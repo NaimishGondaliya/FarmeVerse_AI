@@ -1,0 +1,266 @@
+﻿.\venv\Scripts\python
+.exe : Creating test 
+database for alias 
+'default'...
+At line:1 char:1
++ .\venv\Scripts\pyth
+on.exe manage.py 
+test 
+disease_detection 
+2>&1 | Out ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Creatin   
+ g test d...as 'd    
+efault'...:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+
+Found 7 test(s).
+System check identified no issues (0 silenced).
+EEEEEEE
+=====================
+=====================
+=====================
+=======
+ERROR: test_history_d
+etail_and_delete_spec
+ific (disease_detecti
+on.tests.DiseaseDetec
+tionAPITests.test_his
+tory_detail_and_delet
+e_specific)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+=====================
+=====================
+=====================
+=======
+ERROR: test_history_l
+ist_and_delete_all (d
+isease_detection.test
+s.DiseaseDetectionAPI
+Tests.test_history_li
+st_and_delete_all)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+=====================
+=====================
+=====================
+=======
+ERROR: 
+test_ping_endpoint (d
+isease_detection.test
+s.DiseaseDetectionAPI
+Tests.test_ping_endpo
+int)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+=====================
+=====================
+=====================
+=======
+ERROR: test_upload_cr
+op_detection_cotton (
+disease_detection.tes
+ts.DiseaseDetectionAP
+ITests.test_upload_cr
+op_detection_cotton)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+=====================
+=====================
+=====================
+=======
+ERROR: test_upload_cr
+op_detection_healthy 
+(disease_detection.te
+sts.DiseaseDetectionA
+PITests.test_upload_c
+rop_detection_healthy
+)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+=====================
+=====================
+=====================
+=======
+ERROR: test_upload_cr
+op_detection_tomato (
+disease_detection.tes
+ts.DiseaseDetectionAP
+ITests.test_upload_cr
+op_detection_tomato)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+=====================
+=====================
+=====================
+=======
+ERROR: test_upload_mi
+ssing_fields (disease
+_detection.tests.Dise
+aseDetectionAPITests.
+test_upload_missing_f
+ields)
+---------------------
+---------------------
+---------------------
+-------
+Traceback (most 
+recent call last):
+  File "D:\Project2K2
+6\FarmVerse_AI\backen
+d\disease_detection\t
+ests.py", line 13, 
+in setUp
+    self.user = User.
+objects.create_user(
+                ^^^^^
+^^^^^^^^^^^^^^^^^^^^
+TypeError: CustomUser
+Manager.create_user()
+ missing 2 required 
+positional 
+arguments: 'mobile' 
+and 'full_name'
+
+---------------------
+---------------------
+---------------------
+-------
+Ran 7 tests in 0.003s
+
+FAILED (errors=7)
+Destroying test 
+database for alias 
+'default'...
+

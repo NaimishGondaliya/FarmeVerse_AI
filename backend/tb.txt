@@ -1,0 +1,16 @@
+
+Traceback (most recent call last):
+  File "C:\Users\Naimish\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "C:\Users\Naimish\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 412, in initial
+    neg = self.perform_content_negotiation(request)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Naimish\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 316, in perform_content_negotiation
+    return conneg.select_renderer(request, renderers, self.format_kwarg)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Naimish\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\negotiation.py", line 45, in select_renderer
+    renderers = self.filter_renderers(renderers, format)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Naimish\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\negotiation.py", line 88, in filter_renderers
+    raise Http404
+django.http.response.Http404

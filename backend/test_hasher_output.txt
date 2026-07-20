@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Project2K26\FarmVerse_AI\backend\test_hasher.py", line 9, in <module>
+    from django.contrib.auth.hashers import BcryptSHA256PasswordHasher
+ImportError: cannot import name 'BcryptSHA256PasswordHasher' from 'django.contrib.auth.hashers' (D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\contrib\auth\hashers.py)

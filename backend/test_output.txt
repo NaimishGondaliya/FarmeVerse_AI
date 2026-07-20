@@ -1,0 +1,15 @@
+Weather API: ce4f3cb8f17900bc9562c641e80c097e
+Found 16 test(s).
+Creating test database for alias 'default'...
+System check identified some issues:
+
+WARNINGS:
+?: (urls.W005) URL namespace 'analytics' isn't unique. You may not be able to reverse all URLs in this namespace
+
+System check identified 1 issue (0 silenced).
+................
+----------------------------------------------------------------------
+Ran 16 tests in 9.115s
+
+OK
+Destroying test database for alias 'default'...

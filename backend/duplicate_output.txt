@@ -1,0 +1,123 @@
+Traceback (most recent call last):
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\query.py", line 808, in __iter__
+    yield from iter(self._query)
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\query.py", line 167, in __iter__
+    yield self._align_results(doc)
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\query.py", line 269, in _align_results
+    if selected.table == self.left_table:
+       ^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\sql_tokens.py", line 133, in table
+    return alias2token[name].table
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\sql_tokens.py", line 133, in table
+    return alias2token[name].table
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\sql_tokens.py", line 133, in table
+    return alias2token[name].table
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  [Previous line repeated 970 more times]
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\sql_tokens.py", line 130, in table
+    name = self.given_table
+           ^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\sql_tokens.py", line 141, in given_table
+    name = self._token.get_real_name()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 361, in get_real_name
+    return self._get_first_name(dot_idx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 386, in _get_first_name
+    return token.get_name()
+           ^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 355, in get_name
+    return self.get_alias() or self.get_real_name()
+           ^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 344, in get_alias
+    _, ws = self.token_next_by(t=T.Whitespace)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 244, in token_next_by
+    return self._token_matching(funcs, idx, end)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 223, in _token_matching
+    if func(token):
+       ^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\sql.py", line 242, in <lambda>
+    funcs = lambda tk: imt(tk, i, m, t)
+                       ^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\utils.py", line 100, in imt
+    elif types and any(token.ttype in ttype for ttype in types):
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\utils.py", line 100, in <genexpr>
+    elif types and any(token.ttype in ttype for ttype in types):
+                       ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\sqlparse\tokens.py", line 19, in __contains__
+    return item is not None and (self is item or item[:len(self)] == self)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+RecursionError: maximum recursion depth exceeded in comparison
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\cursor.py", line 76, in fetchone
+    return self.result.next()
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\query.py", line 797, in __next__
+    result = next(self._result_generator)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\sql2mongo\query.py", line 830, in __iter__
+    raise exe from e
+djongo.exceptions.SQLDecodeError: 
+
+	Keyword: FAILED SQL: SELECT %(0)s AS "a" FROM "users" WHERE "users"."mobile" = %(1)s LIMIT 1
+Params: (1, '9876543210')
+Version: 1.3.6
+	Sub SQL: None
+	FAILED SQL: None
+	Params: None
+	Version: None
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\utils.py", line 98, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\cursor.py", line 81, in fetchone
+    raise db_exe from e
+djongo.database.DatabaseError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Project2K26\FarmVerse_AI\backend\test_duplicate_direct.py", line 32, in <module>
+    u2 = AuthService.register_user(payload)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\authentication\services\auth_service.py", line 25, in register_user
+    if User.objects.filter(mobile=mobile).exists():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\models\query.py", line 1226, in exists
+    return self.query.has_results(using=self.db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\models\sql\query.py", line 592, in has_results
+    return compiler.has_results()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1366, in has_results
+    return bool(self.execute_sql(SINGLE))
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1409, in execute_sql
+    val = cursor.fetchone()
+          ^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\utils.py", line 97, in inner
+    with self:
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\django\db\utils.py", line 98, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project2K26\FarmVerse_AI\backend\venv\Lib\site-packages\djongo\cursor.py", line 81, in fetchone
+    raise db_exe from e
+django.db.utils.DatabaseError
+Registering first time...
+Success 1: Ramesh Patel (Farmer)
+Registering second time (duplicate)...
+Exception class: DatabaseError

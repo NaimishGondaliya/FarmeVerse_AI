@@ -1,0 +1,32 @@
+Failed to send OTP email to ramesh.patel@example.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3117d847e17sm7098175eec.18 - gsmtp')
+C:\Users\Naimish\AppData\Local\Programs\Python\Python311\Lib\copy.py:211: ResourceWarning: unclosed <ssl.SSLSocket fd=1060, family=23, type=1, proto=0, laddr=('2409:40c1:6411:2156:b94a:2771:7721:77c5', 57790, 0, 0), raddr=('2404:6800:4013:813::6d', 587, 0, 0)>
+  y = [deepcopy(a, memo) for a in x]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+Bad Request: /api/auth/register/
+..Failed to send OTP email to ramesh@example.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3117483ddd1sm10433494eec.9 - gsmtp')
+.
+----------------------------------------------------------------------
+Ran 3 tests in 8.019s
+
+OK
+
+--- Testing Registration Flow ---
+Register farmer status: 201
+Register farmer response: {'success': True, 'message': 'Registration successful. Verification OTP sent to your registered email.', 'data': {'uuid': '3e2fe3d7-7555-41c6-be83-bc6dfd862d0c', 'full_name': 'Ramesh Patel', 'mobile': '9876543210', 'email': 'ramesh.patel@example.com', 'role': 'Farmer', 'is_verified': False, 'is_active': True, 'created_at': '2026-07-07T22:37:53.982622+05:30', 'updated_at': '2026-07-07T22:37:53.982622+05:30'}}
+Register duplicate status: 400
+
+--- Testing Login and Profile Flow ---
+Login status: 200
+Login body: {'success': True, 'message': 'Login successful', 'data': {'tokens': {'access': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzNDQ3Njc3LCJpYXQiOjE3ODM0NDQwNzcsImp0aSI6IjZhNzkyMGU1YzNhMDQ5Njg4M2I1MzQ2NDkxYzE2ZTU5IiwidXNlcl9pZCI6ImYzYzNmMTUxLTQxY2ItNDdiNi1iMzRmLTdiNjMyM2ZhODIwMSIsInJvbGUiOiJGYXJtZXIiLCJlbWFpbCI6InJhbWVzaEBleGFtcGxlLmNvbSIsImZ1bGxfbmFtZSI6IlJhbWVzaCBQYXRlbCJ9.fmj6bAAzvwBau7N1MWQKEhA7QfrX4uwss7-aqjwdmEE', 'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4MzUzMDQ3NywiaWF0IjoxNzgzNDQ0MDc3LCJqdGkiOiIzZTY0M2EyMTMxZWQ0MGJiYmExZWZlMjU3NTFiMzU4YyIsInVzZXJfaWQiOiJmM2MzZjE1MS00MWNiLTQ3YjYtYjM0Zi03YjYzMjNmYTgyMDEiLCJyb2xlIjoiRmFybWVyIiwiZW1haWwiOiJyYW1lc2hAZXhhbXBsZS5jb20iLCJmdWxsX25hbWUiOiJSYW1lc2ggUGF0ZWwifQ.8AYokpvMxM2n-M7UdX0iz40r0MXWVBi7ityYgNJsP6g'}, 'user': {'uuid': 'f3c3f151-41cb-47b6-b34f-7b6323fa8201', 'full_name': 'Ramesh Patel', 'mobile': '9876543210', 'email': 'ramesh@example.com', 'role': 'Farmer', 'is_verified': True}}}
+Get profile status: 200
+Get profile response: {'success': True, 'message': 'Profile fetched successfully', 'data': {'uuid': 'f3c3f151-41cb-47b6-b34f-7b6323fa8201', 'full_name': 'Ramesh Patel', 'mobile': '9876543210', 'email': 'ramesh@example.com', 'role': 'Farmer', 'is_verified': True, 'is_active': True, 'created_at': '2026-07-07T22:37:57.419825+05:30', 'updated_at': '2026-07-07T22:37:57.455409+05:30'}}
+Update profile status: 200
+Update profile response: {'success': True, 'message': 'Profile updated successfully', 'data': {'uuid': 'f3c3f151-41cb-47b6-b34f-7b6323fa8201', 'full_name': 'Ramesh Patel Revised', 'mobile': '9876543210', 'email': 'ramesh.new@example.com', 'role': 'Farmer', 'is_verified': True, 'is_active': True, 'created_at': '2026-07-07T22:37:57.419825+05:30', 'updated_at': '2026-07-07T22:37:57.745560+05:30'}}
+Logout status: 200
+
+--- Testing Forgot Password Reset Flow ---
+Forgot password init status: 200
+Simulated retrieved OTP: 770919
+OTP verification status: 200
+Reset password status: 200
+Login with reset status: 200
