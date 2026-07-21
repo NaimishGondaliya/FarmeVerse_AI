@@ -28,9 +28,9 @@ class ExpertJWTAuthentication(BaseAuthentication):
             if role != 'Expert':
                 raise exceptions.AuthenticationFailed('Token does not have Expert role permissions.')
 
-            expert = AgricultureExpert.objects.filter(id=user_id, active_status=True).first()
+            expert = AgricultureExpert.objects.filter(id=user_id).first()
             if not expert:
-                raise exceptions.AuthenticationFailed('Expert account not found or is currently inactive.')
+                raise exceptions.AuthenticationFailed('Expert account not found.')
 
             return (expert, token)
         except exceptions.AuthenticationFailed as ae:

@@ -172,10 +172,13 @@ export const ExpertDashboard = () => {
         try {
             const nextStatus = !profile.active_status
             const updated = await expertAPI.update(profile.id, { active_status: nextStatus })
-            setProfile(updated)
+            setProfile(prev => ({
+                ...prev,
+                active_status: updated.active_status
+            }))
             setStats(prev => ({
                 ...prev,
-                active_status: nextStatus
+                active_status: updated.active_status
             }))
         } catch (err) {
             console.error("Failed to toggle online status", err)

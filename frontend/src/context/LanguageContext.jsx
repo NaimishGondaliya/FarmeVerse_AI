@@ -497,12 +497,17 @@ export const LanguageProvider = ({ children }) => {
     // Run dynamic DOM translation whenever the language state changes or new elements render
     useEffect(() => {
         let isTranslating = false;
+        let observer = null;
 
         const walkAndTranslate = () => {
             if (isTranslating) return;
             isTranslating = true;
 
             try {
+                if (observer) {
+                    observer.disconnect();
+                }
+
                 const walk = document.createTreeWalker(
                     document.getElementById('root') || document.body,
                     NodeFilter.SHOW_TEXT,
@@ -549,14 +554,18 @@ export const LanguageProvider = ({ children }) => {
                 console.error("DOM translation error:", err);
             } finally {
                 isTranslating = false;
+                if (observer) {
+                    observer.observe(document.body, {
+                        childList: true,
+                        subtree: true,
+                        characterData: true
+                    });
+                }
             }
         };
 
-        // Initial translation
-        walkAndTranslate();
-
         // Setup MutationObserver to watch for dynamic DOM updates (React renders, API loads, modals, etc.)
-        const observer = new MutationObserver((mutations) => {
+        observer = new MutationObserver((mutations) => {
             let shouldTranslate = false;
             for (const mutation of mutations) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -582,6 +591,9 @@ export const LanguageProvider = ({ children }) => {
             }
         });
 
+        // Initial translation
+        walkAndTranslate();
+
         observer.observe(document.body, {
             childList: true,
             subtree: true,
@@ -589,7 +601,9 @@ export const LanguageProvider = ({ children }) => {
         });
 
         return () => {
-            observer.disconnect();
+            if (observer) {
+                observer.disconnect();
+            }
         };
     }, [language]);
 

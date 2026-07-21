@@ -35,9 +35,9 @@ class UnifiedJWTAuthentication(JWTAuthentication):
             role = token.get('role')
 
             if role == 'Expert':
-                expert = AgricultureExpert.objects.filter(id=user_id, active_status=True).first()
+                expert = AgricultureExpert.objects.filter(id=user_id).first()
                 if not expert:
-                    raise exceptions.AuthenticationFailed('Expert account not found or is currently inactive.')
+                    raise exceptions.AuthenticationFailed('Expert account not found.')
                 return (expert, token)
             
             # Default to standard Farmer JWT authentication

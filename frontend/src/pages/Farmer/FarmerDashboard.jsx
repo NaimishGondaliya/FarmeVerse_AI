@@ -117,6 +117,8 @@ export const FarmerDashboard = () => {
             navigate('/farmer/disease-detection')
         } else if (actionName === 'Add Crop') {
             navigate('/farmer/crops')
+        } else if (actionName === 'Add Farm') {
+            navigate('/farmer/my-farm')
         } else if (actionName === 'Profit Calculator') {
             navigate('/farmer/profit-calculator')
         } else {
@@ -127,11 +129,7 @@ export const FarmerDashboard = () => {
 
     const getModalContent = () => {
         switch (modalType) {
-            case 'Add Farm':
-                return {
-                    title: 'નવી ખેતી શારૂ કરો (Add New Farm)',
-                    body: 'આ સુવિધા આગામી ચરણ (Phase 2) માં ઉપલબ્ધ થશે. અહીં તમે તમારી જમીનના રેકોર્ડ અને ફોટો જોડી શકશો.'
-                }
+
             case 'Profit Calculator':
                 return {
                     title: 'નફાની ગણતરી કરો (Profit Calculator)',

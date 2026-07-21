@@ -7,6 +7,12 @@
     @apply bg-[#f8f9fa] text-dark font-sans antialiased;
   }
 
+  /* Hide native browser password reveal and clear buttons to avoid duplicates */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+
   /* Standard Scrollbar styling */
   ::-webkit-scrollbar {
     width: 6px;
@@ -174,5 +180,22 @@
   span.text-red-650::before {
     content: "⚠️";
     @apply mr-1 flex-shrink-0 text-xs;
+  }
+
+  /* Specificity overrides to allow padding-left utilities to work on raw input selectors */
+  input[type="text"].pl-10,
+  input[type="search"].pl-10,
+  input.pl-10 {
+    padding-left: 2.5rem !important;
+  }
+  input[type="text"].pl-11,
+  input[type="search"].pl-11,
+  input.pl-11 {
+    padding-left: 2.75rem !important;
+  }
+  input[type="text"].pl-12,
+  input[type="search"].pl-12,
+  input.pl-12 {
+    padding-left: 3rem !important;
   }
 }
