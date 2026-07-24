@@ -4,6 +4,8 @@ import { FiArrowLeft, FiSend, FiCheckCircle, FiLock } from 'react-icons/fi'
 import { consultationAPI } from '../../services/api'
 import { useLanguage } from '../../context/LanguageContext'
 
+const BACKEND_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api').replace(/\/api\/?$/, '')
+
 const translations = {
     ENG: {
         back: "Back",
@@ -168,12 +170,12 @@ export const ConversationView = () => {
 
                 <div className="flex items-center gap-3 self-end md:self-auto">
                     {/* Language Switch */}
-                    
+
 
                     {/* Status Badge */}
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${consultation.status === 'Pending' ? 'bg-amber-100 text-amber-800' :
-                            consultation.status === 'Replied' ? 'bg-emerald-100 text-emerald-800' :
-                                'bg-slate-100 text-slate-800'
+                        consultation.status === 'Replied' ? 'bg-emerald-100 text-emerald-800' :
+                            'bg-slate-100 text-slate-800'
                         }`}>
                         {consultation.status === 'Pending' ? t.pending :
                             consultation.status === 'Replied' ? t.replied :
@@ -206,10 +208,10 @@ export const ConversationView = () => {
                         {consultation.image && (
                             <div className="mt-3 rounded-lg overflow-hidden border border-slate-100 max-w-sm">
                                 <img
-                                    src={`http://127.0.0.1:8000${consultation.image}`}
+                                    src={`${BACKEND_URL}${consultation.image}`}
                                     alt="Consultation attachment"
                                     className="w-full h-auto object-cover max-h-60 hover:opacity-95 cursor-zoom-in"
-                                    onClick={() => window.open(`http://127.0.0.1:8000${consultation.image}`)}
+                                    onClick={() => window.open(`${BACKEND_URL}${consultation.image}`)}
                                 />
                             </div>
                         )}
@@ -231,8 +233,8 @@ export const ConversationView = () => {
                             className={`flex items-start gap-2.5 max-w-[85%] ${isCurrentUser ? 'self-end' : 'self-start'}`}
                         >
                             <div className={`p-4 rounded-2xl shadow-xs border ${isCurrentUser
-                                    ? 'bg-emerald-600 text-white rounded-tr-none border-emerald-500'
-                                    : 'bg-white text-slate-700 rounded-tl-none border-slate-100'
+                                ? 'bg-emerald-600 text-white rounded-tr-none border-emerald-500'
+                                : 'bg-white text-slate-700 rounded-tl-none border-slate-100'
                                 }`}>
                                 <span className={`text-[10px] font-extrabold uppercase block mb-1 ${isCurrentUser ? 'text-emerald-100' : 'text-slate-400'
                                     }`}>

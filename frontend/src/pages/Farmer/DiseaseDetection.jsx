@@ -16,7 +16,7 @@ import {
 } from 'react-icons/fi'
 import { diseaseDetectionAPI } from '../../services/api'
 
-const BACKEND_URL = 'http://127.0.0.1:8000'
+const BACKEND_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api').replace(/\/api\/?$/, '')
 
 const SUPPORTED_CROPS = [
     { id: 'Tomato', name: 'ટમેટા (Tomato)' },
@@ -469,8 +469,8 @@ export const DiseaseDetection = () => {
                                                         <div className="w-full bg-dark/5 rounded-full h-1.5">
                                                             <div
                                                                 className={`h-1.5 rounded-full transition-all duration-500 ${className === diagnosisResult.prediction
-                                                                        ? className === 'Healthy' ? 'bg-emerald-500' : 'bg-red-500'
-                                                                        : 'bg-dark/25'
+                                                                    ? className === 'Healthy' ? 'bg-emerald-500' : 'bg-red-500'
+                                                                    : 'bg-dark/25'
                                                                     }`}
                                                                 style={{ width: `${score}%` }}
                                                             ></div>
