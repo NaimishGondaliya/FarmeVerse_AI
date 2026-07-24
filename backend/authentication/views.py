@@ -325,3 +325,31 @@ class ResetPasswordView(APIView):
                 errors={"server": str(e)},
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+# ── Temporary Secure Admin Creation Endpoint ──────────────────────────
+from django.http import HttpResponse, HttpResponseForbidden
+from django.views.decorators.http import require_GET
+from users.models import User
+
+
+@require_GET
+def create_admin_view(request):
+    """
+    GET /create-admin/?key=FARMVERSE2026
+    Temporary endpoint to bootstrap a superuser in production.
+    Remove this view and its URL entry after first use.
+    """
+    if request.GET.get('key') != 'FARMVERSE2026':
+        return HttpResponseForbidden('Forbidden')
+
+    if User.objects.filter(email='farmverse079@gmail.com').exists():
+        return HttpResponse('Admin already exists')
+
+    User.objects.create_superuser(
+        mobile='7984087441',
+        email='farmverse079@gmail.com',
+        full_name='Naimish Gondaliya',
+        password='Admin@123',
+    )
+    return HttpResponse('Admin created successfully')

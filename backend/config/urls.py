@@ -8,9 +8,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from authentication.views import create_admin_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # Temporary secure endpoint to create production superuser
+    path('create-admin/', create_admin_view, name='create-admin'),
     
     # Unified API Endpoints for FarmVerse AI modules
     path('api/auth/', include('authentication.urls')),
