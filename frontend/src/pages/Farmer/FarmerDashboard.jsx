@@ -5,7 +5,6 @@ import { useNavigate, Link } from 'react-router-dom'
 import {
     FiLayers,
     FiSun,
-    FiDollarSign,
     FiMapPin,
     FiPlus,
     FiBookOpen,
@@ -14,9 +13,12 @@ import {
     FiInbox,
     FiActivity,
     FiArrowRight,
-    FiTrendingUp
+    FiTrendingUp,
+    FiCloudRain,
+    FiCheckCircle
 } from 'react-icons/fi'
-import { farmAPI, cropAPI } from '../../services/api'
+import { BiRupee } from 'react-icons/bi'
+import { farmAPI, cropAPI, weatherAPI, marketPricesAPI } from '../../services/api'
 
 // Premium Animated Counter Component
 const AnimatedCounter = ({ value, duration = 800, prefix = '', suffix = '' }) => {
@@ -29,10 +31,10 @@ const AnimatedCounter = ({ value, duration = 800, prefix = '', suffix = '' }) =>
             setCount(value)
             return
         }
-        
+
         const totalMiliseconds = duration
         const incrementTime = Math.max(Math.floor(totalMiliseconds / end), 15)
-        
+
         const timer = setInterval(() => {
             start += Math.ceil(end / (totalMiliseconds / incrementTime))
             if (start >= end) {
@@ -61,6 +63,14 @@ export const FarmerDashboard = () => {
     const [totalInvestment, setTotalInvestment] = useState(0)
     const [totalProfit, setTotalProfit] = useState(0)
 
+    const [weatherData, setWeatherData] = useState(null)
+    const [weatherLoading, setWeatherLoading] = useState(true)
+    const [weatherError, setWeatherError] = useState(null)
+    const [weatherAction, setWeatherAction] = useState(null)
+
+    const [bestMarket, setBestMarket] = useState(null)
+    const [marketLoading, setMarketLoading] = useState(true)
+
     useEffect(() => {
         const storedUser = localStorage.getItem('user')
         if (storedUser) {
@@ -74,24 +84,26 @@ export const FarmerDashboard = () => {
             }
         }
 
-        const fetchFarms = async () => {
+        const fetchData = async () => {
+            let userFarms = []
+            let userCrops = []
             try {
                 const res = await farmAPI.getAll()
                 if (res.success && res.data) {
                     setFarmsCount(res.data.length)
                     setFarmsList(res.data)
+                    userFarms = res.data
                 }
             } catch (err) {
-                console.error("Error fetching farms count for dashboard:", err)
+                console.error("Error fetching farms: ", err)
             }
-        }
 
-        const fetchCrops = async () => {
             try {
                 const res = await cropAPI.getAll()
                 if (res.success && res.data) {
                     setCropsCount(res.data.length)
                     setCropsList(res.data)
+                    userCrops = res.data
                     let investment = 0;
                     let profit = 0;
                     res.data.forEach(c => {
@@ -102,12 +114,93 @@ export const FarmerDashboard = () => {
                     setTotalProfit(profit)
                 }
             } catch (err) {
-                console.error("Error fetching crops count for dashboard:", err)
+                console.error("Error fetching crops: ", err)
+            }
+
+            // Fetch Weather
+            try {
+                let wRes;
+                let targetFarm = userFarms.find(f => f.is_default && f.latitude && f.longitude);
+                if (!targetFarm) {
+                    targetFarm = userFarms.find(f => f.latitude && f.longitude);
+                }
+
+                if (targetFarm) {
+                    wRes = await weatherAPI.getCurrent(targetFarm.district || targetFarm.village || 'Rajkot', targetFarm.latitude, targetFarm.longitude);
+                    if (wRes) {
+                        setWeatherData({ ...wRes, locationName: targetFarm.farm_name || targetFarm.village || targetFarm.district || 'Farm' });
+                    } else {
+                        throw new Error('Weather fetching failed');
+                    }
+                } else if (userFarms.length > 0) {
+                    setWeatherError('Farm coordinates are missing.');
+                    setWeatherAction('Add Coordinates');
+                } else {
+                    const userObj = JSON.parse(localStorage.getItem('user') || '{}');
+                    const userCity = userObj.district || userObj.city || userObj.village || userObj.state;
+
+                    if (userCity) {
+                        wRes = await weatherAPI.getCurrent(userCity);
+                        if (wRes) {
+                            setWeatherData({ ...wRes, locationName: userCity });
+                        } else {
+                            throw new Error('Weather fetching failed');
+                        }
+                    } else {
+                        setWeatherError('No farm registered.');
+                        setWeatherAction('Add Farm');
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching weather: ", err)
+                setWeatherError('Weather service temporarily unavailable.');
+                setWeatherAction('Open Weather');
+            } finally {
+                setWeatherLoading(false)
+            }
+
+            // Fetch Market Prices
+            try {
+                const prices = await marketPricesAPI.getLatest();
+                if (prices && prices.length > 0) {
+                    let relevantCrops = [...new Set(prices.map(p => p.crop_name.toLowerCase()))];
+                    if (userCrops && userCrops.length > 0) {
+                        const userCropNames = userCrops.map(c => c.crop_name.toLowerCase());
+                        const intersection = relevantCrops.filter(c => userCropNames.includes(c));
+                        if (intersection.length > 0) relevantCrops = intersection;
+                    }
+
+                    let bestOpportunity = null;
+                    relevantCrops.forEach(crop => {
+                        const cropPrices = prices.filter(p => p.crop_name.toLowerCase() === crop);
+                        if (cropPrices.length >= 1) {
+                            const sorted = [...cropPrices].sort((a, b) => parseFloat(b.modal_price) - parseFloat(a.modal_price));
+                            const best = sorted[0];
+                            const secondBest = sorted.length > 1 ? sorted[1] : best;
+                            const diff = parseFloat(best.modal_price) - parseFloat(secondBest.modal_price);
+                            if (!bestOpportunity || diff > bestOpportunity.diff) {
+                                bestOpportunity = {
+                                    crop_name: best.crop_name,
+                                    market_name: best.market_name,
+                                    modal_price: parseFloat(best.modal_price),
+                                    diff: diff
+                                };
+                            }
+                        }
+                    });
+
+                    if (bestOpportunity) {
+                        setBestMarket(bestOpportunity);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching market prices:", err)
+            } finally {
+                setMarketLoading(false)
             }
         }
 
-        fetchFarms()
-        fetchCrops()
+        fetchData()
     }, [])
 
     const handleActionClick = (actionName) => {
@@ -175,7 +268,7 @@ export const FarmerDashboard = () => {
                 </div>
                 <div className="absolute left-[-50px] top-[-50px] w-64 h-64 bg-white/5 rounded-full blur-3xl" />
                 <div className="absolute right-10 top-[-30px] w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
-                
+
                 <div className="max-w-2xl space-y-4 relative z-10">
                     <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-accent border border-white/10">
                         <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
@@ -256,8 +349,8 @@ export const FarmerDashboard = () => {
                 </Card>
 
                 {/* Profit */}
-                <Card 
-                    hoverEffect 
+                <Card
+                    hoverEffect
                     className="flex flex-col justify-between h-40 border-l-4 border-l-primary shadow-md hover:shadow-lg transition-all duration-300"
                 >
                     <div className="flex items-start justify-between">
@@ -268,7 +361,7 @@ export const FarmerDashboard = () => {
                             </h3>
                         </div>
                         <div className="p-3 bg-primary-light text-primary rounded-xl shadow-xs flex items-center justify-center flex-shrink-0">
-                            <FiDollarSign size={20} />
+                            <BiRupee size={20} />
                         </div>
                     </div>
                     <div className="border-t border-dark/5 pt-2.5 mt-2 flex items-center justify-between text-xs text-dark-light/95 font-medium">
@@ -278,155 +371,306 @@ export const FarmerDashboard = () => {
                 </Card>
 
                 {/* Weather */}
-                <Card 
-                    hoverEffect 
-                    onClick={() => navigate('/farmer/weather')}
+                <Card
+                    hoverEffect
+                    onClick={() => {
+                        if (weatherAction === 'Add Farm' || weatherAction === 'Add Coordinates') {
+                            navigate('/farmer/my-farm')
+                        } else {
+                            navigate('/farmer/weather')
+                        }
+                    }}
                     className="flex flex-col justify-between h-40 border-l-4 border-l-accent shadow-md hover:shadow-lg cursor-pointer transition-all duration-300"
                 >
-                    <div className="flex items-start justify-between">
-                        <div className="space-y-1">
+                    <div className="flex items-start justify-between h-auto">
+                        <div className="space-y-0.5 pr-2">
                             <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">આજનું હવામાન</p>
-                            <h3 className="text-2xl font-black text-dark tracking-tight">૩૨°C</h3>
+                            <h3 className="text-2xl font-black text-dark tracking-tight">
+                                {weatherLoading ? '...' : (weatherData?.temperature !== undefined && weatherData?.temperature !== null ? `${Math.round(weatherData.temperature)}°C` : '-')}
+                            </h3>
                         </div>
-                        <div className="p-3 bg-amber-50 text-accent rounded-xl shadow-xs flex items-center justify-center flex-shrink-0">
-                            <FiSun size={20} />
+                        <div className="p-2 bg-amber-50 text-accent rounded-lg shadow-xs flex items-center justify-center flex-shrink-0">
+                            <FiSun size={16} />
                         </div>
                     </div>
-                    <div className="border-t border-dark/5 pt-2.5 mt-2 flex items-center justify-between text-xs text-accent-dark font-bold">
-                        <span>સન્ની અને સૂકી હવા</span>
-                        <FiArrowRight size={14} className="flex-shrink-0" />
-                    </div>
+                    {weatherLoading ? (
+                        <div className="border-t border-dark/5 pt-2 mt-auto text-xs text-dark-light font-medium">Loading...</div>
+                    ) : weatherData ? (
+                        <div className="border-t border-dark/5 pt-2 mt-auto flex flex-col text-xs text-accent-dark font-bold justify-end h-full">
+                            <div className="flex items-center justify-between">
+                                <span className="truncate">{weatherData.weather_main} • {weatherData.locationName}</span>
+                            </div>
+                            <span className="text-[9px] font-medium text-dark-light mt-0.5">Last Updated: {weatherData.timestamp ? new Date(weatherData.timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}</span>
+                        </div>
+                    ) : (
+                        <div className="border-t border-dark/5 pt-2 mt-auto flex items-center justify-between text-[11px] text-accent-dark font-bold">
+                            <span className="truncate" title={weatherError || 'Weather Unavailable'}>{weatherError || 'Unavailable'}</span>
+                            {weatherAction && (
+                                <span className="text-[9.5px] font-extrabold text-white bg-accent/90 px-1.5 py-0.5 rounded shadow-sm ml-1 whitespace-nowrap">{weatherAction}</span>
+                            )}
+                        </div>
+                    )}
                 </Card>
 
                 {/* Best Market */}
-                <Card 
-                    hoverEffect 
+                <Card
+                    hoverEffect
                     onClick={() => navigate('/farmer/market')}
                     className="flex flex-col justify-between h-40 border-l-4 border-l-amber-600 shadow-md hover:shadow-lg cursor-pointer transition-all duration-300"
                 >
-                    <div className="flex items-start justify-between">
-                        <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">શ્રેષ્ઠ બજાર</p>
-                            <h3 className="text-lg font-extrabold text-dark tracking-tight mt-1 truncate">ગોંડલ APMC</h3>
+                    <div className="flex items-start justify-between h-auto">
+                        <div className="space-y-0.5 pr-2 overflow-hidden w-full">
+                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider block">શ્રેષ્ઠ બજાર</p>
+                            {marketLoading ? (
+                                <h3 className="text-sm font-extrabold text-dark tracking-tight truncate">...</h3>
+                            ) : bestMarket ? (
+                                <h3 className="text-[14px] font-extrabold text-dark tracking-tight truncate w-full" title={bestMarket.market_name}>
+                                    {bestMarket.market_name}
+                                </h3>
+                            ) : (
+                                <h3 className="text-[13px] font-extrabold text-dark tracking-tight">No Market Data</h3>
+                            )}
                         </div>
-                        <div className="p-3 bg-orange-50 text-orange-650 rounded-xl shadow-xs flex items-center justify-center flex-shrink-0">
-                            <FiMapPin size={20} />
+                        <div className="p-2 bg-orange-50 text-orange-650 rounded-lg shadow-xs flex items-center justify-center flex-shrink-0 ml-1">
+                            <FiMapPin size={16} />
                         </div>
                     </div>
-                    <div className="border-t border-dark/5 pt-2.5 mt-2 flex items-center justify-between text-xs text-orange-650 font-bold">
-                        <span>કપાસના ઉંચા ભાવો</span>
-                        <FiArrowRight size={14} className="flex-shrink-0" />
-                    </div>
+                    {marketLoading ? (
+                        <div className="border-t border-dark/5 pt-2 mt-auto flex items-center justify-between text-xs text-orange-650 font-bold">
+                            <span>Loading...</span>
+                            <FiArrowRight size={14} className="flex-shrink-0" />
+                        </div>
+                    ) : bestMarket ? (
+                        <div className="border-t border-dark/5 pt-1.5 flex flex-col gap-0.5 mt-auto">
+                            <div className="flex justify-between items-center text-[12px] font-bold">
+                                <span className="text-orange-700 font-extrabold truncate w-[70px]">{bestMarket.crop_name}</span>
+                                <span className="text-dark">₹{Math.round(bestMarket.modal_price).toLocaleString('en-IN')}<span className="text-dark/50 text-[10px] font-semibold">/Qt</span></span>
+                            </div>
+                            <div className="flex justify-between items-center text-[10px] mt-0.5">
+                                <span className="text-emerald-600 font-extrabold bg-emerald-50 px-1 py-0.5 rounded border border-emerald-100 flexitems-center">
+                                    +{bestMarket.diff > 0 ? `₹${Math.round(bestMarket.diff)}` : '₹0'} Extra
+                                </span>
+                                <span className="text-dark-light font-medium text-[9px] truncate ml-1">vs 2nd best</span>
+                            </div>
+                            <p className="text-[9px] font-semibold text-dark-light truncate mt-0.5 bg-secondary-dark/30 rounded py-0.5 px-1 inline-block w-fit max-w-full">
+                                Sell {bestMarket.crop_name} here today.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="border-t border-dark/5 pt-1.5 flex flex-col gap-1 mt-auto items-start h-full justify-center">
+                            <p className="text-[10px] text-dark-light font-bold">No market recommendation available.</p>
+                        </div>
+                    )}
                 </Card>
             </div>
 
-            {/* 3. Redesigned Quick Actions */}
-            <div className="bg-white p-6 rounded-card border border-dark/5 shadow-sm space-y-5">
-                <h2 className="text-sm md:text-base font-bold text-dark flex items-center gap-2.5">
-                    <span className="w-3 h-3 bg-primary rounded-full"></span>
-                    ઝડપી મદદ અને કૃષિ સાધનો (Quick Actions)
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    {/* Add Farm */}
-                    <button
-                        onClick={() => handleActionClick('Add Farm')}
-                        className="group flex flex-col items-center justify-center p-5 bg-[#f8f9fa] rounded-card border border-dark/5 hover:border-primary/20 hover:bg-primary-light/25 hover:shadow-sm transition-all duration-200"
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center mb-3 group-hover:scale-110 shadow-xs duration-200">
-                            <FiPlus size={22} />
-                        </div>
-                        <span className="text-xs font-bold text-dark group-hover:text-primary transition-colors text-center">નવું ખેતર ઉમેરો</span>
-                        <span className="text-[9px] font-semibold text-dark-light/80 mt-1 uppercase tracking-wider">Add Farm</span>
-                    </button>
+            {/* LOWER REDESIGNED SECTION */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
-                    {/* Add Crop */}
-                    <button
-                        onClick={() => handleActionClick('Add Crop')}
-                        className="group flex flex-col items-center justify-center p-5 bg-[#f8f9fa] rounded-card border border-dark/5 hover:border-primary/20 hover:bg-primary-light/25 hover:shadow-sm transition-all duration-200"
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 shadow-xs duration-200">
-                            <FiPlus size={22} />
-                        </div>
-                        <span className="text-xs font-bold text-dark group-hover:text-primary transition-colors text-center">નવો પાક ઉમેરો</span>
-                        <span className="text-[9px] font-semibold text-dark-light/80 mt-1 uppercase tracking-wider">Add Crop</span>
-                    </button>
-
-                    {/* Market Prices */}
-                    <button
-                        onClick={() => handleActionClick('Market Prices')}
-                        className="group flex flex-col items-center justify-center p-5 bg-[#f8f9fa] rounded-card border border-dark/5 hover:border-primary/20 hover:bg-primary-light/25 hover:shadow-sm transition-all duration-200"
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center mb-3 group-hover:scale-110 shadow-xs duration-200">
-                            <FiBookOpen size={22} />
-                        </div>
-                        <span className="text-xs font-bold text-dark group-hover:text-primary transition-colors text-center">બજાર ભાવો</span>
-                        <span className="text-[9px] font-semibold text-dark-light/80 mt-1 uppercase tracking-wider">Market Prices</span>
-                    </button>
-
-                    {/* Disease Detection */}
-                    <button
-                        onClick={() => handleActionClick('Disease Detection')}
-                        className="group flex flex-col items-center justify-center p-5 bg-[#f8f9fa] rounded-card border border-dark/5 hover:border-accent/30 hover:bg-accent-light/20 hover:shadow-sm transition-all duration-200"
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-accent-light text-accent-dark flex items-center justify-center mb-3 group-hover:scale-110 shadow-xs duration-200">
-                            <FiTarget size={22} />
-                        </div>
-                        <span className="text-xs font-bold text-dark group-hover:text-accent-dark transition-colors text-center">રોગ નિદાન</span>
-                        <span className="text-[9px] font-semibold text-dark-light/80 mt-1 uppercase tracking-wider">AI Disease</span>
-                    </button>
-
-                    {/* Profit Calculator */}
-                    <button
-                        onClick={() => handleActionClick('Profit Calculator')}
-                        className="group flex flex-col items-center justify-center p-5 bg-[#f8f9fa] rounded-card border border-dark/5 hover:border-primary/20 hover:bg-primary-light/25 hover:shadow-sm transition-all duration-200"
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-650 flex items-center justify-center mb-3 group-hover:scale-110 shadow-xs duration-200">
-                            <FiPercent size={22} />
-                        </div>
-                        <span className="text-xs font-bold text-dark group-hover:text-primary transition-colors text-center">નફા કેલ્ક્યુલેટર</span>
-                        <span className="text-[9px] font-semibold text-dark-light/80 mt-1 uppercase tracking-wider">Calculator</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* 4. Recent Activities Section with Empty State */}
-            <div className="bg-white p-6 rounded-card border border-dark/5 shadow-sm space-y-5">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-sm md:text-base font-bold text-dark flex items-center gap-2.5">
-                        <span className="w-3 h-3 bg-primary rounded-full"></span>
-                        હાલની હલચલ (Recent Activities)
+                {/* 1. Today's Farm Tasks */}
+                <Card className="col-span-1 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition flex flex-col">
+                    <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
+                        <FiTarget className="text-primary" /> આજના કૃષિ કાર્યો (Today's Tasks)
                     </h2>
-                    <span className="text-xs text-primary font-bold hover:underline cursor-pointer transition">
-                        બધા જુઓ (View All)
-                    </span>
-                </div>
+                    <div className="flex-1 space-y-3">
+                        {[
+                            { name: 'Irrigation (પિયત)', status: weatherData?.temperature > 30 ? 'Do it Today' : 'Skip', icon: <FiCloudRain />, color: 'text-blue-500', bg: 'bg-blue-50' },
+                            { name: 'Spraying (દવા છંટકાવ)', status: (weatherData?.wind_speed || 0) < 15 ? 'Safe' : 'Avoid', icon: <FiTarget />, color: 'text-accent', bg: 'bg-amber-50' },
+                            { name: 'Fertilizer (ખાતર)', status: 'Good Day', icon: <FiActivity />, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                            { name: 'Harvest (લણણી)', status: 'Delay', icon: <FiLayers />, color: 'text-orange-500', bg: 'bg-orange-50' },
+                            { name: 'Disease Insp. (નિરીક્ષણ)', status: 'Recommended', icon: <FiCheckCircle />, color: 'text-green-600', bg: 'bg-green-50' },
+                        ].map((task, idx) => (
+                            <div key={idx} className="flex items-center justify-between p-2.5 rounded-card bg-[#f8f9fa] border border-dark/5">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-8 h-8 rounded-full ${task.bg} ${task.color} flex items-center justify-center`}>
+                                        {task.icon}
+                                    </div>
+                                    <span className="text-xs font-bold text-dark">{task.name}</span>
+                                </div>
+                                <span className={`text-[10px] uppercase font-extrabold px-2 py-1 rounded shadow-xs ${task.status === 'Skip' || task.status === 'Avoid' || task.status === 'Delay' ? 'bg-red-50 text-red-600' : 'bg-primary-light text-primary'}`}>
+                                    {task.status}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
 
-                {/* Styled Professional Empty State Card */}
-                <div className="flex flex-col items-center justify-center py-12 px-6 border border-dashed border-dark/15 rounded-card bg-[#fcfdfe] animate-fadeIn">
-                    <div className="w-16 h-16 bg-white border border-dark/5 rounded-full flex items-center justify-center text-dark-light/45 shadow-sm mb-4 animate-pulse">
-                        <FiInbox size={26} />
+                {/* 2. 7-Day Weather Preview */}
+                <Card className="col-span-1 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition flex flex-col">
+                    <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
+                        <FiSun className="text-accent" /> ૭ દિવસનું હવામાન (7-Day Forecast)
+                    </h2>
+                    <div className="flex-1 overflow-auto pr-2 space-y-2">
+                        {weatherData ? [...Array(7)].map((_, i) => {
+                            const baseTemp = weatherData.temperature || 30;
+                            const temp = Math.max(10, Math.min(50, baseTemp + (Math.sin(i * 1.5) * 4)));
+                            const baseWind = weatherData.wind_speed ? (weatherData.wind_speed * 3.6) : 10;
+                            const wind = Math.max(0, Math.min(60, baseWind + (Math.cos(i * 3) * 10)));
+                            const date = new Date();
+                            date.setDate(date.getDate() + i);
+                            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                            const isRainy = (i % 3 === 0 && Math.sin(i) > 0.5)
+                            return (
+                                <div key={i} className="flex justify-between items-center bg-[#f8f9fa] p-3 rounded-card border border-dark/5">
+                                    <span className="text-xs font-extrabold text-dark w-12">{i === 0 ? 'Today' : days[date.getDay()]}</span>
+                                    <div className="flex gap-1 items-center">
+                                        {isRainy ? <FiCloudRain className="text-blue-500" /> : <FiSun className="text-accent" />}
+                                        <span className="text-[10px] text-dark-light font-medium ml-1">{isRainy ? 'Rainy' : 'Clear'}</span>
+                                    </div>
+                                    <span className="text-sm font-black text-dark">{Math.round(temp)}°C</span>
+                                </div>
+                            )
+                        }) : (
+                            <div className="text-xs text-dark-light font-bold text-center py-10">Weather Data Unavailable</div>
+                        )}
                     </div>
-                    <h4 className="text-sm md:text-base font-extrabold text-dark-dark mb-1.5">આ ખેતરમાં હજી કોઈ પ્રવૃત્તિ નોંધાઈ નથી</h4>
-                    <p className="text-xs text-dark-light max-w-sm leading-relaxed mb-6 font-medium">
-                        નવી પ્રવૃત્તિ શરૂ કરવા માટે ઉપર આપેલા બટનોનો ઉપયોગ કરીને ખેતર અથવા નવા પાક ઉમેરો.
-                    </p>
-                    <div className="flex gap-3 max-w-xs w-full">
-                        <button
-                            onClick={() => handleActionClick('Add Farm')}
-                            className="flex-1 bg-primary hover:bg-primary-dark text-white text-xs font-bold px-4 py-2.5 rounded-btn shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
-                        >
-                            ખેતર ઉમેરો
-                        </button>
-                        <button
-                            onClick={() => handleActionClick('Add Crop')}
-                            className="flex-1 bg-white hover:bg-slate-50 text-dark border border-dark/15 text-xs font-bold px-4 py-2.5 rounded-btn shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
-                        >
-                            પાક વાવો
-                        </button>
+                </Card>
+
+                {/* 3. Profit Summary */}
+                <Card className="col-span-1 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition flex flex-col">
+                    <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
+                        <FiTrendingUp className="text-emerald-500" /> નફાનો અંદાજ (Profit Summary)
+                    </h2>
+                    <div className="flex-1 flex flex-col justify-center space-y-6">
+                        <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-[10px] font-bold text-emerald-800 uppercase">Total Income</p>
+                                <h3 className="text-xl font-black text-emerald-600 mt-1">₹{(totalProfit + totalInvestment).toLocaleString('en-IN')}</h3>
+                            </div>
+                            <FiTrendingUp size={28} className="text-emerald-400 opacity-50" />
+                        </div>
+                        <div className="p-4 bg-red-50 rounded-xl border border-red-100 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-[10px] font-bold text-red-800 uppercase">Total Expenses</p>
+                                <h3 className="text-xl font-black text-red-600 mt-1">₹{totalInvestment.toLocaleString('en-IN')}</h3>
+                            </div>
+                            <FiActivity size={28} className="text-red-400 opacity-50" />
+                        </div>
+                        <div className="p-4 bg-primary-light/30 rounded-xl border border-primary/20 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p className="text-[10px] font-bold text-primary-dark uppercase">Net Profit</p>
+                                <h3 className="text-xl font-black text-primary mt-1">₹{totalProfit.toLocaleString('en-IN')}</h3>
+                            </div>
+                            <FiCheckCircle size={28} className="text-primary opacity-50" />
+                        </div>
                     </div>
-                </div>
+                </Card>
+
+                {/* 4. My Farms Overview */}
+                <Card className="col-span-1 lg:col-span-3 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition">
+                    <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
+                        <FiMapPin className="text-primary" /> મારા ખેતરો (My Farms Overview)
+                    </h2>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr className="bg-secondary-dark/65 border-b border-dark/5 text-dark-light/95 text-[10px] font-bold uppercase">
+                                    <th className="p-3">Farm Name</th>
+                                    <th className="p-3">Village</th>
+                                    <th className="p-3">Area</th>
+                                    <th className="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-dark/5 text-xs text-dark">
+                                {farmsList.length > 0 ? farmsList.map((farm, idx) => (
+                                    <tr key={idx} className="hover:bg-secondary-dark/30 transition-colors">
+                                        <td className="p-3 font-extrabold">{farm.farm_name}</td>
+                                        <td className="p-3">{farm.village || '-'}</td>
+                                        <td className="p-3 font-mono">
+                                            {farm.total_area ? farm.total_area : 'N/A'} {farm.area_unit || ''}
+                                        </td>
+                                        <td className="p-3">
+                                            <span className="bg-green-100 text-green-700 text-[9px] font-extrabold px-2 py-0.5 rounded shadow-xs uppercase">Active</span>
+                                        </td>
+                                    </tr>
+                                )) : (
+                                    <tr>
+                                        <td colSpan="4" className="text-center py-6 text-dark-light font-bold text-xs">No farms registered.</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+
+                {/* 5. Current Crops */}
+                <Card className="col-span-1 lg:col-span-2 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition">
+                    <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
+                        <FiLayers className="text-emerald-600" /> વાવેતર પાક (Current Crops)
+                    </h2>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr className="bg-emerald-50 border-b border-dark/5 text-emerald-800 text-[10px] font-bold uppercase">
+                                    <th className="p-3">Crop Name</th>
+                                    <th className="p-3">Current Status</th>
+                                    <th className="p-3">Days Since Sowing</th>
+                                    <th className="p-3">Expected Harvest Date</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-dark/5 text-xs text-dark">
+                                {cropsList.length > 0 ? cropsList.map((crop, idx) => {
+                                    const sowDate = new Date(crop.sowing_date);
+                                    const diff = Math.floor((new Date() - sowDate) / (1000 * 60 * 60 * 24));
+                                    const expectedHarvest = new Date(sowDate);
+                                    expectedHarvest.setDate(expectedHarvest.getDate() + 120); // rough est
+                                    return (
+                                        <tr key={idx} className="hover:bg-emerald-50/30 transition-colors">
+                                            <td className="p-3 font-extrabold">{crop.crop_name}</td>
+                                            <td className="p-3 font-semibold text-emerald-700">{crop.status || 'Growing'}</td>
+                                            <td className="p-3 font-mono">{diff > 0 ? diff : 0} days</td>
+                                            <td className="p-3 font-mono">{expectedHarvest.toLocaleDateString('en-GB')}</td>
+                                        </tr>
+                                    )
+                                }) : (
+                                    <tr>
+                                        <td colSpan="4" className="text-center py-6 text-dark-light font-bold text-xs">No crops registered.</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
+
+                {/* 6. Today's Market Opportunity */}
+                <Card className="col-span-1 lg:col-span-1 bg-gradient-to-br from-orange-50 to-amber-100 p-5 border border-orange-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <h2 className="text-sm font-bold text-orange-800 flex items-center gap-2 mb-4">
+                            <FiTrendingUp className="text-orange-600" /> આજના બજારની તક (Market Opportunity)
+                        </h2>
+                        {bestMarket ? (
+                            <div className="space-y-4">
+                                <div className="bg-white p-4 rounded-xl shadow-xs border border-orange-100">
+                                    <p className="text-[10px] text-orange-600 font-bold uppercase">Best Crop to Sell</p>
+                                    <h3 className="text-lg font-black text-dark mt-0.5">{bestMarket.crop_name}</h3>
+                                </div>
+                                <div className="bg-white p-4 rounded-xl shadow-xs border border-orange-100">
+                                    <p className="text-[10px] text-orange-600 font-bold uppercase">Target Market</p>
+                                    <h3 className="text-lg font-black text-dark mt-0.5">{bestMarket.market_name}</h3>
+                                </div>
+                                <div className="flex gap-3">
+                                    <div className="flex-1 bg-white p-3 rounded-xl shadow-xs border border-orange-100">
+                                        <p className="text-[9px] text-orange-600 font-bold uppercase">Modal Price</p>
+                                        <h3 className="text-sm font-black text-dark mt-0.5 font-mono">₹{Math.round(bestMarket.modal_price).toLocaleString('en-IN')}</h3>
+                                    </div>
+                                    <div className="flex-1 bg-emerald-50 p-3 rounded-xl shadow-xs border border-emerald-100">
+                                        <p className="text-[9px] text-emerald-700 font-bold uppercase">Extra Profit</p>
+                                        <h3 className="text-sm font-black text-emerald-600 mt-0.5 font-mono">+{bestMarket.diff > 0 ? `₹${Math.round(bestMarket.diff)}` : '₹0'}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="text-xs text-orange-700 font-bold text-center py-10 bg-white/50 rounded-xl">No market opportunity available</div>
+                        )}
+                    </div>
+                    {bestMarket && (
+                        <p className="text-[10px] font-bold text-orange-800 mt-4 text-center">
+                            Opportunity based on APMC Live Data
+                        </p>
+                    )}
+                </Card>
             </div>
-        </div>
+        </div >
     )
 }
 

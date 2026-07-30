@@ -14,10 +14,11 @@ import {
     FiInfo,
     FiImage,
     FiTrendingUp,
-    FiDollarSign,
     FiCalendar
 } from 'react-icons/fi'
-import { cropAPI, farmAPI } from '../../services/api'
+import { BiRupee } from 'react-icons/bi'
+import { cropAPI, farmAPI, salesAPI } from '../../services/api'
+import { SalesModal } from '../../components/common/SalesModal'
 
 export const CropRecords = () => {
     const [crops, setCrops] = useState([])
@@ -35,8 +36,11 @@ export const CropRecords = () => {
     // Modals state
     const [showFormModal, setShowFormModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showSalesModal, setShowSalesModal] = useState(false)
     const [selectedCrop, setSelectedCrop] = useState(null)
     const [detailCrop, setDetailCrop] = useState(null)
+    const [editSalesData, setEditSalesData] = useState(null)
+    const [initialSalesData, setInitialSalesData] = useState(null)
 
     // Form inputs state
     const [formData, setFormData] = useState({
@@ -121,8 +125,131 @@ export const CropRecords = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
+
+        // Intercept change to 'Sold' Status
+        if (name === 'crop_status' && value === 'Sold') {
+            if (!selectedCrop) {
+                // It is a NEW crop - validate and automatically save first!
+                if (!validateForm()) return;
+
+                setIsLoading(true);
+                const data = new FormData();
+                const tempFormData = {
+                    ...formData,
+                    crop_status: 'Harvested' // Fallback status if they cancel sale
+                };
+                Object.keys(tempFormData).forEach(key => {
+                    if (key === 'crop_image') {
+                        if (tempFormData[key] instanceof File) {
+                            data.append(key, tempFormData[key]);
+                        }
+                    } else if (tempFormData[key] !== null && tempFormData[key] !== undefined && tempFormData[key] !== '') {
+                        data.append(key, tempFormData[key]);
+                    }
+                });
+
+                cropAPI.create(data).then(async (res) => {
+                    if (res.success) {
+                        setSuccessMsg('પાક રેકોર્ડ સફળ થયો. કૃપા કરીને વેચાણની વિગતો પૂર્ણ કરો.');
+                        await fetchCrops();
+                        await fetchFarms();
+
+                        const newCropId = res.data.id;
+                        setEditSalesData(null);
+                        setInitialSalesData({
+                            crop: newCropId,
+                            market_yard: '',
+                            sold_quantity: formData.actual_yield || formData.expected_yield || '',
+                            price_per_kg: '',
+                            maxYield: formData.actual_yield || formData.expected_yield || '',
+                            sale_date: new Date().toISOString().substring(0, 10),
+                        });
+                        setShowFormModal(false);
+                        setShowSalesModal(true);
+                    } else {
+                        setErrorMsg(res.message || 'માહિતી સાચવી શકાઈ નહિ.');
+                    }
+                }).catch(err => {
+                    console.error("Auto-save error: ", err);
+                    setErrorMsg('માહિતી સાચવતી વખતે અણધારી સમસ્યા આવી.');
+                }).finally(() => {
+                    setIsLoading(false);
+                });
+                return;
+            }
+
+            salesAPI.getAll().then(res => {
+                let existingSale = null;
+                if (res.success && res.data) {
+                    existingSale = res.data.find(sale => String(sale.crop) === String(selectedCrop.id));
+                }
+
+                if (existingSale) {
+                    setEditSalesData(existingSale);
+                    setInitialSalesData(null);
+                } else {
+                    setEditSalesData(null);
+                    setInitialSalesData({
+                        crop: selectedCrop.id,
+                        market_yard: '',
+                        sold_quantity: formData.actual_yield || formData.expected_yield || '',
+                        price_per_kg: '',
+                        maxYield: formData.actual_yield || formData.expected_yield || '',
+                        sale_date: new Date().toISOString().substring(0, 10),
+                    });
+                }
+                setShowFormModal(false);
+                setShowSalesModal(true);
+            }).catch(err => {
+                console.error("Error fetching sales: ", err);
+                alert("વેચાણ ડેટા મેળવવામાં મુશ્કેલી. કૃપા કરીને થોડીવાર પછી પ્રયાસ કરો.");
+            });
+            return; // prevent updating form so it doesn't stay 'Sold' locally if user cancels
+        }
+
         setFormData(prev => {
             const nextData = { ...prev, [name]: value }
+
+            // Auto-fill crop defaults
+            if (['crop_name', 'sowing_date', 'area_used', 'area_unit'].includes(name)) {
+                const cropDefaults = {
+                    'cotton': { days: 180, yieldPerAcre: 150 },
+                    'કપાસ': { days: 180, yieldPerAcre: 150 },
+                    'groundnut': { days: 120, yieldPerAcre: 70 },
+                    'મગફળી': { days: 120, yieldPerAcre: 70 },
+                    'wheat': { days: 125, yieldPerAcre: 80 },
+                    'ઘઉં': { days: 125, yieldPerAcre: 80 },
+                    'cumin': { days: 110, yieldPerAcre: 25 },
+                    'જીરું': { days: 110, yieldPerAcre: 25 },
+                    'castor': { days: 180, yieldPerAcre: 60 },
+                    'દિવેલા': { days: 180, yieldPerAcre: 60 },
+                    'એરંડા': { days: 180, yieldPerAcre: 60 }
+                };
+
+                const currentCropName = (name === 'crop_name' ? value : prev.crop_name).toLowerCase().trim();
+                const matchedCrop = cropDefaults[currentCropName];
+
+                if (matchedCrop) {
+                    // Update harvest date
+                    if ((name === 'crop_name' || name === 'sowing_date') && nextData.sowing_date) {
+                        const sDate = new Date(nextData.sowing_date);
+                        sDate.setDate(sDate.getDate() + matchedCrop.days);
+                        nextData.expected_harvest_date = sDate.toISOString().split('T')[0];
+                    }
+
+                    // Update expected yield
+                    if (name === 'crop_name' || name === 'area_used' || name === 'area_unit') {
+                        let area = parseFloat(nextData.area_used) || 1;
+                        if (nextData.area_unit === 'Hectare') {
+                            area = area * 2.47105;
+                        }
+                        const calculatedYield = Math.round(area * matchedCrop.yieldPerAcre).toString();
+
+                        // We set expected_yield if we are reacting to a change
+                        nextData.expected_yield = calculatedYield;
+                    }
+                }
+            }
 
             // Auto update total cost if any cost field changes
             if (['seed_cost', 'fertilizer_cost', 'pesticide_cost', 'labour_cost', 'other_cost'].includes(name)) {
@@ -162,6 +289,37 @@ export const CropRecords = () => {
             errors.area_used = 'વપરાયેલ જમીનનું માપ ફરજિયાત છે'
         } else if (isNaN(areaNum) || areaNum <= 0) {
             errors.area_used = 'જમીનનું માપ 0 થી વધુ હોવું જોઈએ'
+        } else if (formData.farm && (formData.crop_status === 'Sown' || formData.crop_status === 'Growing')) {
+            const selectedFarm = farms.find(f => String(f.id) === String(formData.farm));
+            if (selectedFarm) {
+                let farmTotalAcres = parseFloat(selectedFarm.total_area) || 0;
+                if (selectedFarm.area_unit === 'Hectare') farmTotalAcres *= 2.47105;
+
+                let usedAcres = 0;
+                crops.forEach(c => {
+                    if (String(c.farm) === String(formData.farm) && (c.crop_status === 'Sown' || c.crop_status === 'Growing')) {
+                        // Exclude the current crop if editing
+                        if (selectedCrop && String(selectedCrop.id) === String(c.id)) return;
+
+                        let cArea = parseFloat(c.area_used) || 0;
+                        if (c.area_unit === 'Hectare') cArea *= 2.47105;
+                        usedAcres += cArea;
+                    }
+                });
+
+                const availableAcres = farmTotalAcres - usedAcres;
+                let reqAcres = areaNum;
+                if (formData.area_unit === 'Hectare') {
+                    reqAcres *= 2.47105;
+                }
+
+                if (reqAcres > availableAcres + 0.001) {
+                    const availableInReqUnit = (formData.area_unit === 'Hectare' ? availableAcres / 2.47105 : availableAcres);
+                    const rounded = availableInReqUnit.toFixed(2).replace(/\.?0+$/, '');
+                    const unitStr = formData.area_unit === 'Hectare' ? 'Hectare' : 'Acre';
+                    errors.area_used = `Only ${rounded || 0} ${unitStr} is available in this farm.`;
+                }
+            }
         }
 
         const expYieldNum = parseFloat(formData.expected_yield)
@@ -321,6 +479,7 @@ export const CropRecords = () => {
                 setShowFormModal(false)
 
                 const updatedCropsList = await fetchCrops()
+                await fetchFarms() // Update farm areas from database
 
                 if (detailCrop && detailCrop.id === selectedCrop?.id) {
                     const updatedCrop = updatedCropsList?.find(c => c.id === selectedCrop.id) || res.data
@@ -377,6 +536,7 @@ export const CropRecords = () => {
                     setDetailCrop(null)
                 }
                 await fetchCrops()
+                await fetchFarms() // Update farm areas from database
                 setSelectedCrop(null)
             } else {
                 setErrorMsg(res?.message || 'રેકોર્ડ કાઢી નાખવામાં નિષ્ફળતા.')
@@ -398,6 +558,13 @@ export const CropRecords = () => {
         const matchesStatus = filterStatus ? c.crop_status === filterStatus : true
         return matchesSearch && matchesFarm && matchesSeason && matchesStatus
     })
+
+    // Active Farm Summary
+    const activeSummaryFarm = filterFarm ? farms.find(f => String(f.id) === String(filterFarm)) : null;
+    const utilizationRaw = activeSummaryFarm && activeSummaryFarm.total_area > 0
+        ? Math.round((activeSummaryFarm.used_area / activeSummaryFarm.total_area) * 100)
+        : 0;
+    const utilization = Math.min(100, Math.max(0, utilizationRaw));
 
     // Calculations for Summary Cards
     const totalInvestment = crops.reduce((acc, curr) => acc + (parseFloat(curr.total_cost) || 0), 0)
@@ -463,7 +630,7 @@ export const CropRecords = () => {
                 </Card>
                 <Card className="flex items-center p-4 bg-white border border-dark/5 shadow-sm rounded-card">
                     <div className="p-3 rounded-full bg-blue-50 text-blue-600 mr-4">
-                        <FiDollarSign size={20} />
+                        <BiRupee size={20} />
                     </div>
                     <div>
                         <span className="text-[10px] uppercase font-bold text-dark-light/75">કુલ રોકાણ (Total Investment)</span>
@@ -531,6 +698,38 @@ export const CropRecords = () => {
                             </select>
                         </div>
                     </div>
+
+                    {/* Live Farm Summary */}
+                    {activeSummaryFarm && (
+                        <div className="bg-emerald-50/50 p-4 rounded-card border border-emerald-100 shadow-sm animate-fadeIn">
+                            <div className="flex justify-between items-center mb-2">
+                                <h4 className="text-sm font-bold text-dark flex items-center gap-1.5">
+                                    <span>📊</span> Live Farm Summary ({activeSummaryFarm.farm_name})
+                                </h4>
+                                <span className="text-xs font-bold text-primary">{utilization}% Utilized</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4 mb-3 text-sm">
+                                <div>
+                                    <span className="block text-[10px] uppercase font-bold text-dark-light">Farm Area</span>
+                                    <strong className="text-dark">{activeSummaryFarm.total_area} {activeSummaryFarm.area_unit}</strong>
+                                </div>
+                                <div>
+                                    <span className="block text-[10px] uppercase font-bold text-red-500/80">Used Area</span>
+                                    <strong className="text-red-600 border-b border-red-200">{activeSummaryFarm.used_area} {activeSummaryFarm.area_unit}</strong>
+                                </div>
+                                <div>
+                                    <span className="block text-[10px] uppercase font-bold text-emerald-600/80">Available Area</span>
+                                    <strong className="text-emerald-700 border-b border-emerald-200">{activeSummaryFarm.available_area} {activeSummaryFarm.area_unit}</strong>
+                                </div>
+                            </div>
+                            <div className="w-full bg-slate-200/80 rounded-full h-1.5 overflow-hidden flex">
+                                <div
+                                    className={`h-1.5 rounded-full transition-all duration-500 ${utilization > 90 ? 'bg-red-500' : 'bg-emerald-500'}`}
+                                    style={{ width: `${utilization}%` }}
+                                ></div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Table listing */}
                     {isLoading && crops.length === 0 ? (
@@ -1243,6 +1442,20 @@ export const CropRecords = () => {
                     </div>
                 </div>
             )}
+
+            {/* SALES MODAL */}
+            <SalesModal
+                isOpen={showSalesModal}
+                onClose={() => setShowSalesModal(false)}
+                onSuccess={async (data, isEdit) => {
+                    setSuccessMsg(isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+                    // We must refetch the crops so that the Table updates the Status to "Sold"
+                    await fetchCrops()
+                }}
+                editSales={editSalesData}
+                initialData={initialSalesData}
+                crops={crops}
+            />
         </div>
     )
 }

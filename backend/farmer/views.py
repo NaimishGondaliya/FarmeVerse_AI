@@ -488,4 +488,42 @@ class SalesDetailView(APIView):
         )
 
 
+class NotificationListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            notifications = request.user.notifications.all()
+            from .serializers import NotificationSerializer
+            serializer = NotificationSerializer(notifications, many=True)
+            return success_response(
+                data=serializer.data,
+                message="Notifications retrieved successfully.",
+                status_code=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return error_response(
+                message="Failed to retrieve notifications.",
+                errors={"server": str(e)},
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class NotificationDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            notification = request.user.notifications.get(pk=pk)
+            notification.is_read = True
+            notification.save()
+            return success_response(
+                message="Notification marked as read.",
+                status_code=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return error_response(
+                message="Notification not found.",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
 

@@ -57,3 +57,5 @@ media/
 
 # Static files
 staticfiles/
+# Added by cleanup
+*.pyc

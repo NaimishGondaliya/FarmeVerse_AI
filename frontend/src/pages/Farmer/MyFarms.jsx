@@ -12,7 +12,8 @@ import {
     FiSearch,
     FiX,
     FiCheck,
-    FiInfo
+    FiInfo,
+    FiNavigation
 } from 'react-icons/fi'
 import { farmAPI } from '../../services/api'
 
@@ -171,6 +172,33 @@ export const MyFarms = () => {
         }
     }
 
+    const [locationLoading, setLocationLoading] = useState(false)
+
+    const handleGetLocation = () => {
+        if (!navigator.geolocation) {
+            alert('Your browser does not support geolocation.')
+            return
+        }
+
+        setLocationLoading(true)
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setFormData(prev => ({
+                    ...prev,
+                    latitude: position.coords.latitude.toFixed(6),
+                    longitude: position.coords.longitude.toFixed(6)
+                }))
+                setLocationLoading(false)
+            },
+            (error) => {
+                console.error("Error getting location: ", error)
+                alert('ભૂલ: લોકેશન મેળવી શકાયું નથી. કૃપા કરીને સ્થાનની પરવાનગી આપો.')
+                setLocationLoading(false)
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        )
+    }
+
     const openDeleteModal = (farm) => {
         setSelectedFarm(farm)
         setShowDeleteModal(true)
@@ -284,8 +312,8 @@ export const MyFarms = () => {
                                     key={farm.id}
                                     hoverEffect
                                     className={`relative cursor-pointer transition-all border p-5 flex flex-col justify-between h-48 ${detailFarm && detailFarm.id === farm.id
-                                            ? 'border-primary ring-1 ring-primary bg-emerald-50/10'
-                                            : 'border-dark/5 bg-white'
+                                        ? 'border-primary ring-1 ring-primary bg-emerald-50/10'
+                                        : 'border-dark/5 bg-white'
                                         }`}
                                     onClick={() => setDetailFarm(farm)}
                                 >
@@ -625,9 +653,21 @@ export const MyFarms = () => {
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
+                                <div className="col-span-2 flex justify-between items-end mb-2">
+                                    <label className="text-xs text-dark-light font-bold">GPS Coordinates (વૈકલ્પિક)</label>
+                                    <button
+                                        type="button"
+                                        onClick={handleGetLocation}
+                                        disabled={locationLoading}
+                                        className="text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-800 py-1.5 px-3 rounded flex items-center gap-2 transition-colors font-bold disabled:opacity-50"
+                                    >
+                                        <FiNavigation size={12} className={locationLoading ? 'animate-spin' : ''} />
+                                        {locationLoading ? 'મેળવવામાં આવી રહ્યું છે...' : 'મારું વર્તમાન લોકેશન વાપરો'}
+                                    </button>
+                                </div>
                                 {/* Latitude */}
                                 <div className="flex flex-col">
-                                    <label className="text-xs text-dark-light mb-1.5">Latitude (વૈકલ્પિક)</label>
+                                    <label className="text-[11px] text-dark-light mb-1.5">Latitude</label>
                                     <input
                                         type="number"
                                         step="0.000001"
@@ -640,7 +680,7 @@ export const MyFarms = () => {
 
                                 {/* Longitude */}
                                 <div className="flex flex-col">
-                                    <label className="text-xs text-dark-light mb-1.5">Longitude (વૈકલ્પિક)</label>
+                                    <label className="text-[11px] text-dark-light mb-1.5">Longitude</label>
                                     <input
                                         type="number"
                                         step="0.000001"

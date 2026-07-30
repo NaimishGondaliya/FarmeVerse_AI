@@ -36,8 +36,39 @@ class Farm(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
+            Notification.objects.create(
+                user=self.farmer,
+                title="New Farm Added (નવું ખેતર)",
+                message=f"તમારું ખેતર '{self.farm_name}' ({self.village}) નોંધાઈ ગયું છે."
+            )
+
     def __str__(self):
         return f"{self.farm_name} - {self.village}"
+
+    @property
+    def used_area(self):
+        active_crops = self.crops.filter(crop_status__in=['Sown', 'Growing'])
+        used_acres = Decimal('0.00')
+        for c in active_crops:
+            c_area = c.area_used
+            if c.area_unit == 'Hectare':
+                c_area *= Decimal('2.47105')
+            used_acres += c_area
+            
+        if self.area_unit == 'Hectare':
+            return round(used_acres / Decimal('2.47105'), 2)
+        return round(used_acres, 2)
+
+    @property
+    def available_area(self):
+        avail = self.total_area - self.used_area
+        return max(Decimal('0.00'), avail)
+
+
 
 
 class Crop(models.Model):
@@ -108,6 +139,14 @@ class Crop(models.Model):
         ordering = ['-created_at']
 
     def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        old_status = None
+        if not is_new:
+            try:
+                old_status = Crop.objects.get(pk=self.pk).crop_status
+            except Crop.DoesNotExist:
+                pass
+                
         # Automatically calculate the total cost
         self.total_cost = (
             self.seed_cost + 
@@ -117,6 +156,51 @@ class Crop(models.Model):
             self.other_cost
         )
         super().save(*args, **kwargs)
+
+        if is_new:
+            Notification.objects.create(
+                user=self.farm.farmer,
+                title="Crop Added (નવો પાક)",
+                message=f"તમારા ખેતરમાં '{self.crop_name}' નો નવો પાક ઉમેરવામાં આવ્યો છે."
+            )
+        elif old_status != self.crop_status:
+            if self.crop_status == 'Harvested':
+                Notification.objects.create(
+                    user=self.farm.farmer,
+                    title="Crop Harvested (પાક લણણી)",
+                    message=f"તમારો પાક '{self.crop_name}' સફળતાપૂર્વક લણવામાં આવ્યો છે."
+                )
+            elif self.crop_status == 'Sold':
+                Notification.objects.create(
+                    user=self.farm.farmer,
+                    title="Crop Sold (પાક વેચાણ)",
+                    message=f"તમારો પાક '{self.crop_name}' વેચાઈ ગયો છે."
+                )
+                
+
+        # Automatic expense integration
+        expense_mapping = {
+            'Seed': self.seed_cost,
+            'Fertilizer': self.fertilizer_cost, # Included for completeness
+            'Pesticide': self.pesticide_cost,
+            'Labour': self.labour_cost,
+            'Other': self.other_cost
+        }
+
+        for expense_type, amount in expense_mapping.items():
+            if amount > 0:
+                Expense.objects.update_or_create(
+                    crop=self,
+                    expense_type=expense_type,
+                    defaults={
+                        'amount': amount,
+                        'expense_date': self.sowing_date,
+                        'description': 'Auto-synced from crop records'
+                    }
+                )
+            else:
+                # Remove if amount was reduced to 0
+                Expense.objects.filter(crop=self, expense_type=expense_type, description='Auto-synced from crop records').delete()
 
     def __str__(self):
         return f"{self.crop_name} ({self.crop_variety}) - {self.farm.farm_name}"
@@ -189,11 +273,39 @@ class Sales(models.Model):
         ordering = ['-sale_date']
 
     def save(self, *args, **kwargs):
+        is_new = self.pk is None
         self.total_revenue = self.sold_quantity * self.price_per_kg
         super().save(*args, **kwargs)
+        
+        # Push sale updates up to the Crop model automatically
+        self.crop.crop_status = 'Sold'
+        self.crop.selling_price = self.price_per_kg
+        self.crop.sold_quantity = self.sold_quantity
+        # Optional: could also set harvest date if not set, but not explicitly requested
+        self.crop.save()
+        
+        if is_new:
+            Notification.objects.create(
+                user=self.crop.farm.farmer,
+                title="Sale Recorded (વેચાણ નોંધાઈ)",
+                message=f"તમારા પાક '{self.crop.crop_name}' નું {self.sold_quantity}kg નું વેચાણ ₹{self.total_revenue} માં નોંધાયું છે."
+            )
+
+
 
     def __str__(self):
         return f"Sale: {self.crop.crop_name} - {self.sold_quantity}kg at {self.market_yard}"
 
 
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications', verbose_name="User")
+    title = models.CharField(max_length=255, verbose_name="Title")
+    message = models.TextField(verbose_name="Message")
+    is_read = models.BooleanField(default=False, verbose_name="Is Read")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
 
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.title} - {self.user.email}"

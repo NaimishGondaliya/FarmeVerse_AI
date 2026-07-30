@@ -3,8 +3,8 @@ import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import Loader from '../../components/common/Loader'
 import EmptyState from '../../components/common/EmptyState'
+import { SalesModal } from '../../components/common/SalesModal'
 import {
-    FiDollarSign,
     FiTrendingUp,
     FiPercent,
     FiPlus,
@@ -18,6 +18,7 @@ import {
     FiInfo,
     FiArrowRight
 } from 'react-icons/fi'
+import { BiRupee } from 'react-icons/bi'
 import { cropAPI, expenseAPI, salesAPI } from '../../services/api'
 
 export const ProfitCalculator = () => {
@@ -421,7 +422,7 @@ export const ProfitCalculator = () => {
 
                 <Card className="p-4 bg-white border border-dark/5 shadow-sm rounded-card flex items-center">
                     <div className="p-3.5 rounded-full bg-red-50 text-red-500 mr-4">
-                        <FiDollarSign size={22} />
+                        <BiRupee size={22} />
                     </div>
                     <div>
                         <span className="text-[10px] uppercase font-bold text-dark-light/85">કુલ સરવાળો ખર્ચ (Expense)</span>
@@ -431,7 +432,7 @@ export const ProfitCalculator = () => {
 
                 <Card className={`p-4 border shadow-sm rounded-card flex items-center ${netProfit >= 0 ? 'bg-emerald-50/20 border-emerald-100' : 'bg-red-50/20 border-red-100'}`}>
                     <div className={`p-3.5 rounded-full mr-4 ${netProfit >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-650'}`}>
-                        <FiDollarSign size={22} className={netProfit < 0 ? 'rotate-180' : ''} />
+                        <BiRupee size={22} className={netProfit < 0 ? 'rotate-180' : ''} />
                     </div>
                     <div>
                         <span className="text-[10px] uppercase font-bold text-dark-light/85">ચોખ્ખો નફો (Net Profit)</span>
@@ -820,111 +821,16 @@ export const ProfitCalculator = () => {
             )}
 
             {/* SALES ADD/EDIT MODAL */}
-            {showSalesModal && (
-                <div className="fixed inset-0 bg-dark/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
-                    <form
-                        onSubmit={handleSalesSubmit}
-                        className="bg-white rounded-card shadow-2xl border border-dark/5 max-w-md w-full overflow-hidden flex flex-col animate-scaleUp text-xs font-semibold text-dark select-none"
-                    >
-                        <div className="flex justify-between items-center bg-primary px-5 py-3.5 text-white">
-                            <h3 className="font-bold text-sm flex items-center gap-1">
-                                {editSales ? 'વેચાણ નોંધ સુધારો (Edit Sale)' : 'નવું વેચાણ ઉમેરો (Record Sale)'}
-                            </h3>
-                            <button
-                                type="button"
-                                onClick={() => setShowSalesModal(false)}
-                                className="p-1 hover:bg-primary-dark/80 rounded"
-                            >
-                                <FiX size={18} />
-                            </button>
-                        </div>
-
-                        <div className="p-5 space-y-3.5">
-                            <div className="flex flex-col">
-                                <label className="text-[10px] font-bold text-dark/75 mb-1">આસક્ત પાક (Target Crop) *</label>
-                                <select
-                                    className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.crop ? 'border-red-500' : 'border-dark/15'}`}
-                                    value={salesForm.crop}
-                                    onChange={(e) => setSalesForm(prev => ({ ...prev, crop: e.target.value }))}
-                                >
-                                    <option value="">પાક પસંદ કરો</option>
-                                    {crops.map(c => (
-                                        <option key={c.id} value={c.id}>{c.crop_name} ({c.crop_variety}) - {c.farm_name}</option>
-                                    ))}
-                                </select>
-                                {formErrors.crop && <span className="text-[9px] text-red-650 mt-0.5">{formErrors.crop}</span>}
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label className="text-[10px] font-bold text-dark/75 mb-1">બજાર / એપીએમસી (Market Yard / APMC) *</label>
-                                <input
-                                    type="text"
-                                    className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.market_yard ? 'border-red-500' : 'border-dark/15'}`}
-                                    placeholder="દા.ત. ગોંડલ માર્કેટ યાર્ડ"
-                                    value={salesForm.market_yard}
-                                    onChange={(e) => setSalesForm(prev => ({ ...prev, market_yard: e.target.value }))}
-                                />
-                                {formErrors.market_yard && <span className="text-[9px] text-red-650 mt-0.5">{formErrors.market_yard}</span>}
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3.5">
-                                <div className="flex flex-col">
-                                    <label className="text-[10px] font-bold text-dark/75 mb-1">વેચેલો જથ્થો (Quantity in kg) *</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.sold_quantity ? 'border-red-500' : 'border-dark/15'}`}
-                                        value={salesForm.sold_quantity}
-                                        onChange={(e) => setSalesForm(prev => ({ ...prev, sold_quantity: e.target.value }))}
-                                    />
-                                    {formErrors.sold_quantity && <span className="text-[9px] text-red-650 mt-0.5">{formErrors.sold_quantity}</span>}
-                                </div>
-
-                                <div className="flex flex-col">
-                                    <label className="text-[10px] font-bold text-dark/75 mb-1">કિંમત પ્રતિ કિલો (Price/kg) *</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.price_per_kg ? 'border-red-500' : 'border-dark/15'}`}
-                                        value={salesForm.price_per_kg}
-                                        onChange={(e) => setSalesForm(prev => ({ ...prev, price_per_kg: e.target.value }))}
-                                    />
-                                    {formErrors.price_per_kg && <span className="text-[9px] text-red-650 mt-0.5">{formErrors.price_per_kg}</span>}
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label className="text-[10px] font-bold text-dark/75 mb-1">વેચાણ તારીખ (Sale Date) *</label>
-                                <input
-                                    type="date"
-                                    className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.sale_date ? 'border-red-500' : 'border-dark/15'}`}
-                                    value={salesForm.sale_date}
-                                    onChange={(e) => setSalesForm(prev => ({ ...prev, sale_date: e.target.value }))}
-                                />
-                                {formErrors.sale_date && <span className="text-[9px] text-red-650 mt-0.5">{formErrors.sale_date}</span>}
-                            </div>
-                        </div>
-
-                        <div className="bg-secondary-dark px-5 py-3 border-t border-dark/5 flex justify-end gap-2 text-[11px] font-bold">
-                            <button
-                                type="button"
-                                onClick={() => setShowSalesModal(false)}
-                                className="px-4 py-2 hover:bg-dark/5 text-dark-light rounded"
-                            >
-                                રદ કરો (Cancel)
-                            </button>
-                            <Button
-                                type="submit"
-                                variant="primary"
-                                disabled={isLoading}
-                                className="px-4 py-2 hover:opacity-90 transition-all font-bold rounded-btn"
-                            >
-                                Save (સાચવો)
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            )}
+            <SalesModal
+                isOpen={showSalesModal}
+                onClose={() => setShowSalesModal(false)}
+                onSuccess={(data, isEdit) => {
+                    setSuccessMsg(isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+                    loadData()
+                }}
+                editSales={editSales}
+                crops={crops}
+            />
 
             {/* DELETE CONFIRMATION DIALOG MODAL */}
             {showDeleteModal && (

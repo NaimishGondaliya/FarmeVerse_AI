@@ -166,6 +166,17 @@ export const salesAPI = {
     }
 };
 
+export const notificationAPI = {
+    getAll: async () => {
+        const response = await API.get('/farmer/notifications/');
+        return response.data;
+    },
+    markAsRead: async (id) => {
+        const response = await API.patch(`/farmer/notifications/${id}/`);
+        return response.data;
+    }
+};
+
 export const marketPricesAPI = {
     getLatest: async (date) => {
         const url = date ? `/market-prices/latest/?date=${date}` : '/market-prices/latest/';
@@ -174,6 +185,10 @@ export const marketPricesAPI = {
     },
     query: async (params) => {
         const response = await API.get('/market-prices/by-crop/', { params });
+        return response.data;
+    },
+    getAnalytics: async (params) => {
+        const response = await API.get('/market-prices/analytics/', { params });
         return response.data;
     },
     refresh: async () => {
@@ -222,8 +237,15 @@ export const diseaseDetectionAPI = {
 };
 
 export const weatherAPI = {
-    getCurrent: async (city) => {
-        const response = await API.get('/weather/current/', { params: { city } });
+    getCurrent: async (city, lat = null, lon = null) => {
+        const params = {};
+        if (lat && lon) {
+            params.lat = lat;
+            params.lon = lon;
+        } else if (city) {
+            params.city = city;
+        }
+        const response = await API.get('/weather/current/', { params });
         return response.data;
     }
 };

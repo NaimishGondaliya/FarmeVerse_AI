@@ -27,9 +27,9 @@ class OpenWeatherAPIError(WeatherServiceError):
         super().__init__(message)
         self.status_code = status_code
 
-def get_current_weather(city):
+def get_current_weather(city=None, lat=None, lon=None):
     """
-    Fetch current weather details for a given city from OpenWeather API.
+    Fetch current weather details for a given city or coordinates from OpenWeather API.
     """
     api_key = os.getenv('OPENWEATHER_API_KEY')
     if not api_key:
@@ -37,10 +37,17 @@ def get_current_weather(city):
 
     url = "https://api.openweathermap.org/data/2.5/weather"
     params = {
-        'q': city,
         'appid': api_key,
         'units': 'metric'
     }
+    
+    if lat and lon:
+        params['lat'] = lat
+        params['lon'] = lon
+    elif city:
+        params['q'] = city
+    else:
+        raise ValueError("Either city or lat/lon must be provided")
 
     try:
         response = requests.get(url, params=params, timeout=10)

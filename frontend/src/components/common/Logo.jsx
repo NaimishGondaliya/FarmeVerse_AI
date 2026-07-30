@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import logoImage from '../../assets/logo.jpg'
 
 export const Logo = ({ size = 'md', showText = true, invert = false }) => {
     const iconSizes = {
@@ -19,9 +20,9 @@ export const Logo = ({ size = 'md', showText = true, invert = false }) => {
             <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`flex items-center justify-center rounded-xl bg-gradient-to-br from-primary-light to-secondary border border-primary/20 ${iconSizes[size]}`}
+                className={`flex items-center justify-center rounded-xl overflow-hidden border border-primary/20 ${iconSizes[size]}`}
             >
-                <span role="img" aria-label="leaf" className="translate-y-[-1px]">🌱</span>
+                <img src={logoImage} alt="FarmVerse AI Logo" className="w-full h-full object-cover" />
             </motion.div>
             {showText && (
                 <div className="flex flex-col">

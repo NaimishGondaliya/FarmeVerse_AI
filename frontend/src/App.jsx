@@ -30,7 +30,7 @@ import { ExpertInbox } from './pages/Expert/ExpertInbox'
 import { ConversationView } from './pages/Expert/ConversationView'
 import { ExpertFarmerList } from './pages/Expert/ExpertFarmerList'
 import { ExpertAvailability } from './pages/Expert/ExpertAvailability'
-import { authAPI } from './services/api'
+import { authAPI, notificationAPI } from './services/api'
 import AdminExpertManagement from './pages/Admin/AdminExpertManagement'
 import AdminConsultationCenter from './pages/Admin/AdminConsultationCenter'
 import { AdminSchemesManagement } from './pages/Admin/AdminSchemesManagement'
@@ -57,6 +57,22 @@ const DashboardLayout = ({ role, children }) => {
 
     const [userName, setUserName] = useState('ખેડૂત મિત્ર')
     const [showNotifications, setShowNotifications] = useState(false)
+    const [notifications, setNotifications] = useState([])
+    const [unreadCount, setUnreadCount] = useState(0)
+
+    const fetchNotifications = async () => {
+        try {
+            if (notificationAPI) {
+                const res = await notificationAPI.getAll();
+                if (res.success && res.data) {
+                    setNotifications(res.data);
+                    setUnreadCount(res.data.filter(n => !n.is_read).length);
+                }
+            }
+        } catch (err) {
+            console.error("Failed to fetch notifications:", err);
+        }
+    };
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user')
@@ -66,11 +82,28 @@ const DashboardLayout = ({ role, children }) => {
                 if (userObj && userObj.full_name) {
                     setUserName(userObj.full_name)
                 }
+                // Only fetch notifications if logged in
+                const token = localStorage.getItem('access_token');
+                if (token && token !== 'null' && token !== 'undefined') {
+                    fetchNotifications();
+                    // Poll every 30 seconds
+                    const interval = setInterval(fetchNotifications, 30000);
+                    return () => clearInterval(interval);
+                }
             } catch (err) {
                 console.error(err)
             }
         }
     }, [])
+
+    const handleMarkAsRead = async (id) => {
+        try {
+            await notificationAPI.markAsRead(id);
+            await fetchNotifications();
+        } catch (err) {
+            console.error("Failed to mark as read:", err);
+        }
+    };
 
     const handleLogout = async () => {
         try {
@@ -226,7 +259,7 @@ const DashboardLayout = ({ role, children }) => {
                                 className="p-2 rounded-btn text-dark hover:bg-secondary-dark relative transition-colors"
                             >
                                 <FiBell size={20} />
-                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full flex items-center justify-center text-[8px] text-white font-bold">{unreadCount > 0 ? unreadCount : ''}</span>
                             </button>
 
                             {showNotifications && (
@@ -241,16 +274,23 @@ const DashboardLayout = ({ role, children }) => {
                                         </button>
                                     </div>
                                     <div className="space-y-2 max-h-48 overflow-y-auto pt-1">
-                                        <div className="p-2 hover:bg-secondary-dark rounded-btn text-[11px] border border-transparent hover:border-dark/5">
-                                            <p className="font-bold text-dark">બજાર ભાવો અપડેટ</p>
-                                            <p className="text-dark-light mt-0.5">કપાસ અને જીરૂના ભાવમાં ઉછાળો જોવા મળ્યો છે.</p>
-                                            <span className="text-[9px] text-dark-light/75 block mt-1">૧૦ મિનિટ પહેલા</span>
-                                        </div>
-                                        <div className="p-2 hover:bg-secondary-dark rounded-btn text-[11px] border border-transparent hover:border-dark/5">
-                                            <p className="font-bold text-dark">કમોસમી માવઠું ચેતવણી</p>
-                                            <p className="text-dark-light mt-0.5">આવતા અઠવાડિયે મધ્ય અને ઉત્તર ગુજરાતમાં છૂટાછવાયા વરસાદની શક્યતા.</p>
-                                            <span className="text-[9px] text-dark-light/75 block mt-1">૨ કલાક પહેલા</span>
-                                        </div>
+                                        {notifications.length === 0 ? (
+                                            <div className="p-2 text-center text-dark-light text-[11px]">No new notifications</div>
+                                        ) : (
+                                            notifications.map(notif => (
+                                                <div
+                                                    key={notif.id}
+                                                    onClick={() => !notif.is_read && handleMarkAsRead(notif.id)}
+                                                    className={`p-2 rounded-btn text-[11px] border cursor-pointer hover:border-dark/5 ${notif.is_read ? 'bg-transparent text-dark-light border-transparent' : 'bg-secondary-dark border-primary/20 hover:bg-secondary-dark/80 font-semibold text-dark'}`}
+                                                >
+                                                    <p className="font-bold text-dark">{notif.title}</p>
+                                                    <p className={`mt-0.5 ${notif.is_read ? 'text-dark-light/80' : 'text-dark-light'}`}>{notif.message}</p>
+                                                    <span className="text-[9px] text-dark-light/75 block mt-1">
+                                                        {new Date(notif.created_at).toLocaleString('gu-IN')}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        )}
                                     </div>
                                 </div>
                             )}

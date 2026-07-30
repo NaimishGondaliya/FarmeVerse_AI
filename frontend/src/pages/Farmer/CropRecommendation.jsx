@@ -15,7 +15,7 @@ import {
     FiSearch,
     FiX
 } from 'react-icons/fi'
-import { weatherAPI, cropRecommendationAPI } from '../../services/api'
+import { weatherAPI, cropRecommendationAPI, farmAPI } from '../../services/api'
 
 // English/Gujarati translations dictionary
 const dictionary = {
@@ -48,7 +48,19 @@ const dictionary = {
         errorInvalidRange: "કૃપા કરીને સાચા મૂલ્યો દાખલ કરો: pH (0-14), N, P, K અને વરસાદ (>= 0).",
         predictionError: "પાકની ભલામણ આગાહી કરવામાં કંઈક ભૂલ થઈ. કૃપા કરીને ફરી પ્રયાસ કરો.",
         inputSummary: "ગણતરી કરેલ ઇનપુટ વિગતો",
-        backToInputs: "નવી ભલામણ કરો"
+        backToInputs: "નવી ભલામણ કરો",
+
+        /* Phase 3 Suitability */
+        suitabilityTitle: "સુસંગતતા સ્કોર (Suitability Score)",
+        badgeExcellent: "શ્રેષ્ઠ (Excellent)",
+        badgeGood: "સારું (Good)",
+        badgeModerate: "મધ્યમ (Moderate)",
+        badgeNotRecommended: "ભલામણ નથી (Not Recommended)",
+        suLabelTemp: "તાપમાન",
+        suLabelRain: "વરસાદની શક્યતા",
+        suLabelHum: "ભેજ",
+        suLabelSeason: "વર્તમાન ઋતુ",
+        suRecSentence: "આ હવામાન પરિસ્થિતિઓ વર્તમાન પાકના વિકાસ માટે સંપૂર્ણ આધાર પૂરો પાડે છે."
     },
     ENG: {
         title: "🌾 Crop Recommendation Center",
@@ -79,7 +91,19 @@ const dictionary = {
         errorInvalidRange: "Please input valid parameters: pH (0-14), nutrients and rainfall must be positive.",
         predictionError: "Server error during recommendation predictions. Please try again.",
         inputSummary: "Input Parameters Summary",
-        backToInputs: "New Analysis"
+        backToInputs: "New Analysis",
+
+        /* Phase 3 Suitability */
+        suitabilityTitle: "Suitability Score",
+        badgeExcellent: "Excellent",
+        badgeGood: "Good",
+        badgeModerate: "Moderate",
+        badgeNotRecommended: "Not Recommended",
+        suLabelTemp: "Temperature",
+        suLabelRain: "Rainfall",
+        suLabelHum: "Humidity",
+        suLabelSeason: "Season",
+        suRecSentence: "These environmental conditions provide a reliable foundation for crop growth."
     }
 }
 
@@ -201,6 +225,11 @@ export const CropRecommendation = () => {
     const lang = language === 'en' ? 'ENG' : 'GUJ'
     const [selectedCity, setSelectedCity] = useState('Rajkot')
 
+    // Location Mode State
+    const [locationMode, setLocationMode] = useState('city') // 'city' or 'farm'
+    const [myFarms, setMyFarms] = useState([])
+    const [selectedFarmId, setSelectedFarmId] = useState('')
+
     // Soil Parameters State variables
     const [nVal, setNVal] = useState('90')
     const [pVal, setPVal] = useState('42')
@@ -211,6 +240,7 @@ export const CropRecommendation = () => {
     // Weather Parameters State variables (read-only, auto fetched)
     const [tempVal, setTempVal] = useState(28.0)
     const [humidityVal, setHumidityVal] = useState(70.0)
+    const [rainProbVal, setRainProbVal] = useState(0)
 
     // UI Status State variables
     const [isWeatherSyncing, setIsWeatherSyncing] = useState(false)
@@ -235,10 +265,6 @@ export const CropRecommendation = () => {
         }
     }, [lang, selectedCity])
 
-    useEffect(() => {
-        autoSyncWeather(selectedCity)
-    }, [selectedCity])
-
     // Click outside autocomplete to close dropdown hook
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -250,14 +276,45 @@ export const CropRecommendation = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-    const autoSyncWeather = async (city) => {
+    useEffect(() => {
+        const fetchFarms = async () => {
+            try {
+                const res = await farmAPI.getAll()
+                if (res.success && res.data) {
+                    setMyFarms(res.data)
+                    if (res.data.length > 0) {
+                        setSelectedFarmId(res.data[0].id)
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching farms:", err)
+            }
+        }
+        fetchFarms()
+    }, [])
+
+    useEffect(() => {
+        if (locationMode === 'city') {
+            autoSyncWeather(selectedCity, null, null)
+        } else if (locationMode === 'farm' && selectedFarmId) {
+            const farm = myFarms.find(f => f.id === selectedFarmId)
+            if (farm && farm.latitude && farm.longitude) {
+                autoSyncWeather(null, farm.latitude, farm.longitude)
+            } else {
+                setAlertMessage('Selected farm does not have saved GPS coordinates.')
+            }
+        }
+    }, [selectedCity, locationMode, selectedFarmId, myFarms])
+
+    const autoSyncWeather = async (city, lat, lon) => {
         setIsWeatherSyncing(true)
         setAlertMessage('')
         try {
-            const data = await weatherAPI.getCurrent(city)
+            const data = await weatherAPI.getCurrent(city, lat, lon)
             if (data && data.temperature !== undefined) {
                 setTempVal(data.temperature)
                 setHumidityVal(data.humidity ?? 65.0)
+                setRainProbVal(data.pop !== undefined ? data.pop * 100 : (data.clouds || 0))
                 setSuccessMessage(t.weatherSyncSuccess)
                 setTimeout(() => setSuccessMessage(''), 3000)
             } else {
@@ -348,6 +405,13 @@ export const CropRecommendation = () => {
 
         setIsRecommending(true)
         try {
+            let predictionCity = selectedCity;
+            if (locationMode === 'farm' && selectedFarmId) {
+                const farm = myFarms.find(f => f.id === selectedFarmId)
+                if (farm) {
+                    predictionCity = farm.district || farm.village || 'Rajkot'
+                }
+            }
             const payload = {
                 N: n,
                 P: p,
@@ -356,7 +420,7 @@ export const CropRecommendation = () => {
                 humidity: parseFloat(humidityVal),
                 ph: ph,
                 rainfall: rainfall,
-                city: selectedCity
+                city: predictionCity
             }
             const result = await cropRecommendationAPI.predict(payload)
             if (result && result.success) {
@@ -427,51 +491,94 @@ export const CropRecommendation = () => {
                             </h3>
                         </div>
 
-                        {/* City select autocomplete representing auto weather sync */}
-                        <div className="flex flex-col relative" ref={autocompleteRef}>
-                            <label className="block text-xs font-bold text-dark-light mb-1.5 font-sans select-none">
-                                {t.citySelect}
-                            </label>
-                            <div className="relative w-full">
-                                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
-                                <input
-                                    type="text"
-                                    placeholder={lang === 'GUJ' ? 'શહેર શોધો (દા.ત. Rajkot)...' : 'Search Gujarat City...'}
-                                    className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    value={searchTerm}
-                                    onChange={handleSearchChange}
-                                    onFocus={() => setIsDropdownOpen(true)}
-                                    onKeyDown={handleKeyDown}
-                                />
-                                {searchTerm && (
-                                    <button
-                                        type="button"
-                                        onClick={handleClearSearch}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full animate-fadeIn"
-                                    >
-                                        <FiX size={16} />
-                                    </button>
-                                )}
-                            </div>
+                        {/* Location Mode Toggle */}
+                        <div className="flex gap-2 p-1 bg-slate-100 rounded-btn border border-slate-200 w-full mb-4">
+                            <button
+                                type="button"
+                                className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${locationMode === 'farm' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                onClick={() => setLocationMode('farm')}
+                            >
+                                {lang === 'GUJ' ? 'મારું ખેતર પસંદ કરો' : 'Use My Farm'}
+                            </button>
+                            <button
+                                type="button"
+                                className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${locationMode === 'city' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                onClick={() => setLocationMode('city')}
+                            >
+                                {lang === 'GUJ' ? 'શહેર પસંદ કરો' : 'Select City'}
+                            </button>
+                        </div>
 
-                            {/* Dropdown Suggestions List */}
-                            {isDropdownOpen && filteredCities.length > 0 && (
-                                <ul className="absolute z-50 left-0 right-0 top-[68px] max-h-60 overflow-y-auto bg-white border border-dark/10 rounded-btn shadow-lg py-1 text-xs">
-                                    {filteredCities.map((city, idx) => (
-                                        <li
-                                            key={`${city.name}-${idx}`}
-                                            onClick={() => handleSelectCity(city)}
-                                            onMouseEnter={() => setKeyboardIndex(idx)}
-                                            className={`px-4 py-2 cursor-pointer flex justify-between items-center transition-colors ${keyboardIndex === idx ? 'bg-primary/10 text-primary font-bold' : 'text-dark font-medium'
-                                                }`}
-                                        >
-                                            <span>{lang === 'GUJ' ? city.labelGuj : city.labelEng}</span>
-                                            {selectedCity === city.name && (
-                                                <span className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-black">Active</span>
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
+                        {/* City / Farm select representing auto weather sync */}
+                        <div className="flex flex-col relative" ref={locationMode === 'city' ? autocompleteRef : null}>
+                            {locationMode === 'city' ? (
+                                <>
+                                    <label className="block text-xs font-bold text-dark-light mb-1.5 font-sans select-none">
+                                        {t.citySelect}
+                                    </label>
+                                    <div className="relative w-full">
+                                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+                                        <input
+                                            type="text"
+                                            placeholder={lang === 'GUJ' ? 'શહેર શોધો (દા.ત. Rajkot)...' : 'Search Gujarat City...'}
+                                            className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                            onFocus={() => setIsDropdownOpen(true)}
+                                            onKeyDown={handleKeyDown}
+                                        />
+                                        {searchTerm && (
+                                            <button
+                                                type="button"
+                                                onClick={handleClearSearch}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full animate-fadeIn"
+                                            >
+                                                <FiX size={16} />
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Dropdown Suggestions List */}
+                                    {isDropdownOpen && filteredCities.length > 0 && (
+                                        <ul className="absolute z-50 left-0 right-0 top-[68px] max-h-60 overflow-y-auto bg-white border border-dark/10 rounded-btn shadow-lg py-1 text-xs">
+                                            {filteredCities.map((city, idx) => (
+                                                <li
+                                                    key={`${city.name}-${idx}`}
+                                                    onClick={() => handleSelectCity(city)}
+                                                    onMouseEnter={() => setKeyboardIndex(idx)}
+                                                    className={`px-4 py-2 cursor-pointer flex justify-between items-center transition-colors ${keyboardIndex === idx ? 'bg-primary/10 text-primary font-bold' : 'text-dark font-medium'
+                                                        }`}
+                                                >
+                                                    <span>{lang === 'GUJ' ? city.labelGuj : city.labelEng}</span>
+                                                    {selectedCity === city.name && (
+                                                        <span className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-black">Active</span>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <label className="block text-xs font-bold text-dark-light mb-1.5 font-sans select-none">
+                                        {lang === 'GUJ' ? 'તમારું ખેતર પસંદ કરો (GPS સંકલન માટે):' : 'Select Your Farm (For GPS Sync):'}
+                                    </label>
+                                    <select
+                                        className="w-full h-12 rounded-xl border border-slate-300 px-4 text-sm leading-normal focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                        value={selectedFarmId}
+                                        onChange={(e) => setSelectedFarmId(e.target.value)}
+                                    >
+                                        {myFarms.length === 0 ? (
+                                            <option value="" disabled>{lang === 'GUJ' ? 'કોઈ ખેતર ઉપલબ્ધ નથી' : 'No farms available'}</option>
+                                        ) : (
+                                            myFarms.map(farm => (
+                                                <option key={farm.id} value={farm.id}>
+                                                    {farm.farm_name} ({farm.village})
+                                                </option>
+                                            ))
+                                        )}
+                                    </select>
+                                </>
                             )}
                             {isWeatherSyncing && (
                                 <span className="text-[10px] text-primary font-bold mt-1 select-none animate-pulse">
@@ -609,6 +716,53 @@ export const CropRecommendation = () => {
                                         <span>{predictionResult.confidence}%</span>
                                     </div>
                                 </div>
+
+                                {/* Phase 3 - Crop Suitability Score */}
+                                {(() => {
+                                    let tempScore = 0;
+                                    let humScore = 0;
+                                    let rScore = 0;
+                                    let sScore = 20;
+
+                                    if (tempVal >= 20 && tempVal <= 32) tempScore = 30;
+                                    else if (tempVal > 10 && tempVal < 40) tempScore = 20;
+
+                                    if (humidityVal >= 50 && humidityVal <= 80) humScore = 20;
+                                    else if (humidityVal >= 30 && humidityVal <= 90) humScore = 10;
+
+                                    if (rainProbVal >= 40 && rainProbVal <= 80) rScore = 30;
+                                    else if (rainProbVal > 10 && rainProbVal < 90) rScore = 20;
+
+                                    const totalScore = tempScore + humScore + rScore + sScore;
+
+                                    let badgeLabel = t.badgeNotRecommended;
+                                    let badgeColor = 'bg-red-500 text-white';
+                                    if (totalScore >= 80) { badgeLabel = t.badgeExcellent; badgeColor = 'bg-emerald-500 text-white'; }
+                                    else if (totalScore >= 60) { badgeLabel = t.badgeGood; badgeColor = 'bg-blue-500 text-white'; }
+                                    else if (totalScore >= 40) { badgeLabel = t.badgeModerate; badgeColor = 'bg-amber-500 text-white'; }
+
+                                    return (
+                                        <div className="bg-white text-dark p-4 rounded-card border shadow-inner space-y-3">
+                                            <div className="flex justify-between items-center border-b pb-2">
+                                                <h4 className="font-black text-xs uppercase tracking-wider">{t.suitabilityTitle}</h4>
+                                                <span className={`px-2 py-1 rounded text-xs font-black select-none ${badgeColor}`}>
+                                                    {totalScore}% - {badgeLabel}
+                                                </span>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2 text-xs font-bold text-dark-light">
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={tempScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelTemp}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={rScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelRain}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={humScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelHum}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={sScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelSeason}</span></div>
+                                            </div>
+
+                                            <p className="text-xs font-semibold leading-relaxed pt-1 text-emerald-800">
+                                                {t.suRecSentence}
+                                            </p>
+                                        </div>
+                                    )
+                                })()}
 
                                 {/* Summary variables list cards parameters */}
                                 <div className="space-y-3.5">

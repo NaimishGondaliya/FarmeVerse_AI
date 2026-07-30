@@ -1,15 +1,25 @@
 from rest_framework import serializers
-from .models import Farm, Crop, Expense, Sales
+from .models import Farm, Crop, Expense, Sales, Notification
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'title', 'message', 'is_read', 'created_at']
+        read_only_fields = ['id', 'title', 'message', 'created_at']
+
 
 class FarmSerializer(serializers.ModelSerializer):
+    used_area = serializers.ReadOnlyField()
+    available_area = serializers.ReadOnlyField()
+
     class Meta:
         model = Farm
         fields = [
             'id', 'farm_name', 'village', 'taluka', 'district', 'state',
-            'total_area', 'area_unit', 'soil_type', 'irrigation_type',
+            'total_area', 'used_area', 'available_area', 'area_unit', 'soil_type', 'irrigation_type',
             'latitude', 'longitude', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'used_area', 'available_area', 'created_at', 'updated_at']
 
     def validate_total_area(self, value):
         if value <= 0:
@@ -79,6 +89,52 @@ class CropSerializer(serializers.ModelSerializer):
                     field: f"{field.replace('_', ' ').title()} must be greater than 0."
                 })
                 
+        # Farm Area Validation
+        farm = attrs.get('farm') or getattr(self.instance, 'farm', None)
+        area_used = attrs.get('area_used')
+        if area_used is None: 
+            area_used = getattr(self.instance, 'area_used', None)
+
+        area_unit = attrs.get('area_unit') or getattr(self.instance, 'area_unit', 'Acre')
+        crop_status = attrs.get('crop_status') or getattr(self.instance, 'crop_status', 'Sown')
+
+        if farm and area_used and crop_status in ['Sown', 'Growing']:
+            # Calculate Farm Total Area in Acres
+            farm_total_acres = float(farm.total_area)
+            if farm.area_unit == 'Hectare':
+                farm_total_acres *= 2.47105
+
+            from .models import Crop
+            active_crops = Crop.objects.filter(farm=farm, crop_status__in=['Sown', 'Growing'])
+            if self.instance:
+                active_crops = active_crops.exclude(id=self.instance.id)
+
+            used_acres = 0.0
+            for c in active_crops:
+                c_area = float(c.area_used)
+                if c.area_unit == 'Hectare':
+                    c_area *= 2.47105
+                used_acres += c_area
+
+            available_acres = farm_total_acres - used_acres
+            
+            req_acres = float(area_used)
+            if area_unit == 'Hectare':
+                req_acres *= 2.47105
+                available_in_req_unit = available_acres / 2.47105
+            else:
+                available_in_req_unit = available_acres
+            
+            if req_acres > available_acres + 0.001:
+                available_str = f"{available_in_req_unit:.2f}".rstrip('0').rstrip('.')
+                if not available_str:
+                    available_str = "0"
+                
+                unit_str = "Hectare" if area_unit == 'Hectare' else "Acre"
+                raise serializers.ValidationError({
+                    "area_used": f"Only {available_str} {unit_str} is available in this farm."
+                })
+
         return attrs
 
 

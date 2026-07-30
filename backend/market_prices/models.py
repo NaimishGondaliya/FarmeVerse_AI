@@ -4,17 +4,18 @@ class MarketPrice(models.Model):
     market_name = models.CharField(max_length=100)
     district_name = models.CharField(max_length=100, null=True, blank=True)
     crop_name = models.CharField(max_length=100)
+    crop_name_gu = models.CharField(max_length=100, null=True, blank=True)
     min_price = models.DecimalField(max_digits=10, decimal_places=2)
     max_price = models.DecimalField(max_digits=10, decimal_places=2)
     modal_price = models.DecimalField(max_digits=10, decimal_places=2)
     arrival_quantity = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     price_date = models.DateField()
-    source = models.CharField(max_length=100, default='AGMARKNET')
+    source = models.CharField(max_length=100, default='Official APMC')
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-price_date', 'market_name', 'crop_name']
-        unique_together = ('market_name', 'crop_name', 'price_date')
+        unique_together = ('market_name', 'crop_name', 'crop_name_gu', 'price_date')
         indexes = [
             models.Index(fields=['market_name']),
             models.Index(fields=['district_name']),

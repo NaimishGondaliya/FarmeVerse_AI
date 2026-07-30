@@ -4,9 +4,9 @@ from .views import (
     FarmListCreateView, FarmDetailView,
     CropListCreateView, CropDetailView,
     ExpenseListCreateView, ExpenseDetailView,
-    SalesListCreateView, SalesDetailView
+    SalesListCreateView, SalesDetailView,
+    NotificationListView, NotificationDetailView
 )
-
 app_name = 'farmer'
 
 urlpatterns = [

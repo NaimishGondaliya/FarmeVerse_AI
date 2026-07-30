@@ -28,14 +28,17 @@ class CurrentWeatherView(APIView):
 
     def get(self, request):
         city = request.query_params.get('city')
-        if not city:
+        lat = request.query_params.get('lat')
+        lon = request.query_params.get('lon')
+
+        if not city and not (lat and lon):
             return Response(
-                {"error": "City parameter is required."},
+                {"error": "City or lat/lon parameters are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
         try:
-            weather_data = get_current_weather(city)
+            weather_data = get_current_weather(city=city, lat=lat, lon=lon)
             # Save telemetry log record
             try:
                 from .models import WeatherRequestLog

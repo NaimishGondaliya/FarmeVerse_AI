@@ -8,7 +8,8 @@ from .views import (
     MarketDistrictsView,
     MarketsByDistrictView,
     MarketCommoditiesView,
-    MarketPriceSearchView
+    MarketPriceSearchView,
+    MarketPriceAnalyticsView
 )
 
 app_name = 'market_prices'
@@ -24,4 +25,5 @@ urlpatterns = [
     path('markets/', MarketsByDistrictView.as_view(), name='markets'),
     path('commodities/', MarketCommoditiesView.as_view(), name='commodities'),
     path('search/', MarketPriceSearchView.as_view(), name='search'),
+    path('analytics/', MarketPriceAnalyticsView.as_view(), name='analytics'),
 ]

@@ -110,7 +110,44 @@ export const MarketPrices = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [districts, setDistricts] = useState([])
     const [selectedDistrict, setSelectedDistrict] = useState('')
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
     const [selectedRecommendationCrop, setSelectedRecommendationCrop] = useState('Cotton')
+
+    // Analytics Feature States
+    const [analyticsData, setAnalyticsData] = useState(null)
+    const [analyticsLoading, setAnalyticsLoading] = useState(false)
+    const [analyticsFilter, setAnalyticsFilter] = useState({ market: '', crop: '', range: '15' })
+
+    const fetchAnalytics = async () => {
+        if (!analyticsFilter.market && !analyticsFilter.crop) return // Optionally require at least one filter, but we can default everything.
+        setAnalyticsLoading(true)
+        try {
+            const dateOffset = new Date()
+            dateOffset.setDate(dateOffset.getDate() - parseInt(analyticsFilter.range))
+            const fromDateStr = dateOffset.toISOString().split('T')[0]
+            const toDateStr = new Date().toISOString().split('T')[0]
+            const data = await marketPricesAPI.getAnalytics({
+                market: analyticsFilter.market,
+                crop: analyticsFilter.crop,
+                from_date: fromDateStr,
+                to_date: toDateStr
+            })
+            setAnalyticsData(data)
+        } catch (err) {
+            console.error('Error fetching analytics:', err)
+        } finally {
+            setAnalyticsLoading(false)
+        }
+    }
+
+    // Auto-fetch analytics if filtered
+    useEffect(() => {
+        if (analyticsFilter.market || analyticsFilter.crop) {
+            fetchAnalytics()
+        } else {
+            setAnalyticsData(null)
+        }
+    }, [analyticsFilter])
     const { language } = useLanguage()
     const lang = language === 'en' ? 'ENG' : 'GUJ'
     const [priceUnit, setPriceUnit] = useState('quintal') // 'quintal' or 'man'
@@ -127,8 +164,6 @@ export const MarketPrices = () => {
     const displayPerUnit = priceUnit === 'man'
         ? (lang === 'GUJ' ? 'મણ દીઠ' : 'per Man')
         : (lang === 'GUJ' ? 'ક્વિન્ટલ દીઠ' : 'per Quintal')
-
-    const [selectedDate, setSelectedDate] = useState('')
 
     useEffect(() => {
         loadMarketPrices()
@@ -191,7 +226,8 @@ export const MarketPrices = () => {
     // Search and filter pricing data
     const filteredPrices = prices.filter(p => {
         const query = searchQuery.trim().toLowerCase()
-        const districtMatch = selectedDistrict ? marketDistrictMap[p.market_name] === selectedDistrict : true
+        const pDistrict = p.district_name || marketDistrictMap[p.market_name] || ''
+        const districtMatch = selectedDistrict ? pDistrict === selectedDistrict : true
 
         let cropMatch = true
         if (query) {
@@ -309,7 +345,7 @@ export const MarketPrices = () => {
 
                 <div className="flex flex-wrap items-center gap-3">
                     {/* Inline Page Language Switcher */}
-                    
+
 
                     <Button
                         disabled={refreshing}
@@ -346,14 +382,14 @@ export const MarketPrices = () => {
                     </button>
                 </div>
             )}
-            {prices.length > 0 && prices[0].source === "Showing latest available Government market data" && (
+            {prices.length > 0 && prices[0].source === "Government Latest Available" && (
                 <div className="bg-amber-50 border border-amber-250 text-amber-800 px-4 py-3 rounded-card text-xs md:text-sm font-bold flex items-center shadow-xs animate-fadeIn">
                     <span className="flex items-center gap-2">
                         <FiInfo size={16} className="text-amber-600 flex-shrink-0" />
                         <span>
                             {lang === 'GUJ'
-                                ? `આજનો નવો સરકારી બજાર ભાવ મેળવી શકાયો નથી. નવીનતમ ઉપલબ્ધ સરકારી બજાર માહિતી દર્શાવવામાં આવી રહી છે (તારીખ: ${formatDate(prices[0].price_date)}).`
-                                : `Today's prices are not available online yet. Showing latest available Government market data (Actual Date: ${formatDate(prices[0].price_date)}).`}
+                                ? `આજનો નવો સરકારી બજાર ભાવ મેળવી શકાયો નથી. નવીનતમ ઉપલબ્ધ સરકારી બજાર માહિતી દર્શાવવામાં આવી રહી છે (તારીખ: ${formatDate(prices[0].price_date)}, સ્ત્રોત: AGMARKNET).`
+                                : `Today's prices are not available online yet. Showing latest available Government market data (Actual Date: ${formatDate(prices[0].price_date)}, Source: AGMARKNET).`}
                         </span>
                     </span>
                 </div>
@@ -466,9 +502,9 @@ export const MarketPrices = () => {
                                 <span>Data Source:</span>
                                 <span className="text-emerald-750 font-extrabold font-sans text-right">
                                     {prices.length > 0
-                                        ? (prices[0].source.includes("Live")
+                                        ? (prices[0].source === "AGMARKNET"
                                             ? t.sourceLive
-                                            : (prices[0].source.includes("Showing latest")
+                                            : (prices[0].source === "Government Latest Available"
                                                 ? (lang === 'GUJ' ? 'સરકારી બજાર કેશ' : 'Govt. Market Cache')
                                                 : t.sourceOffline))
                                         : '-'}
@@ -514,14 +550,14 @@ export const MarketPrices = () => {
             {/* Main Interactive Table & Filter Dashboard */}
             <div className="space-y-4">
                 {/* Filters Row */}
-                <div className="bg-white p-4 rounded-card border border-dark/5 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="bg-white p-3 md:p-4 rounded-card border border-dark/5 shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 items-center">
                     {/* Search Field */}
                     <div className="relative w-full">
                         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
                         <input
                             type="text"
                             placeholder={t.searchPlaceholder}
-                            className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            className="w-full h-11 rounded-btn border border-slate-300 pl-10 pr-10 text-xs font-semibold leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-secondary-dark/20"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -533,42 +569,38 @@ export const MarketPrices = () => {
                     </div>
 
                     {/* District Filter */}
-                    <div className="flex flex-col gap-3">
-                        <div className="relative">
-                            <select
-                                className="w-full bg-secondary-dark border border-dark/10 outline-none px-3 py-2 text-xs rounded-btn focus:border-primary font-semibold text-dark cursor-pointer appearance-none"
-                                value={selectedDistrict}
-                                onChange={(e) => setSelectedDistrict(e.target.value)}
-                            >
-                                <option value="">{t.allDistricts}</option>
-                                {districts.map(d => (
-                                    <option key={d} value={d}>
-                                        {d}
-                                    </option>
-                                ))}
-                            </select>
-                            <div className="pointer-events-none absolute right-3 top-3.5 text-dark-light flex items-center text-[10px]">
-                                ▼
-                            </div>
-                        </div>
-
-                        {/* Date Picker */}
-                        <div className="relative flex items-center bg-secondary-dark rounded-btn border border-dark/10 px-3 py-2">
-                            <span className="text-xs font-bold text-dark-light mr-2 whitespace-nowrap">
-                                {lang === 'GUJ' ? 'તારીખ પસંદ કરો:' : 'Select Date:'}
-                            </span>
-                            <input
-                                type="date"
-                                className="w-full bg-transparent text-dark outline-none font-semibold text-xs cursor-pointer"
-                                value={selectedDate}
-                                onChange={(e) => handleDateChange(e.target.value)}
-                                max={new Date().toISOString().split('T')[0]}
-                            />
+                    <div className="relative w-full">
+                        <select
+                            className="w-full h-11 bg-secondary-dark/20 border border-dark/10 outline-none px-3 py-2 text-xs rounded-btn focus:ring-2 focus:ring-emerald-500 font-semibold text-dark cursor-pointer appearance-none"
+                            value={selectedDistrict}
+                            onChange={(e) => setSelectedDistrict(e.target.value)}
+                        >
+                            <option value="">{t.allDistricts}</option>
+                            {districts.map(d => (
+                                <option key={d} value={d}>{d}</option>
+                            ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-dark-light flex items-center text-[10px]">
+                            ▼
                         </div>
                     </div>
 
+                    {/* Date Picker */}
+                    <div className="relative flex items-center h-11 bg-secondary-dark/20 rounded-btn border border-dark/10 px-3 shadow-xs">
+                        <span className="text-xs font-bold text-dark-light mr-2 whitespace-nowrap hidden xl:inline">
+                            {lang === 'GUJ' ? 'તારીખ:' : 'Date:'}
+                        </span>
+                        <input
+                            type="date"
+                            className="w-full bg-transparent text-dark outline-none font-semibold text-xs cursor-pointer"
+                            value={selectedDate}
+                            onChange={(e) => handleDateChange(e.target.value)}
+                            max={new Date().toISOString().split('T')[0]}
+                        />
+                    </div>
+
                     {/* Price Unit Toggle */}
-                    <div className="flex bg-secondary-dark rounded-btn border border-dark/10 p-0.5 w-full">
+                    <div className="flex h-11 bg-secondary-dark rounded-btn border border-dark/10 p-0.5 w-full">
                         <button
                             type="button"
                             onClick={() => setPriceUnit('quintal')}

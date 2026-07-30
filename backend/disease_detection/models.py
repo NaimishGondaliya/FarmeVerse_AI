@@ -34,6 +34,20 @@ class DiseaseDetection(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
+            # Import dynamically to avoid circular import since Notification is in farmer app
+            from farmer.models import Notification
+            status = 'બીમાર' if self.status == 'Diseased' else 'તંદુરસ્ત'
+            msg = f"રોગ નિદાન પૂર્ણ: તમારું {self.crop} નું પાન {status} છે. ({self.prediction})"
+            Notification.objects.create(
+                user=self.farmer,
+                title="Disease Diagnosis Completed (રોગ નિદાન)",
+                message=msg
+            )
+
     def __str__(self):
         return f"{self.crop} - {self.prediction} ({self.confidence}%)"
 
