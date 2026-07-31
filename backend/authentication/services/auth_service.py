@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from authentication.services.otp_service import OTPService
 from authentication.services.email_service import EmailService
 from authentication.services.jwt_service import JWTService
@@ -61,19 +61,20 @@ class AuthService:
             user = User.objects.filter(email=credential).first()
             
         if not user:
-            raise ValidationError("Invalid mobile number or email credentials.")
+            raise AuthenticationFailed("Invalid mobile number or email credentials.")
             
         # Check password
         if not user.check_password(password_raw):
-            raise ValidationError("Incorrect password code.")
+            raise AuthenticationFailed("Incorrect password code.")
             
         # Validate role matches requested login portal
         if user.role != role_scope:
-            raise ValidationError(f"Unauthorized. You do not have permissions to access the {role_scope} portal.")
+            raise AuthenticationFailed(f"Unauthorized. You do not have permissions to access the {role_scope} portal.")
             
         # Validate active status
         if not user.is_active:
-            raise ValidationError("Your account is disabled. Please contact administrator.")
+            raise AuthenticationFailed("Your account is disabled. Please contact administrator.")
+
             
         # Automatically verify account on initial login if it's the first time
         if not user.is_verified:

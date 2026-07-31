@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
 
 from authentication.serializers import (
     RegisterSerializer,
@@ -106,6 +106,12 @@ class LoginView(APIView):
                 message=str(msg),
                 errors=errs,
                 status_code=status.HTTP_400_BAD_REQUEST
+            )
+        except AuthenticationFailed as af:
+            return error_response(
+                message=str(af.detail),
+                errors={"error": str(af.detail)},
+                status_code=status.HTTP_401_UNAUTHORIZED
             )
         except Exception as e:
             return error_response(

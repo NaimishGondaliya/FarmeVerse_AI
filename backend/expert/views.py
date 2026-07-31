@@ -69,10 +69,10 @@ class ExpertLoginView(APIView):
 
         expert = AgricultureExpert.objects.filter(email=email).first()
         if not expert:
-            return Response({"error": "Invalid email or password."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid email or password."}, status=status.HTTP_401_UNAUTHORIZED)
 
         if not check_password(password, expert.password):
-            return Response({"error": "Invalid email or password."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid email or password."}, status=status.HTTP_401_UNAUTHORIZED)
 
         if not expert.active_status:
             return Response({"error": "Expert account is inactive. Contact admin."}, status=status.HTTP_403_FORBIDDEN)
