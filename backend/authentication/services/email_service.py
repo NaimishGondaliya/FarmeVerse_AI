@@ -1,4 +1,6 @@
 import logging
+import socket
+from smtplib import SMTPException, SMTPAuthenticationError
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -43,9 +45,18 @@ class EmailService:
             else:
                 logger.error(f"Email failed to send to {email_address} (returned 0)")
                 return False
+        except SMTPAuthenticationError as e:
+            logger.error(f"SMTP Authentication failed to {email_address}. Check App Password. Error: {str(e)}")
+            return False
+        except SMTPException as e:
+            logger.error(f"SMTP Exception while connecting/sending to {email_address}: {str(e)}")
+            return False
+        except (socket.timeout, TimeoutError):
+            logger.error(f"SMTP Connection Timeout. Email to {email_address} dropped. Check network port / Render rules.")
+            return False
+        except OSError as e:
+            logger.error(f"OS/Network error sending email to {email_address}. Possible rendering block: {str(e)}")
+            return False
         except Exception as e:
             logger.error(f"Failed to send OTP email to {email_address}: {str(e)}")
-            print("OTP EMAIL ERROR:", type(e).__name__, str(e))
-            with open("smtp_error.log", "w") as f:
-                f.write(f"OTP EMAIL ERROR: {type(e).__name__} - {str(e)}\n")
             return False
