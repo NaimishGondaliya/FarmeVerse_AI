@@ -95,7 +95,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
 
 class VerifyOTPSerializer(serializers.Serializer):
     """
-    Serializer validating input otp code and mobile numbers.
+    Serializer validating input otp code and mobile numbers (forgot-password flow).
     """
     mobile = serializers.CharField(
         required=True,
@@ -110,7 +110,7 @@ class VerifyOTPSerializer(serializers.Serializer):
 
 class ResetPasswordSerializer(serializers.Serializer):
     """
-    Serializer validating reset password fields.
+    Serializer validating reset password fields — requires reset_token from OTP verification.
     """
     mobile = serializers.CharField(
         required=True,
@@ -125,13 +125,43 @@ class ResetPasswordSerializer(serializers.Serializer):
         required=True,
         write_only=True
     )
+    reset_token = serializers.CharField(
+        required=True
+    )
 
     def validate(self, attrs):
         if attrs.get('new_password') != attrs.get('confirm_password'):
             raise serializers.ValidationError({"confirm_password": "Passwords do not match."})
         return attrs
+
+
 class LogoutSerializer(serializers.Serializer):
     """
     Serializer validating logout payload (refresh token).
     """
     refresh = serializers.CharField(required=True)
+
+
+class VerifyRegistrationOTPSerializer(serializers.Serializer):
+    """
+    Serializer validating registration OTP verification.
+    """
+    mobile = serializers.CharField(
+        required=True,
+        validators=[validate_mobile]
+    )
+    otp_code = serializers.CharField(
+        required=True,
+        min_length=6,
+        max_length=6
+    )
+
+
+class ResendRegistrationOTPSerializer(serializers.Serializer):
+    """
+    Serializer validating resend registration OTP request.
+    """
+    mobile = serializers.CharField(
+        required=True,
+        validators=[validate_mobile]
+    )

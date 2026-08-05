@@ -8,7 +8,10 @@ from .views import (
     ProfileUpdateView,
     ForgotPasswordView,
     VerifyOTPView,
-    ResetPasswordView
+    ResetPasswordView,
+    VerifyRegistrationOTPView,
+    ResendRegistrationOTPView,
+    DebugEmailView,
 )
 
 app_name = 'authentication'
@@ -23,4 +26,7 @@ urlpatterns = [
     path('forgot-password/', ForgotPasswordView.as_view(), name='forgot_password'),
     path('verify-otp/', VerifyOTPView.as_view(), name='verify_otp'),
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
+    path('verify-registration-otp/', VerifyRegistrationOTPView.as_view(), name='verify_registration_otp'),
+    path('resend-registration-otp/', ResendRegistrationOTPView.as_view(), name='resend_registration_otp'),
+    path('debug-email/', DebugEmailView.as_view(), name='debug_email'),
 ]

@@ -45,4 +45,7 @@ class EmailService:
                 return False
         except Exception as e:
             logger.error(f"Failed to send OTP email to {email_address}: {str(e)}")
+            print("OTP EMAIL ERROR:", type(e).__name__, str(e))
+            with open("smtp_error.log", "w") as f:
+                f.write(f"OTP EMAIL ERROR: {type(e).__name__} - {str(e)}\n")
             return False

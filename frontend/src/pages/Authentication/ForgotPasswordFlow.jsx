@@ -14,6 +14,7 @@ export const ForgotPasswordFlow = () => {
     const [step, setStep] = useState(1) // 1: Mobile, 2: OTP, 3: Reset
     const [isLoading, setIsLoading] = useState(false)
     const [userMobile, setUserMobile] = useState('')
+    const [resetToken, setResetToken] = useState('')
     const [toast, setToast] = useState(null)
     const triggerToast = (msg, type = 'error') => setToast({ message: msg, type })
 
@@ -88,6 +89,7 @@ export const ForgotPasswordFlow = () => {
         try {
             const res = await authAPI.verifyOtp(userMobile, data.otp)
             if (res.success) {
+                setResetToken(res.data?.reset_token || '')
                 triggerToast(res.message || 'OTP મળ્યો છે!', 'success')
                 setStep(3) // Move to Reset Password
             } else {
@@ -106,7 +108,7 @@ export const ForgotPasswordFlow = () => {
         if (isLoading) return;
         setIsLoading(true)
         try {
-            const res = await authAPI.resetPassword(userMobile, data.password, data.confirmPassword)
+            const res = await authAPI.resetPassword(userMobile, data.password, data.confirmPassword, resetToken)
             if (res.success) {
                 triggerToast(res.message || 'પાસવર્ડ સફળતાપૂર્વક બદલાઈ ગયો છે!', 'success')
                 setTimeout(() => navigate('/farmer/login'), 2000)
@@ -134,7 +136,7 @@ export const ForgotPasswordFlow = () => {
                 step === 1
                     ? 'તમારા ખાતાનો રજીસ્ટર્ડ મોબાઈલ નંબર દાખલ કરો'
                     : step === 2
-                        ? `અમે તમારા મોબાઈલ નંબર ${userMobile} પર OTP મોકલ્યો છે`
+                        ? `અમે તમારા રજિસ્ટર્ડ ઈમેલ સરનામા પર 6 અંકનો OTP મોકલ્યો છે.`
                         : 'કૃપા કરીને નીચે તમારો નવો પાસવર્ડ દાખલ કરો'
             }
             roleTheme="farmer"

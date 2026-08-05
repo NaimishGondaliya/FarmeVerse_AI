@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { FiUser, FiPhone, FiMail, FiMapPin, FiHome, FiLock } from 'react-icons/fi'
+import { FiUser, FiPhone, FiMail, FiMapPin, FiHome, FiLock, FiShield, FiChevronDown, FiAlertTriangle } from 'react-icons/fi'
 import FormContainer from '../../components/common/FormContainer'
 import Input from '../../components/common/Input'
 import Select from '../../components/common/Select'
@@ -23,6 +23,9 @@ export const FarmerRegister = () => {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
     const [toast, setToast] = useState(null)
+    const [step, setStep] = useState(1) // 1: Registration Form, 2: OTP Verification
+    const [registeredMobile, setRegisteredMobile] = useState('')
+    const [maskedEmail, setMaskedEmail] = useState('')
     const triggerToast = (msg, type = 'error') => setToast({ message: msg, type })
 
     const getErrorMessage = (err) => {
@@ -44,6 +47,7 @@ export const FarmerRegister = () => {
         return errorMsg || 'રજીસ્ટ્રેશન નિષ્ફળ ગયું છે'
     }
 
+    // ── Step 1: Registration Form ──
     const {
         register,
         handleSubmit,
@@ -64,7 +68,6 @@ export const FarmerRegister = () => {
         }
     })
 
-    // Watch password field to check compatibility in Confirm Password validation
     const password = watch('password')
 
     const onSubmit = async (data) => {
@@ -79,8 +82,10 @@ export const FarmerRegister = () => {
                 role: 'Farmer'
             })
             if (res.success) {
-                triggerToast(res.message || 'રજીસ્ટ્રેશન સફળ રહ્યું છે! કૃપા કરીને લોગિન કરો.', 'success')
-                setTimeout(() => navigate('/farmer/login'), 2000)
+                setRegisteredMobile(data.mobile)
+                setMaskedEmail(res.data?.masked_email || '***@***.***')
+                triggerToast(res.message || 'OTP તમારા ઈમેલ પર મોકલવામાં આવ્યો છે!', 'success')
+                setStep(2) // Move to OTP verification
             } else {
                 triggerToast(res.message || 'રજીસ્ટ્રેશન નિષ્ફળ રહ્યું', 'error')
             }
@@ -92,10 +97,102 @@ export const FarmerRegister = () => {
         }
     }
 
+    // ── Step 2: OTP Verification ──
+    const {
+        register: regOtp,
+        handleSubmit: handleOtpSubmit,
+        formState: { errors: errorsOtp }
+    } = useForm({ defaultValues: { otp: '' } })
+
+    const onOtpSubmit = async (data) => {
+        if (isLoading) return;
+        setIsLoading(true)
+        try {
+            const res = await authAPI.verifyRegistrationOtp(registeredMobile, data.otp)
+            if (res.success) {
+                triggerToast(res.message || 'ઈમેલ સફળતાપૂર્વક ચકાસાયું! હવે લોગિન કરો.', 'success')
+                setTimeout(() => navigate('/farmer/login'), 2000)
+            } else {
+                triggerToast(res.message || 'OTP ચકાસણી નિષ્ફળ', 'error')
+            }
+        } catch (err) {
+            console.error(err)
+            triggerToast(getErrorMessage(err), 'error')
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleResendOtp = async () => {
+        if (isLoading) return;
+        setIsLoading(true)
+        try {
+            const res = await authAPI.resendRegistrationOtp(registeredMobile)
+            if (res.success) {
+                triggerToast(res.message || 'નવો OTP તમારા ઈમેલ પર મોકલવામાં આવ્યો છે.', 'success')
+            } else {
+                triggerToast(res.message || 'OTP ફરીથી મોકલવામાં નિષ્ફળ', 'error')
+            }
+        } catch (err) {
+            console.error(err)
+            triggerToast(getErrorMessage(err), 'error')
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    // ── Step 2: OTP Verification Screen ──
+    if (step === 2) {
+        return (
+            <FormContainer
+                title="તમારું ઈમેલ ચકાસો"
+                subtitle={`અમે ${maskedEmail} પર 6 અંકનો ચકાસણી કોડ મોકલ્યો છે.`}
+                roleTheme="farmer"
+                backTo="/farmer/register"
+                backLabel="રજીસ્ટ્રેશન પર પાછા જાઓ"
+            >
+                {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+                <form onSubmit={handleOtpSubmit(onOtpSubmit)} className="space-y-4">
+                    <Input
+                        label="OTP કોડ (6 આંકડાનો)"
+                        name="otp"
+                        type="text"
+                        maxLength={6}
+                        placeholder="દા.ત. 123456"
+                        icon={FiShield}
+                        required
+                        error={errorsOtp.otp}
+                        {...regOtp('otp', {
+                            required: 'OTP ફરજિયાત છે',
+                            pattern: {
+                                value: /^\d{6}$/,
+                                message: 'OTP કોડ ફક્ત ૬ અંકનો હોવો જોઈએ'
+                            }
+                        })}
+                    />
+                    <Button type="submit" variant="primary" isLoading={isLoading} disabled={isLoading}>
+                        OTP ચકાસો (Verify OTP)
+                    </Button>
+                    <div className="text-center">
+                        <button
+                            type="button"
+                            className="text-xs text-primary font-bold hover:underline"
+                            disabled={isLoading}
+                            onClick={handleResendOtp}
+                        >
+                            ફરીથી OTP મોકલો (Resend OTP)
+                        </button>
+                    </div>
+                </form>
+            </FormContainer>
+        )
+    }
+
+    // ── Step 1: Registration Form ──
     return (
         <FormContainer
-            title="ખેડૂત રજીસ્ટ્રેશન" // "Farmer Registration" in Gujarati
-            subtitle="નવું ખાતું બનાવવા માટે માહિતી ભરો" // "Fill info to create a new account"
+            title="ખેડૂત રજીસ્ટ્રેશન"
+            subtitle="નવું ખાતું બનાવવા માટે માહિતી ભરો"
             roleTheme="farmer"
             backTo="/farmer/login"
             backLabel="લોગિન પર પાછા જાઓ"
@@ -176,19 +273,39 @@ export const FarmerRegister = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select
-                        label="જિલ્લો (District)"
-                        name="district"
-                        icon={FiMapPin}
-                        required
-                        error={errors.district}
-                        {...register('district', { required: 'જિલ્લો પસંદ કરવો ફરજિયાત છે' })}
-                    >
-                        <option value="">જિલ્લો પસંદ કરો</option>
-                        {GUJARAT_DISTRICTS.map((dst) => (
-                            <option key={dst} value={dst}>{dst}</option>
-                        ))}
-                    </Select>
+                    <div className="w-full flex flex-col mb-4 font-sans">
+                        <label htmlFor="district" className="text-xs md:text-sm font-semibold text-dark/85 mb-1.5 flex items-center gap-1 select-none">
+                            જિલ્લો (District)
+                            <span className="text-red-500 font-bold">*</span>
+                        </label>
+                        <div className="relative flex items-center">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-light/60 pointer-events-none flex items-center justify-center">
+                                <FiMapPin size={18} />
+                            </div>
+                            <select
+                                id="district"
+                                className={`w-full bg-white text-dark placeholder:text-dark-light/40 pl-12 pr-10 py-3 rounded-btn border text-sm transition-all duration-200 outline-none appearance-none cursor-pointer ${errors.district
+                                        ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10 bg-red-50/5 animate-shake'
+                                        : 'border-dark/15 focus:border-primary focus:ring-2 focus:ring-primary/10'
+                                    }`}
+                                {...register('district', { required: 'જિલ્લો પસંદ કરવો ફરજિયાત છે' })}
+                            >
+                                <option value="">જિલ્લો પસંદ કરો</option>
+                                {GUJARAT_DISTRICTS.map((dst) => (
+                                    <option key={dst} value={dst}>{dst}</option>
+                                ))}
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-light/60 pointer-events-none flex items-center justify-center">
+                                <FiChevronDown size={18} />
+                            </div>
+                        </div>
+                        {errors.district && (
+                            <span className="text-xs text-red-650 font-bold mt-1.5 flex items-center gap-1 animate-fadeIn">
+                                <FiAlertTriangle size={13} className="text-red-500 flex-shrink-0" />
+                                <span>{errors.district.message}</span>
+                            </span>
+                        )}
+                    </div>
 
                     {/* State (Default Gujarat) */}
                     <Input

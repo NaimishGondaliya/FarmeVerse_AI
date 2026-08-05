@@ -11,7 +11,9 @@ from authentication.serializers import (
     ForgotPasswordSerializer,
     VerifyOTPSerializer,
     ResetPasswordSerializer,
-    UserSerializer
+    UserSerializer,
+    VerifyRegistrationOTPSerializer,
+    ResendRegistrationOTPSerializer,
 )
 from authentication.services.auth_service import AuthService
 from authentication.services.jwt_service import JWTService
@@ -48,10 +50,12 @@ class RegisterView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
-            user = AuthService.register_user(serializer.validated_data)
+            result = AuthService.register_user(serializer.validated_data)
+            user = result['user']
             user_data = UserSerializer(user).data
+            user_data['masked_email'] = result['masked_email']
             return success_response(
                 message="Registration successful. Verification OTP sent to your registered email.",
                 data=user_data,
@@ -66,6 +70,91 @@ class RegisterView(APIView):
         except Exception as e:
             return error_response(
                 message="Server error during registration",
+                errors={"server": str(e)},
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class VerifyRegistrationOTPView(APIView):
+    """
+    POST /api/auth/verify-registration-otp
+    Verifies the registration OTP and marks the user as verified.
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = VerifyRegistrationOTPSerializer(data=request.data)
+        if not serializer.is_valid():
+            return error_response(
+                message="Validation failed",
+                errors=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            AuthService.verify_registration_otp(
+                mobile=serializer.validated_data['mobile'],
+                otp_code=serializer.validated_data['otp_code']
+            )
+            return success_response(
+                message="Email verified successfully. You can now login.",
+                data={}
+            )
+        except ValidationError as ve:
+            msg = str(ve.detail[0] if isinstance(ve.detail, list) else (
+                ve.detail.get('non_field_errors', [str(ve)])[0]
+                if isinstance(ve.detail, dict) else str(ve)
+            ))
+            return error_response(
+                message=msg,
+                errors=ve.detail if hasattr(ve, 'detail') else {"error": str(ve)},
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return error_response(
+                message="Server error during OTP verification",
+                errors={"server": str(e)},
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class ResendRegistrationOTPView(APIView):
+    """
+    POST /api/auth/resend-registration-otp
+    Resends the registration OTP with rate-limiting protection.
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = ResendRegistrationOTPSerializer(data=request.data)
+        if not serializer.is_valid():
+            return error_response(
+                message="Validation failed",
+                errors=serializer.errors,
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            AuthService.resend_registration_otp(
+                mobile=serializer.validated_data['mobile']
+            )
+            return success_response(
+                message="A new OTP has been sent to your registered email address.",
+                data={}
+            )
+        except ValidationError as ve:
+            msg = str(ve.detail[0] if isinstance(ve.detail, list) else (
+                ve.detail.get('non_field_errors', [str(ve)])[0]
+                if isinstance(ve.detail, dict) else str(ve)
+            ))
+            return error_response(
+                message=msg,
+                errors=ve.detail if hasattr(ve, 'detail') else {"error": str(ve)},
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return error_response(
+                message="Server error during OTP resend",
                 errors={"server": str(e)},
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -86,7 +175,7 @@ class LoginView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
             auth_data = AuthService.authenticate_user(
                 credential=serializer.validated_data['credential'],
@@ -99,7 +188,6 @@ class LoginView(APIView):
                 status_code=status.HTTP_200_OK
             )
         except ValidationError as ve:
-            # Check detailed error mapping or raise general BAD_REQUEST
             errs = ve.detail if hasattr(ve, 'detail') else {"error": str(ve)}
             msg = errs[0] if isinstance(errs, list) else (errs.get('non_field_errors', [str(ve)])[0] if isinstance(errs, dict) else str(ve))
             return error_response(
@@ -136,7 +224,7 @@ class LogoutView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
             blacklisted = JWTService.blacklist_refresh_token(serializer.validated_data['refresh'])
             if blacklisted:
@@ -196,7 +284,7 @@ class ProfileUpdateView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
             updated_user = AuthService.update_profile(request.user, serializer.validated_data)
             user_data = UserSerializer(updated_user).data
@@ -222,7 +310,7 @@ class ProfileUpdateView(APIView):
 class ForgotPasswordView(APIView):
     """
     POST /api/auth/forgot-password
-    Generates and sends recovery OTP to User's phone/email.
+    Generates and sends recovery OTP to User's registered email.
     """
     permission_classes = [AllowAny]
 
@@ -234,7 +322,7 @@ class ForgotPasswordView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
             AuthService.request_forgot_password(serializer.validated_data['mobile'])
             return success_response(
@@ -258,7 +346,7 @@ class ForgotPasswordView(APIView):
 class VerifyOTPView(APIView):
     """
     POST /api/auth/verify-otp
-    Checks the recovery code corresponding to the mobile.
+    Checks the recovery code corresponding to the mobile. Returns reset_token on success.
     """
     permission_classes = [AllowAny]
 
@@ -270,15 +358,15 @@ class VerifyOTPView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
-            AuthService.verify_forgot_password_otp(
+            reset_token = AuthService.verify_forgot_password_otp(
                 mobile=serializer.validated_data['mobile'],
                 otp_code=serializer.validated_data['otp_code']
             )
             return success_response(
-                message="OTP matches successfully.",
-                data={}
+                message="OTP verified successfully.",
+                data={"reset_token": reset_token}
             )
         except ValidationError as ve:
             return error_response(
@@ -297,7 +385,7 @@ class VerifyOTPView(APIView):
 class ResetPasswordView(APIView):
     """
     POST /api/auth/reset-password
-    Resets password after OTP confirmation.
+    Resets password after OTP confirmation — requires valid reset_token.
     """
     permission_classes = [AllowAny]
 
@@ -309,11 +397,12 @@ class ResetPasswordView(APIView):
                 errors=serializer.errors,
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         try:
             AuthService.reset_password(
                 mobile=serializer.validated_data['mobile'],
-                new_password_raw=serializer.validated_data['new_password']
+                new_password_raw=serializer.validated_data['new_password'],
+                reset_token=serializer.validated_data['reset_token']
             )
             return success_response(
                 message="Password reset successful. You may now login.",
@@ -359,3 +448,52 @@ def create_admin_view(request):
         password='Admin@123',
     )
     return HttpResponse('Admin created successfully')
+class DebugEmailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        import os
+        from django.conf import settings
+        from django.core.mail import send_mail
+        from .utils.response import success_response
+
+        user = getattr(settings, 'EMAIL_HOST_USER', None)
+        pwd = getattr(settings, 'EMAIL_HOST_PASSWORD', None)
+
+        debug_info = {
+            'EMAIL_BACKEND': getattr(settings, 'EMAIL_BACKEND', None),
+            'EMAIL_HOST': getattr(settings, 'EMAIL_HOST', None),
+            'EMAIL_PORT': getattr(settings, 'EMAIL_PORT', None),
+            'EMAIL_USE_TLS': getattr(settings, 'EMAIL_USE_TLS', None),
+            'EMAIL_HOST_USER': user,
+            'HAS_EMAIL_HOST_PASSWORD': bool(pwd),
+            'DEFAULT_FROM_EMAIL': getattr(settings, 'DEFAULT_FROM_EMAIL', None),
+            'os_environ_USER': os.environ.get('EMAIL_HOST_USER'),
+            'os_environ_HAS_PWD': bool(os.environ.get('EMAIL_HOST_PASSWORD')),
+        }
+
+        error_type = None
+        error_str = None
+        email_sent = False
+
+        if user:
+            try:
+                send_mail(
+                    'FarmVerse Debug SMTP Test',
+                    'This is a debug test from the API View.',
+                    getattr(settings, 'DEFAULT_FROM_EMAIL', user),
+                    [user],
+                    fail_silently=False
+                )
+                email_sent = True
+            except Exception as e:
+                error_type = type(e).__name__
+                error_str = str(e)
+                print('DEBUG API EMAIL ERROR:', error_type, error_str)
+
+        debug_info['email_sent_successfully'] = email_sent
+        if error_type:
+            debug_info['error_type'] = error_type
+            debug_info['error_str'] = error_str
+
+        return success_response(message='Debug execution completed', data=debug_info)

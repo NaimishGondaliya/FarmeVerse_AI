@@ -18,6 +18,8 @@ API.interceptors.request.use((config) => {
         '/auth/forgot-password/',
         '/auth/verify-otp/',
         '/auth/reset-password/',
+        '/auth/verify-registration-otp/',
+        '/auth/resend-registration-otp/',
         '/weather/current/',
         '/crop-recommendation/predict/',
         '/expert/login/',
@@ -56,12 +58,21 @@ export const authAPI = {
         const response = await API.post('/auth/verify-otp/', { mobile, otp_code: otpCode });
         return response.data;
     },
-    resetPassword: async (mobile, newPassword, confirmPassword) => {
+    resetPassword: async (mobile, newPassword, confirmPassword, resetToken) => {
         const response = await API.post('/auth/reset-password/', {
             mobile,
             new_password: newPassword,
-            confirm_password: confirmPassword
+            confirm_password: confirmPassword,
+            reset_token: resetToken
         });
+        return response.data;
+    },
+    verifyRegistrationOtp: async (mobile, otpCode) => {
+        const response = await API.post('/auth/verify-registration-otp/', { mobile, otp_code: otpCode });
+        return response.data;
+    },
+    resendRegistrationOtp: async (mobile) => {
+        const response = await API.post('/auth/resend-registration-otp/', { mobile });
         return response.data;
     },
     logout: async () => {
