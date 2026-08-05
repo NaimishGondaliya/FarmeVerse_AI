@@ -59,3 +59,38 @@ class ConsultationReply(models.Model):
 
     def __str__(self):
         return f"Reply {self.id} on Consultation {self.consultation_id} by {self.sender}"
+
+
+class ExpertReview(models.Model):
+    """One review per consultation, submitted by the farmer after the thread is closed."""
+    consultation = models.OneToOneField(
+        Consultation,
+        on_delete=models.CASCADE,
+        related_name='review',
+        db_index=True
+    )
+    expert = models.ForeignKey(
+        AgricultureExpert,
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        db_index=True
+    )
+    farmer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='expert_reviews',
+        db_index=True
+    )
+    rating = models.PositiveSmallIntegerField(
+        help_text='Rating from 1 (worst) to 5 (best)'
+    )
+    review = models.TextField(blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'expert_reviews'
+        verbose_name = 'Expert Review'
+        verbose_name_plural = 'Expert Reviews'
+
+    def __str__(self):
+        return f"Review {self.id}: {self.rating}★ for Expert {self.expert_id} (Consultation {self.consultation_id})"

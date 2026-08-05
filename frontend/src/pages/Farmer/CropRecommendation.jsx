@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
 import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import {
@@ -18,95 +19,6 @@ import {
 import { weatherAPI, cropRecommendationAPI, farmAPI } from '../../services/api'
 
 // English/Gujarati translations dictionary
-const dictionary = {
-    GUJ: {
-        title: "🌾 પાક ભલામણ કેન્દ્ર (Crop Recommendation)",
-        subtitle: "જમીન અને હવામાન આધારિત વૈજ્ઞાનિક પાકની ભલામણ",
-        citySelect: "નજીકનું શહેર પસંદ કરો (Weather Auto-sync):",
-        titleInputs: "જમીનના પોષક તત્ત્વો માપો",
-        nLabel: "નાઇટ્રોજન (N)",
-        pLabel: "ફોસ્ફરસ (P)",
-        kLabel: "પોટેશિયમ (K)",
-        phLabel: "પીએચ (pH Value)",
-        rainfallLabel: "વરસાદ (Rainfall in mm)",
-        tempLabel: "તાપમાન (Temperature °C) - ઓટો",
-        humidityLabel: "ભેજ (Humidity %) - ઓટો",
-        nHelp: "નાઇટ્રોજન સ્તર (0-140)",
-        pHelp: "ફોસ્ફરસ સ્તર (5-145)",
-        kHelp: "પોટેશિયમ સ્તર (5-205)",
-        phHelp: "એસિડિટી સ્કેલ (0-14)",
-        rainfallHelp: "અંદાજિત વરસાદ (20-300 mm)",
-        recommendBtn: "યોગ્ય પાકની ભલામણ શોધો",
-        recommending: "ભલામણ શોધી રહ્યા છીએ...",
-        weatherLoading: "હવામાન માહિતી સિંક થઈ રહી છે...",
-        weatherSyncSuccess: "હવામાન વિગતો સફળતાપૂર્વક અપડેટ થઈ!",
-        weatherSyncFail: "હવામાન લાઈવ વિગતો લોડ કરવામાં નિષ્ફળ. કૃપા કરીને ઓટો તાપમાન સેટ કરો.",
-        resultsTitle: "સિસ્ટમ આગ્રહિત ભલામણ (Recommendation Results)",
-        recommendedCrop: "ભલામણ કરેલ પાક:",
-        confidence: "મોડેલ યોગ્યતા (Confidence Score):",
-        errorEmpty: "કૃપા કરીને બધા ખાલી ખાના ભરો.",
-        errorInvalidRange: "કૃપા કરીને સાચા મૂલ્યો દાખલ કરો: pH (0-14), N, P, K અને વરસાદ (>= 0).",
-        predictionError: "પાકની ભલામણ આગાહી કરવામાં કંઈક ભૂલ થઈ. કૃપા કરીને ફરી પ્રયાસ કરો.",
-        inputSummary: "ગણતરી કરેલ ઇનપુટ વિગતો",
-        backToInputs: "નવી ભલામણ કરો",
-
-        /* Phase 3 Suitability */
-        suitabilityTitle: "સુસંગતતા સ્કોર (Suitability Score)",
-        badgeExcellent: "શ્રેષ્ઠ (Excellent)",
-        badgeGood: "સારું (Good)",
-        badgeModerate: "મધ્યમ (Moderate)",
-        badgeNotRecommended: "ભલામણ નથી (Not Recommended)",
-        suLabelTemp: "તાપમાન",
-        suLabelRain: "વરસાદની શક્યતા",
-        suLabelHum: "ભેજ",
-        suLabelSeason: "વર્તમાન ઋતુ",
-        suRecSentence: "આ હવામાન પરિસ્થિતિઓ વર્તમાન પાકના વિકાસ માટે સંપૂર્ણ આધાર પૂરો પાડે છે."
-    },
-    ENG: {
-        title: "🌾 Crop Recommendation Center",
-        subtitle: "Scientific Crop Recommendations based on Soil & Live Weather data",
-        citySelect: "Select Nearest City (Weather Auto-sync):",
-        titleInputs: "Enter Soil Nutrients & Features",
-        nLabel: "Nitrogen (N)",
-        pLabel: "Phosphorus (P)",
-        kLabel: "Potassium (K)",
-        phLabel: "Soil pH Level",
-        rainfallLabel: "Rainfall (mm)",
-        tempLabel: "Temperature (°C) - Auto",
-        humidityLabel: "Humidity (%) - Auto",
-        nHelp: "Nitrogen level in soil (0-140)",
-        pHelp: "Phosphorus level in soil (5-145)",
-        kHelp: "Potassium level in soil (5-205)",
-        phHelp: "Acidity (0-14 range)",
-        rainfallHelp: "Average rainfall (20-300 mm)",
-        recommendBtn: "Recommend Best Crop",
-        recommending: "Processing ML recommendation...",
-        weatherLoading: "Syncing weather properties...",
-        weatherSyncSuccess: "Weather details synced successfully!",
-        weatherSyncFail: "Failed to load live weather variables. Using fallback defaults.",
-        resultsTitle: "Model Recommended Solution",
-        recommendedCrop: "Recommended Crop:",
-        confidence: "Confidence Score:",
-        errorEmpty: "Please fill in all soil features.",
-        errorInvalidRange: "Please input valid parameters: pH (0-14), nutrients and rainfall must be positive.",
-        predictionError: "Server error during recommendation predictions. Please try again.",
-        inputSummary: "Input Parameters Summary",
-        backToInputs: "New Analysis",
-
-        /* Phase 3 Suitability */
-        suitabilityTitle: "Suitability Score",
-        badgeExcellent: "Excellent",
-        badgeGood: "Good",
-        badgeModerate: "Moderate",
-        badgeNotRecommended: "Not Recommended",
-        suLabelTemp: "Temperature",
-        suLabelRain: "Rainfall",
-        suLabelHum: "Humidity",
-        suLabelSeason: "Season",
-        suRecSentence: "These environmental conditions provide a reliable foundation for crop growth."
-    }
-}
-
 const gujaratCities = [
     { name: 'Rajkot', labelGuj: 'રાજકોટ (Rajkot)', labelEng: 'Rajkot' },
     { name: 'Ahmedabad', labelGuj: 'અમદાવાદ (Ahmedabad)', labelEng: 'Ahmedabad' },
@@ -220,9 +132,51 @@ const gujaratCities = [
     { name: 'Mangrol', labelGuj: 'માણગ્રોલ (Mangrol)', labelEng: 'Mangrol' }
 ]
 
+const CROP_TRANSLATIONS = {
+    'Rice': 'ચોખા',
+    'Maize': 'મકાઈ',
+    'Chickpea': 'ચણા',
+    'Kidney Beans': 'રાજમા',
+    'Pigeon Peas': 'તુવેર',
+    'Moth Beans': 'મોથ',
+    'Mung Bean': 'મગ',
+    'Black Gram': 'અડદ',
+    'Lentil': 'મસૂર',
+    'Pomegranate': 'દાડમ',
+    'Banana': 'કેળું',
+    'Mango': 'કેરી',
+    'Grapes': 'દ્રાક્ષ',
+    'Watermelon': 'તરબૂચ',
+    'Muskmelon': 'શકરટેટી',
+    'Apple': 'સફરજન',
+    'Orange': 'નારંગી',
+    'Papaya': 'પપૈયું',
+    'Coconut': 'નાળિયેર',
+    'Cotton': 'કપાસ',
+    'Jute': 'શણ',
+    'Coffee': 'કોફી'
+};
+
+const getLocalizedCropName = (cropName, language) => {
+    if (!cropName) return '';
+    if (language !== 'gu') return cropName.charAt(0).toUpperCase() + cropName.slice(1).toLowerCase();
+
+    // Normalize format to Title Case
+    const normalized = cropName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+    return CROP_TRANSLATIONS[normalized] || CROP_TRANSLATIONS[cropName] || normalized;
+};
+
+const toGujaratiDigits = (str, lang) => {
+    if (lang !== 'gu') return str;
+    const gujDigits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+    return String(str).replace(/\d/g, d => gujDigits[d]);
+};
+
 export const CropRecommendation = () => {
-    const { language } = useLanguage()
-    const lang = language === 'en' ? 'ENG' : 'GUJ'
+    const { formatNumber } = useLanguage()
+    const { language, t } = useTranslation()
+
     const [selectedCity, setSelectedCity] = useState('Rajkot')
 
     // Location Mode State
@@ -255,15 +209,15 @@ export const CropRecommendation = () => {
     const [keyboardIndex, setKeyboardIndex] = useState(-1)
     const autocompleteRef = useRef(null)
 
-    const t = dictionary[lang]
+
 
     // Sync input field value when city or language updates
     useEffect(() => {
         const cityObj = gujaratCities.find(c => c.name === selectedCity)
         if (cityObj) {
-            setSearchTerm(lang === 'GUJ' ? cityObj.labelGuj : cityObj.labelEng)
+            setSearchTerm(language === 'gu' ? cityObj.labelGuj : cityObj.labelEng)
         }
-    }, [lang, selectedCity])
+    }, [language, selectedCity])
 
     // Click outside autocomplete to close dropdown hook
     useEffect(() => {
@@ -315,14 +269,14 @@ export const CropRecommendation = () => {
                 setTempVal(data.temperature)
                 setHumidityVal(data.humidity ?? 65.0)
                 setRainProbVal(data.pop !== undefined ? data.pop * 100 : (data.clouds || 0))
-                setSuccessMessage(t.weatherSyncSuccess)
+                setSuccessMessage(t('cropRecommendation.weatherSyncSuccess'))
                 setTimeout(() => setSuccessMessage(''), 3000)
             } else {
-                setAlertMessage(t.weatherSyncFail)
+                setAlertMessage(t('cropRecommendation.weatherSyncFail'))
             }
         } catch (err) {
             console.error('Failed to sync weather:', err)
-            setAlertMessage(t.weatherSyncFail)
+            setAlertMessage(t('cropRecommendation.weatherSyncFail'))
         } finally {
             setIsWeatherSyncing(false)
         }
@@ -330,7 +284,7 @@ export const CropRecommendation = () => {
 
     // Filter matching cities based on search terms
     const filteredCities = gujaratCities.filter(city => {
-        const search = searchTerm.toLowerCase()
+        const search = (searchTerm || '').toLowerCase()
         return (
             city.name.toLowerCase().includes(search) ||
             city.labelEng.toLowerCase().includes(search) ||
@@ -352,7 +306,7 @@ export const CropRecommendation = () => {
 
     const handleSelectCity = (city) => {
         setSelectedCity(city.name)
-        setSearchTerm(lang === 'GUJ' ? city.labelGuj : city.labelEng)
+        setSearchTerm(language === 'gu' ? city.labelGuj : city.labelEng)
         setIsDropdownOpen(false)
         setKeyboardIndex(-1)
     }
@@ -387,7 +341,7 @@ export const CropRecommendation = () => {
 
         // 10. Form validations
         if (!nVal || !pVal || !kVal || !phVal || !rainfallVal) {
-            setAlertMessage(t.errorEmpty)
+            setAlertMessage(t('cropRecommendation.errorEmpty'))
             return
         }
 
@@ -399,7 +353,7 @@ export const CropRecommendation = () => {
 
         if (isNaN(n) || isNaN(p) || isNaN(k) || isNaN(ph) || isNaN(rainfall) ||
             n < 0 || p < 0 || k < 0 || ph < 0 || ph > 14 || rainfall < 0) {
-            setAlertMessage(t.errorInvalidRange)
+            setAlertMessage(t('cropRecommendation.errorInvalidRange'))
             return
         }
 
@@ -426,7 +380,7 @@ export const CropRecommendation = () => {
             if (result && result.success) {
                 setPredictionResult(result)
             } else {
-                setAlertMessage(result?.error || t.predictionError)
+                setAlertMessage(result?.error || t('cropRecommendation.predictionError'))
             }
         } catch (err) {
             console.error('Predict error:', err)
@@ -435,7 +389,7 @@ export const CropRecommendation = () => {
                 const firstKey = Object.keys(detailError)[0];
                 setAlertMessage(`${firstKey}: ${detailError[firstKey][0]}`);
             } else {
-                setAlertMessage(t.predictionError)
+                setAlertMessage(t('cropRecommendation.predictionError'))
             }
         } finally {
             setIsRecommending(false)
@@ -449,10 +403,10 @@ export const CropRecommendation = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-card border border-dark/5 shadow-sm">
                 <div className="space-y-1">
                     <h1 className="text-xl md:text-2xl font-bold text-primary flex items-center gap-2">
-                        {t.title}
+                        {t('cropRecommendation.title')}
                     </h1>
                     <p className="text-xs text-dark-light select-none font-semibold">
-                        {t.subtitle}
+                        {t('cropRecommendation.subtitle')}
                     </p>
                 </div>
 
@@ -487,7 +441,7 @@ export const CropRecommendation = () => {
                         <div className="border-b border-dark/5 pb-3">
                             <h3 className="text-sm font-extrabold text-primary select-none flex items-center gap-2">
                                 <FiActivity />
-                                {t.titleInputs}
+                                {t('cropRecommendation.titleInputs')}
                             </h3>
                         </div>
 
@@ -498,14 +452,14 @@ export const CropRecommendation = () => {
                                 className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${locationMode === 'farm' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
                                 onClick={() => setLocationMode('farm')}
                             >
-                                {lang === 'GUJ' ? 'મારું ખેતર પસંદ કરો' : 'Use My Farm'}
+                                {t('cropRecommendation.useMyFarm')}
                             </button>
                             <button
                                 type="button"
                                 className={`flex-1 py-2 text-xs font-bold rounded-sm transition-all ${locationMode === 'city' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
                                 onClick={() => setLocationMode('city')}
                             >
-                                {lang === 'GUJ' ? 'શહેર પસંદ કરો' : 'Select City'}
+                                {t('cropRecommendation.selectCityMode')}
                             </button>
                         </div>
 
@@ -514,13 +468,13 @@ export const CropRecommendation = () => {
                             {locationMode === 'city' ? (
                                 <>
                                     <label className="block text-xs font-bold text-dark-light mb-1.5 font-sans select-none">
-                                        {t.citySelect}
+                                        {t('cropRecommendation.citySelect')}
                                     </label>
                                     <div className="relative w-full">
                                         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
                                         <input
                                             type="text"
-                                            placeholder={lang === 'GUJ' ? 'શહેર શોધો (દા.ત. Rajkot)...' : 'Search Gujarat City...'}
+                                            placeholder={t('cropRecommendation.searchCityPh')}
                                             className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                             value={searchTerm}
                                             onChange={handleSearchChange}
@@ -549,7 +503,7 @@ export const CropRecommendation = () => {
                                                     className={`px-4 py-2 cursor-pointer flex justify-between items-center transition-colors ${keyboardIndex === idx ? 'bg-primary/10 text-primary font-bold' : 'text-dark font-medium'
                                                         }`}
                                                 >
-                                                    <span>{lang === 'GUJ' ? city.labelGuj : city.labelEng}</span>
+                                                    <span>{language === 'gu' ? city.labelGuj : city.labelEng}</span>
                                                     {selectedCity === city.name && (
                                                         <span className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-black">Active</span>
                                                     )}
@@ -561,7 +515,7 @@ export const CropRecommendation = () => {
                             ) : (
                                 <>
                                     <label className="block text-xs font-bold text-dark-light mb-1.5 font-sans select-none">
-                                        {lang === 'GUJ' ? 'તમારું ખેતર પસંદ કરો (GPS સંકલન માટે):' : 'Select Your Farm (For GPS Sync):'}
+                                        {t('cropRecommendation.selectFarmGps')}
                                     </label>
                                     <select
                                         className="w-full h-12 rounded-xl border border-slate-300 px-4 text-sm leading-normal focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -569,7 +523,7 @@ export const CropRecommendation = () => {
                                         onChange={(e) => setSelectedFarmId(e.target.value)}
                                     >
                                         {myFarms.length === 0 ? (
-                                            <option value="" disabled>{lang === 'GUJ' ? 'કોઈ ખેતર ઉપલબ્ધ નથી' : 'No farms available'}</option>
+                                            <option value="" disabled>{t('cropRecommendation.noFarmsGps')}</option>
                                         ) : (
                                             myFarms.map(farm => (
                                                 <option key={farm.id} value={farm.id}>
@@ -582,7 +536,7 @@ export const CropRecommendation = () => {
                             )}
                             {isWeatherSyncing && (
                                 <span className="text-[10px] text-primary font-bold mt-1 select-none animate-pulse">
-                                    ⏳ {t.weatherLoading}
+                                    ⏳ {t('cropRecommendation.weatherLoading')}
                                 </span>
                             )}
                         </div>
@@ -592,10 +546,10 @@ export const CropRecommendation = () => {
 
                             {/* Nitrogen N */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-bold text-dark-light">{t.nLabel}</label>
+                                <label className="block text-xs font-bold text-dark-light">{t('cropRecommendation.nLabel')}</label>
                                 <input
                                     type="number"
-                                    placeholder={t.nHelp}
+                                    placeholder={t('cropRecommendation.nHelp')}
                                     className="w-full bg-secondary-dark border border-dark/10 focus:border-primary outline-none px-4 py-2.5 text-xs rounded-btn font-bold text-dark"
                                     value={nVal}
                                     onChange={(e) => setNVal(e.target.value)}
@@ -604,10 +558,10 @@ export const CropRecommendation = () => {
 
                             {/* Phosphorus P */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-bold text-dark-light">{t.pLabel}</label>
+                                <label className="block text-xs font-bold text-dark-light">{t('cropRecommendation.pLabel')}</label>
                                 <input
                                     type="number"
-                                    placeholder={t.pHelp}
+                                    placeholder={t('cropRecommendation.pHelp')}
                                     className="w-full bg-secondary-dark border border-dark/10 focus:border-primary outline-none px-4 py-2.5 text-xs rounded-btn font-bold text-dark"
                                     value={pVal}
                                     onChange={(e) => setPVal(e.target.value)}
@@ -616,10 +570,10 @@ export const CropRecommendation = () => {
 
                             {/* Potassium K */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-bold text-dark-light">{t.kLabel}</label>
+                                <label className="block text-xs font-bold text-dark-light">{t('cropRecommendation.kLabel')}</label>
                                 <input
                                     type="number"
-                                    placeholder={t.kHelp}
+                                    placeholder={t('cropRecommendation.kHelp')}
                                     className="w-full bg-secondary-dark border border-dark/10 focus:border-primary outline-none px-4 py-2.5 text-xs rounded-btn font-bold text-dark"
                                     value={kVal}
                                     onChange={(e) => setKVal(e.target.value)}
@@ -628,11 +582,11 @@ export const CropRecommendation = () => {
 
                             {/* pH Level */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-bold text-dark-light">{t.phLabel}</label>
+                                <label className="block text-xs font-bold text-dark-light">{t('cropRecommendation.phLabel')}</label>
                                 <input
                                     type="number"
                                     step="0.1"
-                                    placeholder={t.phHelp}
+                                    placeholder={t('cropRecommendation.phHelp')}
                                     className="w-full bg-secondary-dark border border-dark/10 focus:border-primary outline-none px-4 py-2.5 text-xs rounded-btn font-bold text-dark"
                                     value={phVal}
                                     onChange={(e) => setPhVal(e.target.value)}
@@ -641,10 +595,10 @@ export const CropRecommendation = () => {
 
                             {/* Rainfall */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-bold text-dark-light">{t.rainfallLabel}</label>
+                                <label className="block text-xs font-bold text-dark-light">{t('cropRecommendation.rainfallLabel')}</label>
                                 <input
                                     type="number"
-                                    placeholder={t.rainfallHelp}
+                                    placeholder={t('cropRecommendation.rainfallHelp')}
                                     className="w-full bg-secondary-dark border border-dark/10 focus:border-primary outline-none px-4 py-2.5 text-xs rounded-btn font-bold text-dark"
                                     value={rainfallVal}
                                     onChange={(e) => setRainfallVal(e.target.value)}
@@ -653,19 +607,19 @@ export const CropRecommendation = () => {
 
                             {/* Temperature (auto, read-only) */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-bold text-emerald-600">{t.tempLabel}</label>
+                                <label className="block text-xs font-bold text-emerald-600">{t('cropRecommendation.tempLabel')}</label>
                                 <div className="flex bg-emerald-50 border border-emerald-200 text-emerald-950 px-4 py-2.5 text-xs rounded-btn font-bold">
                                     <FiSun className="mr-2 text-amber-500 self-center" />
-                                    <span>{tempVal !== null ? `${tempVal.toFixed(1)} °C` : '-'}</span>
+                                    <span>{tempVal !== null ? `${toGujaratiDigits(tempVal.toFixed(1), language)} °C` : '-'}</span>
                                 </div>
                             </div>
 
                             {/* Humidity (auto, read-only) */}
                             <div className="space-y-1 sm:col-span-2">
-                                <label className="block text-xs font-bold text-emerald-600">{t.humidityLabel}</label>
+                                <label className="block text-xs font-bold text-emerald-600">{t('cropRecommendation.humidityLabel')}</label>
                                 <div className="flex bg-emerald-50 border border-emerald-250 text-emerald-950 px-4 py-2.5 text-xs rounded-btn font-bold">
                                     <FiDroplet className="mr-2 text-indigo-500 self-center" />
-                                    <span>{humidityVal !== null ? `${humidityVal.toFixed(1)} %` : '-'}</span>
+                                    <span>{humidityVal !== null ? `${toGujaratiDigits(humidityVal.toFixed(1), language)} %` : '-'}</span>
                                 </div>
                             </div>
                         </div>
@@ -681,10 +635,10 @@ export const CropRecommendation = () => {
                                 {isRecommending ? (
                                     <>
                                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                        <span>{t.recommending}</span>
+                                        <span>{t('cropRecommendation.recommending')}</span>
                                     </>
                                 ) : (
-                                    <span>{t.recommendBtn}</span>
+                                    <span>{t('cropRecommendation.recommendBtn')}</span>
                                 )}
                             </Button>
                         </div>
@@ -703,17 +657,17 @@ export const CropRecommendation = () => {
                             <div className="relative z-10 space-y-4">
                                 <div className="border-b border-white/20 pb-3 flex items-center gap-2">
                                     <FiBookmark className="text-accent" />
-                                    <h3 className="text-sm font-black tracking-wider uppercase select-none">{t.resultsTitle}</h3>
+                                    <h3 className="text-sm font-black tracking-wider uppercase select-none">{t('cropRecommendation.resultsTitle')}</h3>
                                 </div>
 
                                 <div className="text-center py-6 bg-white/10 rounded-card border border-white/10 shadow-inner">
-                                    <span className="text-[10px] text-emerald-100 font-extrabold uppercase select-none">{t.recommendedCrop}</span>
+                                    <span className="text-[10px] text-emerald-100 font-extrabold uppercase select-none">{t('cropRecommendation.recommendedCrop')}</span>
                                     <h2 className="text-3xl font-black capitalize tracking-wide text-accent mt-1 drop-shadow-sm">
-                                        {predictionResult.recommended_crop}
+                                        {getLocalizedCropName(predictionResult.recommended_crop, language)}
                                     </h2>
                                     <div className="mt-3 inline-flex items-center gap-1.5 bg-accent/25 border border-accent/20 px-3 py-1 rounded-btn text-accent font-sans font-black text-xs">
-                                        <span>{t.confidence}</span>
-                                        <span>{predictionResult.confidence}%</span>
+                                        <span>{t('cropRecommendation.confidence')}</span>
+                                        <span>{toGujaratiDigits(predictionResult.confidence || 95, language)}%</span>
                                     </div>
                                 </div>
 
@@ -735,30 +689,30 @@ export const CropRecommendation = () => {
 
                                     const totalScore = tempScore + humScore + rScore + sScore;
 
-                                    let badgeLabel = t.badgeNotRecommended;
+                                    let badgeLabel = t('cropRecommendation.badgeNotRecommended');
                                     let badgeColor = 'bg-red-500 text-white';
-                                    if (totalScore >= 80) { badgeLabel = t.badgeExcellent; badgeColor = 'bg-emerald-500 text-white'; }
-                                    else if (totalScore >= 60) { badgeLabel = t.badgeGood; badgeColor = 'bg-blue-500 text-white'; }
-                                    else if (totalScore >= 40) { badgeLabel = t.badgeModerate; badgeColor = 'bg-amber-500 text-white'; }
+                                    if (totalScore >= 80) { badgeLabel = t('cropRecommendation.badgeExcellent'); badgeColor = 'bg-emerald-500 text-white'; }
+                                    else if (totalScore >= 60) { badgeLabel = t('cropRecommendation.badgeGood'); badgeColor = 'bg-blue-500 text-white'; }
+                                    else if (totalScore >= 40) { badgeLabel = t('cropRecommendation.badgeModerate'); badgeColor = 'bg-amber-500 text-white'; }
 
                                     return (
                                         <div className="bg-white text-dark p-4 rounded-card border shadow-inner space-y-3">
                                             <div className="flex justify-between items-center border-b pb-2">
-                                                <h4 className="font-black text-xs uppercase tracking-wider">{t.suitabilityTitle}</h4>
+                                                <h4 className="font-black text-xs uppercase tracking-wider">{t('cropRecommendation.suitabilityTitle')}</h4>
                                                 <span className={`px-2 py-1 rounded text-xs font-black select-none ${badgeColor}`}>
-                                                    {totalScore}% - {badgeLabel}
+                                                    {toGujaratiDigits(totalScore, language)}% - {badgeLabel}
                                                 </span>
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-2 text-xs font-bold text-dark-light">
-                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={tempScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelTemp}</span></div>
-                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={rScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelRain}</span></div>
-                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={humScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelHum}</span></div>
-                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={sScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t.suLabelSeason}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={tempScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t('cropRecommendation.suLabelTemp')}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={rScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t('cropRecommendation.suLabelRain')}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={humScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t('cropRecommendation.suLabelHum')}</span></div>
+                                                <div className="flex items-center gap-1.5"><FiCheckCircle className={sScore > 0 ? "text-emerald-500" : "text-slate-300"} size={14} /> <span>{t('cropRecommendation.suLabelSeason')}</span></div>
                                             </div>
 
                                             <p className="text-xs font-semibold leading-relaxed pt-1 text-emerald-800">
-                                                {t.suRecSentence}
+                                                {t('cropRecommendation.suRecSentence')}
                                             </p>
                                         </div>
                                     )
@@ -766,20 +720,20 @@ export const CropRecommendation = () => {
 
                                 {/* Summary variables list cards parameters */}
                                 <div className="space-y-3.5">
-                                    <h4 className="text-[10px] text-emerald-100 font-black uppercase tracking-wider select-none">{t.inputSummary}</h4>
+                                    <h4 className="text-[10px] text-emerald-100 font-black uppercase tracking-wider select-none">{t('cropRecommendation.inputSummary')}</h4>
 
                                     <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
                                         <div className="bg-white/10 p-2 rounded-btn border border-white/10 flex flex-col">
                                             <span className="text-[9px] opacity-75">N-P-K</span>
-                                            <span className="font-mono text-accent">{nVal}-{pVal}-{kVal}</span>
+                                            <span className="font-mono text-accent">{toGujaratiDigits(nVal, language)}-{toGujaratiDigits(pVal, language)}-{toGujaratiDigits(kVal, language)}</span>
                                         </div>
                                         <div className="bg-white/10 p-2 rounded-btn border border-white/10 flex flex-col">
                                             <span className="text-[9px] opacity-75">pH Level</span>
-                                            <span className="font-mono text-accent">{phVal}</span>
+                                            <span className="font-mono text-accent">{toGujaratiDigits(phVal, language)}</span>
                                         </div>
                                         <div className="bg-white/10 p-2 rounded-btn border border-white/10 flex flex-col">
                                             <span className="text-[9px] opacity-75">Rainfall</span>
-                                            <span className="font-mono text-accent">{rainfallVal} mm</span>
+                                            <span className="font-mono text-accent">{toGujaratiDigits(rainfallVal, language)} mm</span>
                                         </div>
                                         <div className="bg-white/10 p-2 rounded-btn border border-white/10 flex flex-col">
                                             <span className="text-[9px] opacity-75">City</span>
@@ -791,7 +745,7 @@ export const CropRecommendation = () => {
                                         onClick={() => setPredictionResult(null)}
                                         className="w-full bg-white select-none text-emerald-800 text-xs font-bold py-2 rounded-btn hover:bg-neutral-50 active:scale-98 transition-all flex items-center justify-center gap-1 border border-transparent"
                                     >
-                                        {t.backToInputs}
+                                        {t('cropRecommendation.backToInputs')}
                                     </button>
                                 </div>
                             </div>
@@ -802,10 +756,10 @@ export const CropRecommendation = () => {
                                 <FiCompass size={32} className="animate-spin-slow" />
                             </div>
                             <h4 className="text-sm font-bold text-dark">
-                                {lang === 'GUJ' ? 'આગાહી પરિણામ ખાલી છે.' : 'No Recommendation Loaded.'}
+                                {language === 'gu' ? 'આગાહી પરિણામ ખાલી છે.' : 'No Recommendation Loaded.'}
                             </h4>
                             <p className="text-xs text-dark-light mt-1 max-w-xs leading-relaxed">
-                                {lang === 'GUJ'
+                                {language === 'gu'
                                     ? 'જમીનના મૂલ્યો દાખલ કરીને શોધો બટન દબાવો જેથી પાકની ગણતરી કરી શકાય.'
                                     : 'Please insert the soil attributes and click recommend crop button to query predictions.'}
                             </p>

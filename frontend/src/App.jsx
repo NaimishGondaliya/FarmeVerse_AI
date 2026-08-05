@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link, NavLink, useNavigate } from 'react-router-dom'
 import { FiMenu, FiX, FiBell, FiLogOut, FiUser } from 'react-icons/fi'
 import LanguageSwitcher from './components/common/LanguageSwitcher'
+import { useTranslation } from './hooks/useTranslation'
 
 // Reusable Views & Layouts
 import LandingPage from './pages/LandingPage'
@@ -54,6 +55,8 @@ const EmptyStatePage = ({ name }) => (
 const DashboardLayout = ({ role, children }) => {
     const navigate = useNavigate()
     const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    const { t } = useTranslation()
 
     const [userName, setUserName] = useState('ખેડૂત મિત્ર')
     const [showNotifications, setShowNotifications] = useState(false)
@@ -125,32 +128,32 @@ const DashboardLayout = ({ role, children }) => {
 
     const navLinks = role === 'farmer'
         ? [
-            { to: 'dashboard', label: 'Dashboard (મુખ્ય વિભાગ)' },
-            { to: 'my-farm', label: 'My Farms (મારા ખેતરો)' },
-            { to: 'crops', label: 'Crop Records (પાક રેકોર્ડ)' },
-            { to: 'profit-calculator', label: 'Profit Calculator (નફાની ગણતરી)' },
-            { to: 'market', label: 'Market Prices (બજાર ભાવો)' },
-            { to: 'weather', label: 'Weather (હવામાન)' },
-            { to: 'disease-detection', label: 'Disease Detection (રોગ નિદાન)' },
-            { to: 'crop-recommendation', label: 'Crop Recommendation (પાક ભલામણ)' },
-            { to: 'schemes', label: 'Government Schemes (સરકારી યોજનાઓ)' },
-            { to: 'consultation', label: 'Expert Consultation (નિષ્ણાત સેવ)' },
-            { to: 'profile', label: 'Profile (મારી વ્યવસ્થા)' }
+            { to: 'dashboard', label: t('sidebar.farmer.dashboard') },
+            { to: 'my-farm', label: t('sidebar.farmer.myFarms') },
+            { to: 'crops', label: t('sidebar.farmer.cropRecords') },
+            { to: 'profit-calculator', label: t('sidebar.farmer.profitCalculator') },
+            { to: 'market', label: t('sidebar.farmer.marketPrices') },
+            { to: 'weather', label: t('sidebar.farmer.weather') },
+            { to: 'disease-detection', label: t('sidebar.farmer.diseaseDetection') },
+            { to: 'crop-recommendation', label: t('sidebar.farmer.cropRecommendation') },
+            { to: 'schemes', label: t('sidebar.farmer.govSchemes') },
+            { to: 'consultation', label: t('sidebar.farmer.consultation') },
+            { to: 'profile', label: t('sidebar.farmer.profile') }
         ]
         : role === 'admin'
             ? [
-                { to: 'dashboard', label: 'Expert Management (નિષ્ણાત વ્યવસ્થાપન)' },
-                { to: 'consultation', label: 'Consultation Center' },
-                { to: 'schemes', label: 'Schemes Management' },
-                { to: 'analytics', label: 'System Analytics' },
-                { to: 'profile', label: 'Admin Profile' }
+                { to: 'dashboard', label: t('sidebar.admin.dashboard') },
+                { to: 'consultation', label: t('sidebar.admin.consultation') },
+                { to: 'schemes', label: t('sidebar.admin.schemes') },
+                { to: 'analytics', label: t('sidebar.admin.analytics') },
+                { to: 'profile', label: t('sidebar.admin.profile') }
             ]
             : [
-                { to: 'dashboard', label: 'Dashboard (ડેશબોર્ડ)' },
-                { to: 'consultation', label: 'Consultations (પરામર્શ)' },
-                { to: 'farmer-list', label: 'Farmer List (ખેડૂતોની યાદી)' },
-                { to: 'availability', label: 'Availability (ઉપલબ્ધતા)' },
-                { to: 'profile', label: 'Profile (પ્રોફાઇલ)' }
+                { to: 'dashboard', label: t('sidebar.expert.dashboard') },
+                { to: 'consultation', label: t('sidebar.expert.consultation') },
+                { to: 'farmer-list', label: t('sidebar.expert.farmerList') },
+                { to: 'availability', label: t('sidebar.expert.availability') },
+                { to: 'profile', label: t('sidebar.expert.profile') }
             ];
 
 
@@ -160,7 +163,7 @@ const DashboardLayout = ({ role, children }) => {
             <div className="mb-8">
                 <div className="flex justify-between items-center">
                     <Link to="/" className="text-xl font-bold tracking-wider text-accent flex items-center gap-2 select-none hover:opacity-90">
-                        <span>🌱</span> FarmVerse AI
+                        <span>🌱</span> {t('sidebar.farmVerse')}
                     </Link>
                     {/* Mobile close button */}
                     <button
@@ -170,9 +173,9 @@ const DashboardLayout = ({ role, children }) => {
                         <FiX size={20} />
                     </button>
                 </div>
-                <p className="text-xs text-primary-light mt-1 text-emerald-200">Gujarat Ag-Decision Support</p>
+                <p className="text-xs text-primary-light mt-1 text-emerald-200">{t('sidebar.gujaratAg')}</p>
                 <div className="mt-3 px-2.5 py-1 bg-primary rounded text-[10px] font-bold uppercase tracking-wider text-center border border-emerald-700/35">
-                    {role === 'farmer' ? 'ખેડૂત સત્ર (Farmer Live)' : `${role} Workspace`}
+                    {role === 'farmer' ? t('sidebar.farmerLive') : `${t(`sidebar.${role}.dashboard`, { defaultValue: role })} ${t('sidebar.workspace')}`}
                 </div>
             </div>
             <nav className="flex-1 space-y-1 overflow-y-auto">
@@ -197,12 +200,12 @@ const DashboardLayout = ({ role, children }) => {
                     className="w-full text-left block px-4 py-2.5 mt-6 text-sm font-semibold rounded-btn text-red-200 hover:bg-red-900/40 hover:text-red-100 transition-colors duration-150 flex items-center gap-2"
                 >
                     <FiLogOut size={16} />
-                    <span>Logout (પ્રવેશ બંધ)</span>
+                    <span>{t('sidebar.logout')}</span>
                 </button>
             </nav>
             <div className="mt-auto pt-4 border-t border-primary/40 text-center">
                 <Link to="/" className="inline-block text-xs font-semibold text-accent hover:underline">
-                    ← Home (મુખ્ય પૃષ્ઠ)
+                    ← {t('sidebar.home')}
                 </Link>
             </div>
         </div>
@@ -244,9 +247,9 @@ const DashboardLayout = ({ role, children }) => {
                         </button>
                         <div>
                             <h2 className="text-base md:text-lg font-bold text-dark font-sans capitalize">
-                                {role === 'farmer' ? 'ખેડૂત હોમ પેનલ' : `${role} Control Center`}
+                                {role === 'farmer' ? t('header.farmerPanel') : `${role} ${t('header.controlCenter')}`}
                             </h2>
-                            <p className="text-xs text-dark-light">Active session in Gujarat Zone</p>
+                            <p className="text-xs text-dark-light">{t('header.activeSession')}</p>
                         </div>
                     </div>
 
@@ -265,17 +268,17 @@ const DashboardLayout = ({ role, children }) => {
                             {showNotifications && (
                                 <div className="absolute right-0 mt-2 w-72 bg-white rounded-card shadow-lg border border-dark/5 p-4 z-40 space-y-2 animate-fadeIn">
                                     <div className="flex justify-between items-center pb-2 border-b border-dark/5">
-                                        <span className="text-xs font-bold text-dark font-sans">સૂચનાઓ (Notifications)</span>
+                                        <span className="text-xs font-bold text-dark font-sans">{t('header.notifications')}</span>
                                         <button
                                             className="text-[10px] text-primary hover:underline"
                                             onClick={() => setShowNotifications(false)}
                                         >
-                                            બંધ કરો
+                                            {t('common.close')}
                                         </button>
                                     </div>
                                     <div className="space-y-2 max-h-48 overflow-y-auto pt-1">
                                         {notifications.length === 0 ? (
-                                            <div className="p-2 text-center text-dark-light text-[11px]">No new notifications</div>
+                                            <div className="p-2 text-center text-dark-light text-[11px]">{t('header.noNotifications')}</div>
                                         ) : (
                                             notifications.map(notif => (
                                                 <div

@@ -17,6 +17,7 @@ class AgricultureExpert(models.Model):
     availability = models.CharField(max_length=255, default='Mon-Fri 9:00 AM - 5:00 PM')
     google_map_link = models.URLField(blank=True, null=True)
     rating = models.FloatField(default=0.0)
+    review_count = models.IntegerField(default=0)
     total_consultations = models.IntegerField(default=0)
     active_status = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now_add=True)

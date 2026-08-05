@@ -8,50 +8,53 @@ import {
 import Logo from '../components/common/Logo'
 import Card from '../components/common/Card'
 import LanguageSwitcher from '../components/common/LanguageSwitcher'
+import { useTranslation } from '../hooks/useTranslation'
 
 export const LandingPage = () => {
+    const { t } = useTranslation()
     const features = [
         {
-            title: 'પાક રોગ ઓળખ (Crop Disease Detection)',
-            desc: 'કૃત્રિમ બુદ્ધિમત્તા (AI) દ્વારા પાકના પાંદડાના ફોટા પરથી રોગ અને તેનો ઉપચાર તુરંત મેળવો.',
+            title: t('landing.feat1Title'),
+            desc: t('landing.feat1Desc'),
             icon: FiAlertTriangle,
             color: 'text-red-500 bg-red-50'
         },
         {
-            title: 'પાક ભલામણ (Crop Recommendation)',
-            desc: 'જમીનના પ્રકાર અને પોષક તત્વોના આધારે વાવણી માટે શ્રેષ્ઠ પાકની ભલામણ મેળવો.',
+            title: t('landing.feat2Title'),
+            desc: t('landing.feat2Desc'),
             icon: FiCheckCircle,
             color: 'text-green-650 bg-green-50'
         },
         {
-            title: 'બજાર કિંમતો (Market Prices)',
-            desc: 'ગુજરાતની વિવિધ એ.પી.એમ.સી. (APMC) ના એગમાર્કનેટ (AGMARKNET) ના પાકના લાઈવ બજાર ભાવો.',
+            title: t('landing.feat3Title'),
+            desc: t('landing.feat3Desc'),
             icon: FiTrendingUp,
             color: 'text-blue-500 bg-blue-50'
         },
         {
-            title: 'હવામાનની આગાહી (Weather Forecast)',
-            desc: 'તાલુકા અને જિલ્લા વાર સ્થાનિક હવામાન આગાહી અને કૃષિ સલાહ પત્રકો.',
+            title: t('landing.feat4Title'),
+            desc: t('landing.feat4Desc'),
             icon: FiCloudRain,
             color: 'text-sky-500 bg-sky-50'
         },
         {
-            title: 'સરકારી યોજનાઓ (Government Schemes)',
-            desc: 'ગુજરાત સરકાર દ્વારા અમલમાં મુકાયેલી ખેડૂત કલ્યાણકારી યોજનાઓ અને સહાયની માહિતી.',
+            title: t('landing.feat5Title'),
+            desc: t('landing.feat5Desc'),
             icon: FiLayers,
             color: 'text-amber-500 bg-amber-50'
         },
         {
-            title: 'ખેતી નફો કેલ્ક્યુલેટર (Profit Calculator)',
-            desc: 'વાવણી ખર્ચ, ખાતર, દવા અને મજૂરી ખર્ચની સામે મળનારી આવક અને નફાની ગણતરી.',
+            title: t('landing.feat6Title'),
+            desc: t('landing.feat6Desc'),
             icon: FiBriefcase,
             color: 'text-emerald-500 bg-emerald-50'
         },
         {
-            title: 'એ.આઈ. એનાલિટિક્સ (AI Analytics)',
-            desc: 'પાછલા વર્ષોના રેકોર્ડ્સ અને વાર્ષિક ઉપજના આધારે ફાર્મ પ્રગતિ અને આંકડાકીય વિશ્લેષણ.',
+            title: t('landing.feat7Title'),
+            desc: t('landing.feat7Desc'),
             icon: FiBarChart2,
             color: 'text-indigo-500 bg-indigo-50'
+
         }
     ]
 
@@ -77,14 +80,14 @@ export const LandingPage = () => {
 
                     <div className="flex items-center gap-4">
                         <span className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-primary bg-primary-light px-2.5 py-1 rounded-full border border-primary/20">
-                            📍 ગુજરાત ખેડૂત ક્ષેત્ર (Gujarat Zone)
+                            {t('landing.zone')}
                         </span>
                         <LanguageSwitcher />
                         <Link
                             to="/farmer/login"
                             className="text-sm font-bold text-primary hover:text-primary-dark transition border-b-2 border-transparent hover:border-primary pb-0.5"
                         >
-                            પ્રવેશ કરો (Login)
+                            {t('landing.loginHeader')}
                         </Link>
                     </div>
                 </div>
@@ -101,15 +104,15 @@ export const LandingPage = () => {
                             transition={{ duration: 0.5 }}
                             className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent/15 text-accent-dark border border-accent/20 rounded-full font-bold text-xs uppercase tracking-wider"
                         >
-                            <FiAward /> સેકન્ડરી ફાર્મિંગ ડિસિઝન સપોર્ટ પ્લેટફોર્મ
+                            <FiAward /> {t('landing.badge')}
                         </motion.div>
 
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary-dark font-sans leading-tight">
-                            ગુજરાતના ખેડૂતો માટે સ્માર્ટ એન્ડ્રોઇડ એન્ડ વેબ ડિસિઝન સપોર્ટ પ્લેટફોર્મ
+                            {t('landing.heroTitle')}
                         </h1>
 
                         <p className="text-lg text-dark-light max-w-2xl leading-relaxed">
-                            <strong>FarmVerse AI</strong> - હવામાન, બજાર કિંમતો, પાકના ઇતિહાસ અને આર્ટિફિશિયલ ઇન્ટેલિજન્સ (AI) ના તાલમેલથી આપની ખેતીને વધુ સમૃદ્ધ બનાવવા માટેનું અદ્યતન પ્લેટફોર્મ.
+                            {t('landing.heroDesc')}
                         </p>
 
                         {/* Portal Action Buttons */}
@@ -120,7 +123,7 @@ export const LandingPage = () => {
                                     whileTap={{ scale: 0.97 }}
                                     className="w-full px-8 py-4 bg-primary text-white hover:bg-primary-dark font-extrabold rounded-btn shadow-md border border-transparent transition"
                                 >
-                                    ખેડૂત પોર્ટલ (Farmer Portal)
+                                    {t('landing.btnFarmer')}
                                 </motion.button>
                             </Link>
 
@@ -130,7 +133,7 @@ export const LandingPage = () => {
                                     whileTap={{ scale: 0.97 }}
                                     className="w-full px-8 py-4 bg-white text-emerald-800 hover:bg-emerald-50 border border-emerald-600 font-extrabold rounded-btn shadow-sm transition"
                                 >
-                                    કૃષિ નિષ્ણાત પોર્ટલ (Expert Portal)
+                                    {t('landing.btnExpert')}
                                 </motion.button>
                             </Link>
 
@@ -140,7 +143,7 @@ export const LandingPage = () => {
                                     whileTap={{ scale: 0.97 }}
                                     className="w-full px-8 py-4 bg-dark text-white hover:bg-dark-dark font-extrabold rounded-btn shadow-sm border border-transparent transition"
                                 >
-                                    વહીવટી લૉગિન (Admin)
+                                    {t('landing.btnAdmin')}
                                 </motion.button>
                             </Link>
                         </div>
@@ -158,23 +161,23 @@ export const LandingPage = () => {
 
                             <Card glass className="relative border border-white/20 p-8 shadow-2xl space-y-6">
                                 <span className="text-5xl">🌾</span>
-                                <h3 className="text-xl font-bold text-primary-dark">શા માટે ફાર્મવર્સ એ.આઈ.?</h3>
+                                <h3 className="text-xl font-bold text-primary-dark">{t('landing.whyFarmVerse')}</h3>
                                 <ul className="space-y-3 text-sm text-dark font-semibold">
                                     <li className="flex items-center gap-3">
                                         <span className="w-2.5 h-2.5 bg-accent rounded-full"></span>
-                                        સોઈલ હેલ્થ કાર્ડ પાક ભલામણ
+                                        {t('landing.bullet1')}
                                     </li>
                                     <li className="flex items-center gap-3">
                                         <span className="w-2.5 h-2.5 bg-accent rounded-full"></span>
-                                        પાકના જીવાકોની ફોટો સ્કેનિંગ
+                                        {t('landing.bullet2')}
                                     </li>
                                     <li className="flex items-center gap-3">
                                         <span className="w-2.5 h-2.5 bg-accent rounded-full"></span>
-                                        અદ્યતન નફા-નુકસાન ગણતરી
+                                        {t('landing.bullet3')}
                                     </li>
                                     <li className="flex items-center gap-3">
                                         <span className="w-2.5 h-2.5 bg-accent rounded-full"></span>
-                                        રાજ્ય કલ્યાણકારી સ્કીમો
+                                        {t('landing.bullet4')}
                                     </li>
                                 </ul>
                             </Card>
@@ -186,10 +189,10 @@ export const LandingPage = () => {
             {/* About Project Section */}
             <section className="bg-white py-16 px-6 border-y border-primary/5">
                 <div className="max-w-5xl mx-auto text-center space-y-6">
-                    <h2 className="text-3xl font-bold text-primary-dark">પરિયોજના વિશે (About Project)</h2>
+                    <h2 className="text-3xl font-bold text-primary-dark">{t('landing.aboutTitle')}</h2>
                     <div className="w-20 h-1 bg-accent mx-auto rounded-full" />
                     <p className="text-dark-light text-base leading-relaxed">
-                        મુખ્ય વર્ષના પ્રોજેક્ટ તરીકે નિર્મિત, <strong>FarmVerse AI</strong> એ ગુજરાતના વિવિધ જીલ્લાના સોઈલ પેરામીટર્સ, પ્રચલિત પાકોની લાક્ષણિકતાઓ અને સ્થાનિક માર્કેટની કડીઓને એક તાંતણે જોડે છે. આ પોર્ટલ ખેડૂતોને ક્યારે ક્યો પાક વાવવો, રોગ આવતા કઈ રાસાયણિક કે ઓર્ગેનિક પ્રક્રિયા કરવી, અને પાક ઉત્પાદન પાછળ થનારા ખર્ચનું સંચાલન કઈ રીતે કરવું તેના તકનીકી નિર્ણયો લેવામાં મદદ કરે છે.
+                        {t('landing.aboutDesc')}
                     </p>
                 </div>
             </section>
@@ -197,9 +200,9 @@ export const LandingPage = () => {
             {/* Features Section */}
             <section className="py-20 px-6 max-w-7xl mx-auto w-full">
                 <div className="text-center space-y-4 mb-16">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-primary-dark">પ્લેટફોર્મની વિશેષતાઓ (Features)</h2>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-primary-dark">{t('landing.featuresTitle')}</h2>
                     <p className="text-dark-light max-w-xl mx-auto">
-                        ગુજરાતના વાતાવરણ અને સોઈલ પ્રોફાઈલ સુસંગત વિકસાવવામાં આવેલી મુખ્ય ટેકનિકલ શાખાઓ
+                        {t('landing.featuresDesc')}
                     </p>
                 </div>
 
@@ -223,7 +226,7 @@ export const LandingPage = () => {
                                         <p className="text-sm text-dark-light/90 mt-2 leading-relaxed">{feat.desc}</p>
                                     </div>
                                     <div className="pt-2 text-xs font-bold text-primary hover:underline cursor-default">
-                                        ડેશબોર્ડ પર ઉપલબ્ધ →
+                                        {t('landing.featLink')}
                                     </div>
                                 </Card>
                             </motion.div>
@@ -238,29 +241,29 @@ export const LandingPage = () => {
                     <div className="space-y-4">
                         <Logo size="sm" invert />
                         <p className="text-xs text-primary-light max-w-xs leading-relaxed">
-                            ખેડૂતો અને કૃષિ નિષ્ણાતોને આર્ટિફિશિયલ ઇન્ટેલિજન્સની તાકાત વડે ડિસિઝન સપોર્ટ આપતી કલ્યાણકારી પ્રણાલી.
+                            {t('landing.footerDesc')}
                         </p>
                     </div>
                     <div>
-                        <h4 className="text-sm font-extrabold text-accent uppercase tracking-wider mb-4">મહત્વની લિંક્સ</h4>
+                        <h4 className="text-sm font-extrabold text-accent uppercase tracking-wider mb-4">{t('landing.importantLinks')}</h4>
                         <ul className="space-y-2.5 text-xs text-primary-light">
                             <li>
-                                <Link to="/farmer/login" className="hover:underline">ખેડૂત લૉગિન (Farmer Portal)</Link>
+                                <Link to="/farmer/login" className="hover:underline">{t('landing.footerLinkFarmer')}</Link>
                             </li>
                             <li>
-                                <Link to="/expert/login" className="hover:underline">કૃષિ નિષ્ણાત લૉગિન (Expert Portal)</Link>
+                                <Link to="/expert/login" className="hover:underline">{t('landing.footerLinkExpert')}</Link>
                             </li>
                             <li>
-                                <Link to="/admin/login" className="hover:underline">સિસ્ટમ વહીવટકર્તા (Admin Portal)</Link>
+                                <Link to="/admin/login" className="hover:underline">{t('landing.footerLinkAdmin')}</Link>
                             </li>
                         </ul>
                     </div>
                     <div className="space-y-3">
-                        <h4 className="text-sm font-extrabold text-accent uppercase tracking-wider mb-2">વપરાશકર્તા લાયસન્સ</h4>
+                        <h4 className="text-sm font-extrabold text-accent uppercase tracking-wider mb-2">{t('landing.footerLicense')}</h4>
                         <p className="text-xs text-primary-light">
-                            આ પ્લેટફોર્મના સર્વાધિકાર કાયદા હેઠળ આરક્ષિત છે. આ પ્લેટફોર્મ ચકાસણી હેતુ માટે ડેમો એનવાયરમેન્ટમાં ઓપરેટ થઈ રહ્યું છે.
+                            {t('landing.licenseText')}
                         </p>
-                        <p className="text-xs text-accent font-bold mt-2">© 2026 FarmVerse AI. ગુજરાત, ભારત.</p>
+                        <p className="text-xs text-accent font-bold mt-2">{t('landing.copyright')}</p>
                     </div>
                 </div>
             </footer>

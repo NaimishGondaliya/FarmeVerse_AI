@@ -168,11 +168,15 @@ export const salesAPI = {
 
 export const notificationAPI = {
     getAll: async () => {
-        const response = await API.get('/farmer/notifications/');
+        const role = localStorage.getItem('role')?.toLowerCase() || 'farmer';
+        const prefix = role === 'admin' ? '/adminpanel' : `/${role}`;
+        const response = await API.get(`${prefix}/notifications/`);
         return response.data;
     },
     markAsRead: async (id) => {
-        const response = await API.patch(`/farmer/notifications/${id}/`);
+        const role = localStorage.getItem('role')?.toLowerCase() || 'farmer';
+        const prefix = role === 'admin' ? '/adminpanel' : `/${role}`;
+        const response = await API.patch(`${prefix}/notifications/${id}/`);
         return response.data;
     }
 };
@@ -342,6 +346,10 @@ export const consultationAPI = {
     },
     close: async (id) => {
         const response = await API.post(`/consultation/${id}/close/`);
+        return response.data;
+    },
+    submitRating: async (id, ratingObj) => {
+        const response = await API.post(`/consultation/${id}/rate/`, ratingObj);
         return response.data;
     }
 };

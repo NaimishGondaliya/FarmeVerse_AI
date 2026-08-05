@@ -141,9 +141,16 @@ class AdminExpertDetailView(APIView):
 
     def delete(self, request, pk):
         expert = get_object_or_404(AgricultureExpert, pk=pk)
-        expert.active_status = False
-        expert.save()
-        return Response({"message": "Expert deactivated successfully."}, status=status.HTTP_200_OK)
+        
+        # Check if the expert has active or past consultations to prevent CASCADE deletion
+        if expert.expert_consultations.exists():
+            return Response(
+                {"error": "Cannot delete expert because they have active or past consultations. Deactivate them instead."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        expert.delete()
+        return Response({"message": "Expert deleted successfully."}, status=status.HTTP_200_OK)
 
 
 class AdminExpertStatusView(APIView):
@@ -302,4 +309,32 @@ class AdminConsultationStatusView(APIView):
              "status": consultation.status},
             status=status.HTTP_200_OK
         )
+
+
+class AdminNotificationListView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        try:
+            notifications = request.user.notifications.all()
+            from farmer.serializers import NotificationSerializer
+            serializer = NotificationSerializer(notifications, many=True)
+            return Response({"data": serializer.data, "message": "Notifications fetched"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AdminNotificationDetailView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
+
+    def patch(self, request, pk):
+        try:
+            notification = request.user.notifications.get(pk=pk)
+            notification.is_read = True
+            notification.save()
+            return Response({"message": "Notification marked as read."}, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
 

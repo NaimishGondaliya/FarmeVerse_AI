@@ -1,0 +1,1487 @@
+src\App.jsx:61:const [userName, setUserName] = useState('ખેડૂત મિત્ર')
+src\components\common\Button.jsx:42:<span className="font-semibold">રાહ જુઓ...</span>
+src\components\common\FormContainer.jsx:13:backLabel = 'મુખ્ય પૃષ્ઠ પર પાછા જાઓ', // "Back to main page" in Gujarati
+src\components\common\LanguageSwitcher.jsx:29:ગુજરાતી
+src\components\common\Loader.jsx:15:<h3 className="font-bold text-primary text-sm mt-2">માહિતી લોડ થઈ રહી છે...</h3> {/* Loading in Gujarati */}
+src\components\common\Loader.jsx:16:<p className="text-[10px] text-dark-light/75 font-medium">કૃપા કરીને થોડીવાર રાહ જુઓ</p>
+src\components\common\SalesModal.jsx:59:if (!salesForm.crop) errors.crop = 'પાક પસંદ કરવો જરૂરી છે.';
+src\components\common\SalesModal.jsx:60:if (!salesForm.market_yard.trim()) errors.market_yard = 'માર્કેટ યાર્ડનું નામ જરૂરી છે.';
+src\components\common\SalesModal.jsx:64:errors.sold_quantity = 'વેચેલો જથ્થો 0 થી વધુ હોવો જોઈશે.';
+src\components\common\SalesModal.jsx:66:errors.sold_quantity = `જથ્થો ઉત્પાદન (${initialData.maxYield} kg) થી વધુ ન હોઈ શકે.`;
+src\components\common\SalesModal.jsx:70:errors.price_per_kg = 'કિંમત (પ્રતિ કિલો) 0 થી વધુ હોવી જોઈશે.';
+src\components\common\SalesModal.jsx:72:if (!salesForm.sale_date) errors.sale_date = 'વેચાણ તારીખ અપાયેલી હોવી જરૂરી છે.';
+src\components\common\SalesModal.jsx:94:setErrorMsg(res.message || 'માહિતી સંગ્રહ નિષ્ફળ.');
+src\components\common\SalesModal.jsx:98:setErrorMsg('સિસ્ટમ એરર! કૃપા રકમ વિગતો ચકાસો.');
+src\components\common\SalesModal.jsx:114:{editSales ? 'વેચાણ નોંધ સુધારો (Edit Sale)' : 'નવું વેચાણ ઉમેરો (Record Sale)'}
+src\components\common\SalesModal.jsx:133:<label className="text-[10px] font-bold text-dark/75 mb-1">આસક્ત પાક (Target Crop) *</label>
+src\components\common\SalesModal.jsx:140:<option value="">પાક પસંદ કરો</option>
+src\components\common\SalesModal.jsx:149:<label className="text-[10px] font-bold text-dark/75 mb-1">બજાર / એપીએમસી (Market Yard / APMC) *</label>
+src\components\common\SalesModal.jsx:153:placeholder="દા.ત. ગોંડલ માર્કેટ યાર્ડ"
+src\components\common\SalesModal.jsx:162:<label className="text-[10px] font-bold text-dark/75 mb-1">વેચેલો જથ્થો (Quantity in kg) *</label>
+src\components\common\SalesModal.jsx:177:<label className="text-[10px] font-bold text-dark/75 mb-1">કિંમત પ્રતિ કિલો (Price/kg) *</label>
+src\components\common\SalesModal.jsx:190:<label className="text-[10px] font-bold text-dark/75 mb-1">વેચાણ તારીખ (Sale Date) *</label>
+src\components\common\SalesModal.jsx:207:રદ કરો (Cancel)
+src\components\common\SalesModal.jsx:215:Save (સાચવો)
+src\locales\gu.js:3:loading: "લોડ થઈ રહ્યું છે...", save: "સાચવો", cancel: "રદ કરો", delete: "કાઢી નાખો", edit: "સુધારો", view: "જુઓ", add: "ઉમેરો", update: "અપડેટ કરો", retry: "ફરી પ્રયાસ કરો", search: "શોધો", refresh: "તાજું કરો", status: "સ્થિતિ", actions: "ક્રિયાઓ", close: "બંધ કરો", active: "સક્રિય",
+src\locales\gu.js:4:error: "ભૂલ", success: "સફળતા"
+src\locales\gu.js:8:gujaratAg: "ગુજરાત કૃષિ નિર્ણય સહાય",
+src\locales\gu.js:9:farmerLive: "ખેડૂત સત્ર",
+src\locales\gu.js:10:workspace: "કાર્યસ્થળ",
+src\locales\gu.js:11:logout: "પ્રવેશ બંધ",
+src\locales\gu.js:12:home: "મુખ્ય પૃષ્ઠ",
+src\locales\gu.js:14:dashboard: "ડેશબોર્ડ",
+src\locales\gu.js:15:myFarms: "મારા ખેતરો",
+src\locales\gu.js:16:cropRecords: "પાક રેકોર્ડ",
+src\locales\gu.js:17:profitCalculator: "નફાની ગણતરી",
+src\locales\gu.js:18:marketPrices: "બજાર ભાવો",
+src\locales\gu.js:19:weather: "હવામાન",
+src\locales\gu.js:20:diseaseDetection: "રોગ નિદાન",
+src\locales\gu.js:21:cropRecommendation: "પાક ભલામણ",
+src\locales\gu.js:22:govSchemes: "સરકારી યોજનાઓ",
+src\locales\gu.js:23:consultation: "નિષ્ણાત પરામર્શ",
+src\locales\gu.js:24:profile: "પ્રોફાઇલ"
+src\locales\gu.js:27:dashboard: "નિષ્ણાત વ્યવસ્થાપન",
+src\locales\gu.js:28:consultation: "પરામર્શ કેન્દ્ર",
+src\locales\gu.js:29:schemes: "સરકારી યોજના વ્યવસ્થાપન",
+src\locales\gu.js:30:analytics: "સિસ્ટમ એનાલિટિક્સ",
+src\locales\gu.js:31:profile: "વહીવટી પ્રોફાઇલ"
+src\locales\gu.js:34:dashboard: "ડેશબોર્ડ",
+src\locales\gu.js:35:consultation: "પરામર્શ",
+src\locales\gu.js:36:farmerList: "ખેડૂતોની યાદી",
+src\locales\gu.js:37:availability: "ઉપલબ્ધતા",
+src\locales\gu.js:38:profile: "પ્રોફાઇલ"
+src\locales\gu.js:42:farmerPanel: "ખેડૂત હોમ પેનલ",
+src\locales\gu.js:43:controlCenter: "નિયંત્રણ કેન્દ્ર",
+src\locales\gu.js:44:activeSession: "ગુજરાત ઝોનમાં સક્રિય સત્ર",
+src\locales\gu.js:45:notifications: "સૂચનાઓ",
+src\locales\gu.js:46:noNotifications: "કોઈ નવી સૂચનાઓ નથી"
+src\locales\gu.js:49:profitCalcTitle: "નફાની ગણતરી કરો",
+src\locales\gu.js:50:profitCalcDesc: "Phase 2 રોકાણ વ્યવસ્થાપક સાધન. જેના દ્વારા ખેડૂત તેના રોકાણ અને આવકની સરખામણી કરી નફો ગણી શકશે.",
+src\locales\gu.js:51:comingSoonTitle: "ફીચર ટૂંક સમયમાં શરૂ થશે",
+src\locales\gu.js:52:comingSoonDesc: "ભવિષ્યના અપડેટમાં આ આખી સુવિધા ઉપલબ્ધ બનશે.",
+src\locales\gu.js:53:activeSession: "ખેડૂત લાઈવ સત્ર • સક્રિય સત્ર",
+src\locales\gu.js:54:welcome: "આવકાર, {name}!",
+src\locales\gu.js:55:subtitle: "આ રહ્યું તમારું ફાર્મવર્સ એઆઈ (FarmVerse AI) ડેશબોર્ડ. ગુજરાતના ખેડૂતો માટે બનાવવામાં આવેલ અદ્યતન સ્માર્ટ કૃષિ નિર્ણય સહાયક સાધનો.",
+src\locales\gu.js:56:agriZone: "\ud83d\udccd ગુજરાત કૃષિ ક્ષેત્ર",
+src\locales\gu.js:57:mspActive: "સરકારી ટેકાના ભાવ ચાલુ છે",
+src\locales\gu.js:58:myFarms: "મારા ખેતરો",
+src\locales\gu.js:59:farms: "ખેતરો",
+src\locales\gu.js:60:noFarms: "કોઈ ખેતર નથી",
+src\locales\gu.js:61:currentCrops: "વાવેતર પાક",
+src\locales\gu.js:62:currentCropsTitle: "વાવેતર પાક",
+src\locales\gu.js:63:crops: "પાક",
+src\locales\gu.js:64:noCrops: "કોઈ પાક નથી",
+src\locales\gu.js:65:totalProfit: "કુલ નફો",
+src\locales\gu.js:66:investment: "રોકાણ",
+src\locales\gu.js:67:todaysWeather: "આજનું હવામાન",
+src\locales\gu.js:68:bestMarket: "શ્રેષ્ઠ બજાર",
+src\locales\gu.js:69:todaysTasks: "આજના કૃષિ કાર્યો",
+src\locales\gu.js:70:forecast: "૭ દિવસનું હવામાન",
+src\locales\gu.js:71:profitSummary: "નફાનો અંદાજ",
+src\locales\gu.js:72:totalIncome: "કુલ આવક",
+src\locales\gu.js:73:totalExpenses: "કુલ ખર્ચ",
+src\locales\gu.js:74:netProfit: "ચોખ્ખો નફો",
+src\locales\gu.js:75:myFarmsOverview: "મારા ખેતરો વિહંગાવલોકન",
+src\locales\gu.js:76:farmName: "ખેતરનું નામ",
+src\locales\gu.js:77:village: "ગામ",
+src\locales\gu.js:78:area: "વિસ્તાર",
+src\locales\gu.js:79:status: "સ્થિતિ",
+src\locales\gu.js:80:noFarmsRegistered: "કોઈ ખેતર નોંધાયેલ નથી.",
+src\locales\gu.js:81:cropName: "પાકનું નામ",
+src\locales\gu.js:82:currentStatus: "હાલની સ્થિતિ",
+src\locales\gu.js:83:daysSinceSowing: "વાવેતરથી દિવસો",
+src\locales\gu.js:84:expectedHarvest: "અપેક્ષિત લણણીની તારીખ",
+src\locales\gu.js:85:noCropsRegistered: "કોઈ પાક નોંધાયેલ નથી.",
+src\locales\gu.js:86:marketOpportunity: "આજના બજારની તક"
+src\locales\gu.js:89:irrigation: "પિયત",
+src\locales\gu.js:90:spraying: "દવા છંટકાવ",
+src\locales\gu.js:91:fertilizer: "ખાતર",
+src\locales\gu.js:92:harvest: "લણણી",
+src\locales\gu.js:93:diseaseInsp: "નિરીક્ષણ"
+src\locales\gu.js:96:doItToday: "આજે કરો",
+src\locales\gu.js:97:skip: "છોડી દો",
+src\locales\gu.js:98:safe: "સલામત",
+src\locales\gu.js:99:avoid: "ટાળો",
+src\locales\gu.js:100:goodDay: "સારો દિવસ",
+src\locales\gu.js:101:delay: "વિલંબ",
+src\locales\gu.js:102:recommended: "ભલામણ કરેલ"
+src\locales\gu.js:105:Growing: "ઉગતો પાક",
+src\locales\gu.js:106:Harvested: "લણેલો પાક",
+src\locales\gu.js:107:Sold: "વેચાયેલ"
+src\locales\gu.js:110:errorLoad: "માહિતી લોડ કરવામાં સમસ્યા આવી. કૃપા કરીને રીફ્રેશ કરો.",
+src\locales\gu.js:111:finSummary: "કુલ આવક-જાવક અને નફો",
+src\locales\gu.js:112:netProfit: "ચોખ્ખો નફો",
+src\locales\gu.js:113:totalIncome: "કુલ આવક",
+src\locales\gu.js:114:totalExpenses: "કુલ ખર્ચ",
+src\locales\gu.js:115:allCrops: "બધા પાકો",
+src\locales\gu.js:116:profitMargin: "કુલ નફાની ટકાવારી",
+src\locales\gu.js:117:tabExpenses: "ખર્ચ રેકોર્ડ્સ",
+src\locales\gu.js:118:tabSales: "વેચાણ રેકોર્ડ્સ",
+src\locales\gu.js:119:expAdded: "ખર્ચ સફળતાપૂર્વક નોંધાયો",
+src\locales\gu.js:120:expUpdated: "ખર્ચ સફળતાપૂર્વક સુધારાયો",
+src\locales\gu.js:121:errExpInput: "કૃપા કરીને ખર્ચનું ક્રોપ, પ્રકાર અને રકમ યોગ્ય રીતે ભરો.",
+src\locales\gu.js:122:addExpense: "નવો ખર્ચ ઉમેરો",
+src\locales\gu.js:123:selectExpType: "ખર્ચનો પ્રકાર પસંદ કરો",
+src\locales\gu.js:124:allTypes: "બધા પ્રકાર",
+src\locales\gu.js:125:expNotePlaceholder: "ખર્ચની માહિતી અથવા નોંધ દાખલ કરો...",
+src\locales\gu.js:126:recordExpense: "નવો ખર્ચ નોંધો",
+src\locales\gu.js:127:expDescription: "ખર્ચની વિગત",
+src\locales\gu.js:128:addSales: "નવો વેચાણ રેકોર્ડ ઉમેરો",
+src\locales\gu.js:129:loadingSales: "વેચાણ રેકોર્ડ્સ લોડ થઈ રહ્યા છે...",
+src\locales\gu.js:130:noSales: "કોઈ વેચાણ રેકોર્ડ નથી.",
+src\locales\gu.js:131:loadingExp: "ખર્ચ રેકોર્ડ્સ લોડ થઈ રહ્યા છે...",
+src\locales\gu.js:132:noExp: "કોઈ ખર્ચ રેકોર્ડ નથી.",
+src\locales\gu.js:133:deleteExpConfirm: "તમે આ ખર્ચ રેકોર્ડ ડીલીટ કરવા માંગો છો?",
+src\locales\gu.js:134:deleteSalesConfirm: "તમે આ વેચાણ રેકોર્ડ ડીલીટ કરવા માંગો છો?",
+src\locales\gu.js:135:recordDeleted: "રેકોર્ડ કાઢી નાખવામાં આવ્યો",
+src\locales\gu.js:136:btnExpense: "ખર્ચ નોંધો",
+src\locales\gu.js:137:btnSale: "વેચાણ નોંધો",
+src\locales\gu.js:138:expenseFallbackDesc: "ખર્ચ રેકોર્ડ ઉમેરો અથવા જૂના રેકોર્ડ જુઓ.",
+src\locales\gu.js:139:saleFallbackDesc: "વેચાણ રેકોર્ડ ઉમેરો અથવા જૂના વેચાણ જુઓ.",
+src\locales\gu.js:140:recentRecords: "તાજેતરના રેકોર્ડ્સ"
+src\locales\gu.js:143:Seed: "બિયારણ",
+src\locales\gu.js:144:Fertilizer: "ખાતર",
+src\locales\gu.js:145:Pesticide: "દવા",
+src\locales\gu.js:146:Labor: "મજૂરી",
+src\locales\gu.js:147:Machinery: "મશીનરી",
+src\locales\gu.js:148:Other: "અન્ય"
+src\pages\LandingPage.jsx:15:title: 'પાક રોગ ઓળખ (Crop Disease Detection)',
+src\pages\LandingPage.jsx:16:desc: 'કૃત્રિમ બુદ્ધિમત્તા (AI) દ્વારા પાકના પાંદડાના ફોટા પરથી રોગ અને તેનો ઉપચાર તુરંત મેળવો.',
+src\pages\LandingPage.jsx:21:title: 'પાક ભલામણ (Crop Recommendation)',
+src\pages\LandingPage.jsx:22:desc: 'જમીનના પ્રકાર અને પોષક તત્વોના આધારે વાવણી માટે શ્રેષ્ઠ પાકની ભલામણ મેળવો.',
+src\pages\LandingPage.jsx:27:title: 'બજાર કિંમતો (Market Prices)',
+src\pages\LandingPage.jsx:28:desc: 'ગુજરાતની વિવિધ એ.પી.એમ.સી. (APMC) ના એગમાર્કનેટ (AGMARKNET) ના પાકના લાઈવ બજાર ભાવો.',
+src\pages\LandingPage.jsx:33:title: 'હવામાનની આગાહી (Weather Forecast)',
+src\pages\LandingPage.jsx:34:desc: 'તાલુકા અને જિલ્લા વાર સ્થાનિક હવામાન આગાહી અને કૃષિ સલાહ પત્રકો.',
+src\pages\LandingPage.jsx:39:title: 'સરકારી યોજનાઓ (Government Schemes)',
+src\pages\LandingPage.jsx:40:desc: 'ગુજરાત સરકાર દ્વારા અમલમાં મુકાયેલી ખેડૂત કલ્યાણકારી યોજનાઓ અને સહાયની માહિતી.',
+src\pages\LandingPage.jsx:45:title: 'ખેતી નફો કેલ્ક્યુલેટર (Profit Calculator)',
+src\pages\LandingPage.jsx:46:desc: 'વાવણી ખર્ચ, ખાતર, દવા અને મજૂરી ખર્ચની સામે મળનારી આવક અને નફાની ગણતરી.',
+src\pages\LandingPage.jsx:51:title: 'એ.આઈ. એનાલિટિક્સ (AI Analytics)',
+src\pages\LandingPage.jsx:52:desc: 'પાછલા વર્ષોના રેકોર્ડ્સ અને વાર્ષિક ઉપજના આધારે ફાર્મ પ્રગતિ અને આંકડાકીય વિશ્લેષણ.',
+src\pages\LandingPage.jsx:80:📍 ગુજરાત ખેડૂત ક્ષેત્ર (Gujarat Zone)
+src\pages\LandingPage.jsx:87:પ્રવેશ કરો (Login)
+src\pages\LandingPage.jsx:104:<FiAward /> સેકન્ડરી ફાર્મિંગ ડિસિઝન સપોર્ટ પ્લેટફોર્મ
+src\pages\LandingPage.jsx:108:ગુજરાતના ખેડૂતો માટે સ્માર્ટ એન્ડ્રોઇડ એન્ડ વેબ ડિસિઝન સપોર્ટ પ્લેટફોર્મ
+src\pages\LandingPage.jsx:112:<strong>FarmVerse AI</strong> - હવામાન, બજાર કિંમતો, પાકના ઇતિહાસ અને આર્ટિફિશિયલ ઇન્ટેલિજન્સ (AI) ના તાલમેલથી આપની ખેતીને વધુ સમૃદ્ધ બનાવવા માટેનું અદ્યતન પ્લેટફોર્મ.
+src\pages\LandingPage.jsx:123:ખેડૂત પોર્ટલ (Farmer Portal)
+src\pages\LandingPage.jsx:133:કૃષિ નિષ્ણાત પોર્ટલ (Expert Portal)
+src\pages\LandingPage.jsx:143:વહીવટી લૉગિન (Admin)
+src\pages\LandingPage.jsx:161:<h3 className="text-xl font-bold text-primary-dark">શા માટે ફાર્મવર્સ એ.આઈ.?</h3>
+src\pages\LandingPage.jsx:165:સોઈલ હેલ્થ કાર્ડ પાક ભલામણ
+src\pages\LandingPage.jsx:169:પાકના જીવાકોની ફોટો સ્કેનિંગ
+src\pages\LandingPage.jsx:173:અદ્યતન નફા-નુકસાન ગણતરી
+src\pages\LandingPage.jsx:177:રાજ્ય કલ્યાણકારી સ્કીમો
+src\pages\LandingPage.jsx:189:<h2 className="text-3xl font-bold text-primary-dark">પરિયોજના વિશે (About Project)</h2>
+src\pages\LandingPage.jsx:192:મુખ્ય વર્ષના પ્રોજેક્ટ તરીકે નિર્મિત, <strong>FarmVerse AI</strong> એ ગુજરાતના વિવિધ જીલ્લાના સોઈલ પેરામીટર્સ, પ્રચલિત પાકોની લાક્ષણિકતાઓ અને સ્થાનિક માર્કેટની કડીઓને એક તાંતણે જોડે છે. આ પોર્ટલ ખેડૂતોને ક્યારે ક્યો પાક વાવવો, રોગ આવતા કઈ રાસાયણિક કે ઓર્ગેનિક પ્રક્રિયા કરવી, અને પાક ઉત્પાદન પાછળ થનારા ખર્ચનું સંચાલન કઈ રીતે કરવું તેના તકનીકી નિર્ણયો લેવામાં મદદ કરે છે.
+src\pages\LandingPage.jsx:200:<h2 className="text-3xl md:text-4xl font-extrabold text-primary-dark">પ્લેટફોર્મની વિશેષતાઓ (Features)</h2>
+src\pages\LandingPage.jsx:202:ગુજરાતના વાતાવરણ અને સોઈલ પ્રોફાઈલ સુસંગત વિકસાવવામાં આવેલી મુખ્ય ટેકનિકલ શાખાઓ
+src\pages\LandingPage.jsx:226:ડેશબોર્ડ પર ઉપલબ્ધ →
+src\pages\LandingPage.jsx:241:ખેડૂતો અને કૃષિ નિષ્ણાતોને આર્ટિફિશિયલ ઇન્ટેલિજન્સની તાકાત વડે ડિસિઝન સપોર્ટ આપતી કલ્યાણકારી પ્રણાલી.
+src\pages\LandingPage.jsx:245:<h4 className="text-sm font-extrabold text-accent uppercase tracking-wider mb-4">મહત્વની લિંક્સ</h4>
+src\pages\LandingPage.jsx:248:<Link to="/farmer/login" className="hover:underline">ખેડૂત લૉગિન (Farmer Portal)</Link>
+src\pages\LandingPage.jsx:251:<Link to="/expert/login" className="hover:underline">કૃષિ નિષ્ણાત લૉગિન (Expert Portal)</Link>
+src\pages\LandingPage.jsx:254:<Link to="/admin/login" className="hover:underline">સિસ્ટમ વહીવટકર્તા (Admin Portal)</Link>
+src\pages\LandingPage.jsx:259:<h4 className="text-sm font-extrabold text-accent uppercase tracking-wider mb-2">વપરાશકર્તા લાયસન્સ</h4>
+src\pages\LandingPage.jsx:261:આ પ્લેટફોર્મના સર્વાધિકાર કાયદા હેઠળ આરક્ષિત છે. આ પ્લેટફોર્મ ચકાસણી હેતુ માટે ડેમો એનવાયરમેન્ટમાં ઓપરેટ થઈ રહ્યું છે.
+src\pages\LandingPage.jsx:263:<p className="text-xs text-accent font-bold mt-2">© 2026 FarmVerse AI. ગુજરાત, ભારત.</p>
+src\pages\NotFoundPage.jsx:22:<h2 className="text-2xl font-bold text-dark mt-2">પાનું મળ્યું નથી (Page Not Found)</h2>
+src\pages\NotFoundPage.jsx:24:અમે દિલગીર છીએ, પણ તમે જે માહિતી અથવા પાનું શોધી રહ્યા છો તે આ પૃષ્ઠભૂમિ પર ઉપલબ્ધ નથી. કદાચ લિન્ક તૂટેલી છે અથવા પાનું ખસેડવામાં આવ્યું છે.
+src\pages\NotFoundPage.jsx:30:મુખ્ય પૃષ્ઠ પર જાઓ (Go to Home)
+src\pages\Admin\AdminAnalytics.jsx:36:title: 'સિસ્ટમ ટેલિમેટ્રી અને એનાલિટિક્સ',
+src\pages\Admin\AdminAnalytics.jsx:37:subtitle: 'રીઅલ-ટાઇમ પ્રદર્શન મોનિટરિંગ, ક્વેરી ટેલિમેટ્રી અને સિસ્ટમ-વ્યાપી પ્રવૃત્તિ લૉગ્સ',
+src\pages\Admin\AdminAnalytics.jsx:38:exportCsv: 'CSV નિકાસ કરો',
+src\pages\Admin\AdminAnalytics.jsx:39:exportPdf: 'PDF સારાંશ નિકાસ',
+src\pages\Admin\AdminAnalytics.jsx:40:recentActivity: 'તાજેતરની સિસ્ટમ પ્રવૃત્તિઓ',
+src\pages\Admin\AdminAnalytics.jsx:41:farmersByDistrict: 'જિલ્લાવાર નોંધાયેલા ખેડૂતો',
+src\pages\Admin\AdminAnalytics.jsx:42:cropRecommendations: 'ભલામણ કરેલ પાકોનું વિતરણ',
+src\pages\Admin\AdminAnalytics.jsx:43:diseaseDistribution: 'રોગ નિદાન વિતરણ',
+src\pages\Admin\AdminAnalytics.jsx:44:totalFarmers: 'કુલ ખેડૂતો',
+src\pages\Admin\AdminAnalytics.jsx:45:totalExperts: 'કુલ નિષ્ણાતો',
+src\pages\Admin\AdminAnalytics.jsx:46:totalConsultations: 'પ્રશ્નોત્તરી (મુલાકાતો)',
+src\pages\Admin\AdminAnalytics.jsx:47:totalSchemes: 'સરકારી યોજનાઓ',
+src\pages\Admin\AdminAnalytics.jsx:48:weatherQueries: 'હવામાન પૂછપરછ',
+src\pages\Admin\AdminAnalytics.jsx:49:recommendations: 'પાક ભલામણો',
+src\pages\Admin\AdminAnalytics.jsx:50:diseaseDetections: 'રોગ નિદાન લૉગ્સ',
+src\pages\Admin\AdminAnalytics.jsx:51:loading: 'એનાલિટિક્સ ડેટા લોડ થઈ રહ્યો છે...',
+src\pages\Admin\AdminAnalytics.jsx:52:errorLoad: 'ટેલિમેટ્રી ડેટા લોડ કરવામાં નિષ્ફળ',
+src\pages\Admin\AdminAnalytics.jsx:53:retry: 'ફરીથી પ્રયત્ન કરો',
+src\pages\Admin\AdminAnalytics.jsx:54:successExport: 'રિપોર્ટ સફળતાપૂર્વક ડાઉનલોડ થયો છે',
+src\pages\Admin\AdminAnalytics.jsx:55:errorExport: 'રિપોર્ટ નિકાસ કરવામાં નિષ્ફળતા',
+src\pages\Admin\AdminAnalytics.jsx:56:activeSession: 'ટેલિમેટ્રી સત્ર: સક્રિય',
+src\pages\Admin\AdminAnalytics.jsx:57:refresh: 'ડેટા તાજો કરો'
+src\pages\Admin\AdminConsultationCenter.jsx:64:title: 'પરામર્શ કેન્દ્ર સંચાલન',
+src\pages\Admin\AdminConsultationCenter.jsx:65:subtitle: 'પરામર્શ થ્રેડો અને ટિકિટ સ્થિતિનું નિરીક્ષણ અને સંચાલન કરો',
+src\pages\Admin\AdminConsultationCenter.jsx:66:totalConsultations: 'કુલ ટિકિટો',
+src\pages\Admin\AdminConsultationCenter.jsx:67:pendingTickets: 'પ્રતિસાદ બાકી',
+src\pages\Admin\AdminConsultationCenter.jsx:68:repliedTickets: 'જવાબ આપેલ',
+src\pages\Admin\AdminConsultationCenter.jsx:69:closedTickets: 'બંધ કરેલ ટિકિટો',
+src\pages\Admin\AdminConsultationCenter.jsx:70:todayTickets: 'આજની ટિકિટો',
+src\pages\Admin\AdminConsultationCenter.jsx:71:searchPlaceholder: 'ખેડૂત, નિષ્ણાત, વિષય અથવા ટિકિટ ID દ્વારા શોધો...',
+src\pages\Admin\AdminConsultationCenter.jsx:72:filterAllStatus: 'બધી સ્થિતિ',
+src\pages\Admin\AdminConsultationCenter.jsx:73:filterPending: 'બાકી',
+src\pages\Admin\AdminConsultationCenter.jsx:74:filterReplied: 'જવાબ આપેલ',
+src\pages\Admin\AdminConsultationCenter.jsx:75:filterClosed: 'બંધ',
+src\pages\Admin\AdminConsultationCenter.jsx:76:filterAllDate: 'બધા દિવસો',
+src\pages\Admin\AdminConsultationCenter.jsx:77:filterToday: 'આજે',
+src\pages\Admin\AdminConsultationCenter.jsx:78:filterWeek: 'આ અઠવાડિયે',
+src\pages\Admin\AdminConsultationCenter.jsx:79:filterMonth: 'આ મહિને',
+src\pages\Admin\AdminConsultationCenter.jsx:80:sortNewest: 'પ્રથમ નવા',
+src\pages\Admin\AdminConsultationCenter.jsx:81:sortOldest: 'પ્રથમ જૂના',
+src\pages\Admin\AdminConsultationCenter.jsx:82:ticketId: 'ટિકિટ ID',
+src\pages\Admin\AdminConsultationCenter.jsx:83:farmer: 'ખેડૂત',
+src\pages\Admin\AdminConsultationCenter.jsx:84:specialization: 'કેટેગરી',
+src\pages\Admin\AdminConsultationCenter.jsx:85:subject: 'વિષય',
+src\pages\Admin\AdminConsultationCenter.jsx:86:status: 'સ્થિતિ',
+src\pages\Admin\AdminConsultationCenter.jsx:87:lastReply: 'છેલ્લો જવાબ',
+src\pages\Admin\AdminConsultationCenter.jsx:88:actions: 'ક્રિયાઓ',
+src\pages\Admin\AdminConsultationCenter.jsx:89:noTickets: 'કોઈ પરામર્શ મળ્યા નથી',
+src\pages\Admin\AdminConsultationCenter.jsx:90:noTicketsDesc: 'તમારા ફિલ્ટર્સ બદલીને ફરીથી પ્રયાસ કરો.',
+src\pages\Admin\AdminConsultationCenter.jsx:91:viewConversation: 'વાતચીત થ્રેડ',
+src\pages\Admin\AdminConsultationCenter.jsx:92:closeTicket: 'ટિકિટ બંધ કરો',
+src\pages\Admin\AdminConsultationCenter.jsx:93:reopenTicket: 'ટિકિટ ફરી ખોલો',
+src\pages\Admin\AdminConsultationCenter.jsx:94:deleteTicket: 'ટિકિટ કાઢી નાખો',
+src\pages\Admin\AdminConsultationCenter.jsx:95:confirmDeleteTitle: 'પરામર્શ દૂર કરવાની પુષ્ટિ',
+src\pages\Admin\AdminConsultationCenter.jsx:96:confirmDeleteMsg: 'શું તમે આ પરામર્શને સંચાલન કેન્દ્રમાંથી દૂર કરવા માંગો છો? આ ખેડૂતના ડેટાને અસર કરશે નહીં.',
+src\pages\Admin\AdminConsultationCenter.jsx:97:cancel: 'રદ કરો',
+src\pages\Admin\AdminConsultationCenter.jsx:98:confirm: 'દૂર કરવાની ખાતરી',
+src\pages\Admin\AdminConsultationCenter.jsx:99:loading: 'લોડ થઈ રહ્યું છે...',
+src\pages\Admin\AdminConsultationCenter.jsx:100:errorLoad: 'પરામર્શ લોડ કરવામાં નિષ્ફળ',
+src\pages\Admin\AdminConsultationCenter.jsx:101:retry: 'ફરી પ્રયાસ કરો',
+src\pages\Admin\AdminConsultationCenter.jsx:102:successDeleted: 'પરામર્શ સફળતાપૂર્વક દૂર કરવામાં આવ્યો',
+src\pages\Admin\AdminConsultationCenter.jsx:103:successStatusClose: 'પરામર્શ સફળતાપૂર્વક બંધ કરવામાં આવ્યો',
+src\pages\Admin\AdminConsultationCenter.jsx:104:successStatusReopen: 'પરામર્શ સફળતાપૂર્વક ફરી ખોલવામાં આવ્યો',
+src\pages\Admin\AdminConsultationCenter.jsx:105:statusUpdated: 'પરામર્શની સ્થિતિ અપડેટ થઈ',
+src\pages\Admin\AdminConsultationCenter.jsx:106:farmerMessage: 'ખેડૂત પૂછપરછ',
+src\pages\Admin\AdminConsultationCenter.jsx:107:expertMessage: 'નિષ્ણાત પ્રતિસાદ',
+src\pages\Admin\AdminConsultationCenter.jsx:108:adminControls: 'વહીવટી નિયંત્રણો',
+src\pages\Admin\AdminConsultationCenter.jsx:109:lang: 'ગુજરાતી (GUJ)'
+src\pages\Admin\AdminExpertManagement.jsx:71:title: 'નિષ્ણાત વ્યવસ્થાપન', subtitle: 'કૃષિ નિષ્ણાત ખાતાઓ અને પરામર્શનું સંચાલન',
+src\pages\Admin\AdminExpertManagement.jsx:72:totalExperts: 'કુલ નિષ્ણાતો', activeExperts: 'સક્રિય નિષ્ણાતો', inactiveExperts: 'નિષ્ક્રિય નિષ્ણાતો',
+src\pages\Admin\AdminExpertManagement.jsx:73:totalConsultations: 'કુલ પરામર્શ', pendingMessages: 'બાકી સંદેશા',
+src\pages\Admin\AdminExpertManagement.jsx:74:searchPlaceholder: 'નામ, ઈમેલ, જિલ્લો, વિશેષતા દ્વારા શોધો...',
+src\pages\Admin\AdminExpertManagement.jsx:75:filterAll: 'બધા', filterActive: 'સક્રિય', filterInactive: 'નિષ્ક્રિય',
+src\pages\Admin\AdminExpertManagement.jsx:76:sortNewest: 'સૌથી નવા', sortRating: 'ઉચ્ચ રેટિંગ', sortConsultations: 'સૌથી વધુ પરામર્શ',
+src\pages\Admin\AdminExpertManagement.jsx:77:addExpert: 'નિષ્ણાત ઉમેરો', editExpert: 'નિષ્ણાત સંપાદિત કરો', viewExpert: 'નિષ્ણાત વિગતો',
+src\pages\Admin\AdminExpertManagement.jsx:78:name: 'પૂરું નામ', email: 'ઈમેલ', phone: 'મોબાઈલ', password: 'પાસવર્ડ',
+src\pages\Admin\AdminExpertManagement.jsx:79:confirmPassword: 'પાસવર્ડ ખાતરી', qualification: 'લાયકાત',
+src\pages\Admin\AdminExpertManagement.jsx:80:specialization: 'વિશેષતા', experience: 'અનુભવ (વર્ષ)', district: 'જિલ્લો',
+src\pages\Admin\AdminExpertManagement.jsx:81:languages: 'ભાષાઓ', bio: 'બાયો', activeStatus: 'સક્રિય સ્થિતિ',
+src\pages\Admin\AdminExpertManagement.jsx:82:save: 'સાચવો', cancel: 'રદ કરો', create: 'નિષ્ણાત બનાવો', update: 'અપડેટ કરો',
+src\pages\Admin\AdminExpertManagement.jsx:83:deleteTitle: 'નિષ્ક્રિય કરવાની પુષ્ટિ', deleteMsg: 'શું તમે ખરેખર આ નિષ્ણાતને નિષ્ક્રિય કરવા માંગો છો?',
+src\pages\Admin\AdminExpertManagement.jsx:84:deleteConfirm: 'નિષ્ક્રિય કરો', actions: 'ક્રિયાઓ', status: 'સ્થિતિ', rating: 'રેટિંગ',
+src\pages\Admin\AdminExpertManagement.jsx:85:consultations: 'પરામર્શ', noExperts: 'કોઈ નિષ્ણાત મળ્યા નથી', noExpertsDesc: 'શોધ અથવા ફિલ્ટર બદલો.',
+src\pages\Admin\AdminExpertManagement.jsx:86:recentConsultations: 'તાજેતરના પરામર્શ', loading: 'લોડ થઈ રહ્યું છે...', active: 'સક્રિય', inactive: 'નિષ્ક્રિય',
+src\pages\Admin\AdminExpertManagement.jsx:87:errorLoad: 'નિષ્ણાતો લોડ કરવામાં નિષ્ફળ', retry: 'ફરી પ્રયાસ કરો', successCreated: 'નિષ્ણાત સફળતાપૂર્વક બનાવાયા',
+src\pages\Admin\AdminExpertManagement.jsx:88:successUpdated: 'નિષ્ણાત સફળતાપૂર્વક અપડેટ થયા', successStatus: 'નિષ્ણાતની સ્થિતિ અપડેટ થઈ',
+src\pages\Admin\AdminExpertManagement.jsx:89:successDeleted: 'નિષ્ણાત નિષ્ક્રિય થયા', photo: 'ફોટો URL', profilePhoto: 'પ્રોફાઇલ ફોટો URL',
+src\pages\Admin\AdminExpertManagement.jsx:90:officeAddress: 'ઓફિસ સરનામું', availability: 'ઉપલબ્ધતા', googleMap: 'ગુગલ મેપ લિંક',
+src\pages\Admin\AdminExpertManagement.jsx:91:lang: 'ગુજરાતી (GUJ)'
+src\pages\Admin\AdminExpertManagement.jsx:427:એડમિન પોર્ટલ • Admin Control Center
+src\pages\Admin\AdminProfile.jsx:59:title: "એડમિન પ્રોફાઇલ કંટ્રોલ સેન્ટર",
+src\pages\Admin\AdminProfile.jsx:60:subtitle: "વ્યક્તિગત વિગતો, સુરક્ષા ઓળખપત્રો અને પસંદગીઓનું સંચાલન કરો.",
+src\pages\Admin\AdminProfile.jsx:61:personalInfo: "વ્યક્તિગત માહિતી",
+src\pages\Admin\AdminProfile.jsx:62:fullName: "પૂરું નામ",
+src\pages\Admin\AdminProfile.jsx:63:emailAddress: "ઈમેલ આઈડી",
+src\pages\Admin\AdminProfile.jsx:64:mobileNumber: "મોબાઇલ નંબર",
+src\pages\Admin\AdminProfile.jsx:65:username: "વપરાશકર્તા નામ",
+src\pages\Admin\AdminProfile.jsx:66:role: "ભૂમિકા (રોલ)",
+src\pages\Admin\AdminProfile.jsx:67:accountInfo: "એકાઉન્ટ વિગતો",
+src\pages\Admin\AdminProfile.jsx:68:createdDate: "એકાઉન્ટ બનાવ્યાની તારીખ",
+src\pages\Admin\AdminProfile.jsx:69:lastLogin: "છેલ્લું લોગિન",
+src\pages\Admin\AdminProfile.jsx:70:accountStatus: "એકાઉન્ટ સ્થિતિ",
+src\pages\Admin\AdminProfile.jsx:71:active: "સક્રિય",
+src\pages\Admin\AdminProfile.jsx:72:inactive: "નિષ્ક્રિય",
+src\pages\Admin\AdminProfile.jsx:73:security: "સુરક્ષા અને ગુપ્ત કોડ",
+src\pages\Admin\AdminProfile.jsx:74:changePassword: "એકાઉન્ટ પાસવર્ડ બદલો",
+src\pages\Admin\AdminProfile.jsx:75:currentPwd: "વર્તમાન ગુપ્ત કોડ",
+src\pages\Admin\AdminProfile.jsx:76:newPwd: "નવો ગુપ્ત કોડ",
+src\pages\Admin\AdminProfile.jsx:77:confirmPwd: "નવા ગુપ્ત કોડની પુષ્ટિ કરો",
+src\pages\Admin\AdminProfile.jsx:78:pwdStrength: "પાસવર્ડની મજબૂતાઈ",
+src\pages\Admin\AdminProfile.jsx:79:strengthWeak: "નબળો",
+src\pages\Admin\AdminProfile.jsx:80:strengthMedium: "મધ્યમ",
+src\pages\Admin\AdminProfile.jsx:81:strengthStrong: "મજબૂત",
+src\pages\Admin\AdminProfile.jsx:82:profilePhoto: "પ્રોફાઇલ ફોટો",
+src\pages\Admin\AdminProfile.jsx:83:uploadPhoto: "ફોટો અપલોડ કરો",
+src\pages\Admin\AdminProfile.jsx:84:changePhoto: "બદલો",
+src\pages\Admin\AdminProfile.jsx:85:removePhoto: "દૂર કરો",
+src\pages\Admin\AdminProfile.jsx:86:preferences: "સિસ્ટમ સેટિંગ્સ",
+src\pages\Admin\AdminProfile.jsx:87:saveBtn: "ફેરફારો સાચવો",
+src\pages\Admin\AdminProfile.jsx:88:updatePwdBtn: "પાસવર્ડ અપડેટ કરો",
+src\pages\Admin\AdminProfile.jsx:89:saving: "સાચવી રહ્યાં છીએ...",
+src\pages\Admin\AdminProfile.jsx:90:loading: "એડમિન પ્રોફાઇલમાં માહિતી લોડ થઈ રહી છે...",
+src\pages\Admin\AdminProfile.jsx:91:photoRemoved: "પ્રોફાઇલ ફોટો સફળતાપૂર્વક દૂર કરવામાં આવ્યો",
+src\pages\Admin\AdminProfile.jsx:92:photoUploaded: "પ્રોફાઇલ ફોટો સફળતાપૂર્વક અપલોડ કરવામાં આવ્યો",
+src\pages\Admin\AdminProfile.jsx:93:profileUpdated: "પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ",
+src\pages\Admin\AdminProfile.jsx:94:pwdUpdated: "પાસવર્ડ સફળતાપૂર્વક અપડેટ થયો",
+src\pages\Admin\AdminProfile.jsx:95:confirmTitle: "શું આપ ખાતરીપૂર્વક કરવા માંગો છો?",
+src\pages\Admin\AdminProfile.jsx:96:confirmDeletePhoto: "શું તમે તમારો પ્રોફાઇલ ફોટો દૂર કરવા માંગો છો?",
+src\pages\Admin\AdminProfile.jsx:97:yes: "હા, દૂર કરો",
+src\pages\Admin\AdminProfile.jsx:98:cancel: "રદ કરો",
+src\pages\Admin\AdminProfile.jsx:99:errorLoad: "એડમિન પ્રોફાઇલ ડેટા લોડ કરવામાં નિષ્ફળતા.",
+src\pages\Admin\AdminProfile.jsx:100:retry: "ફરી પ્રયાસ કરો"
+src\pages\Admin\AdminProfile.jsx:212:errors.full_name = lang === 'GUJ' ? 'પૂરું નામ જરૂરી છે.' : 'Full name is required.'
+src\pages\Admin\AdminProfile.jsx:216:errors.email = lang === 'GUJ' ? 'ઈમેલ જરૂરી છે.' : 'Email is required.'
+src\pages\Admin\AdminProfile.jsx:218:errors.email = lang === 'GUJ' ? 'અમાન્ય ઈમેલ ફોર્મેટ.' : 'Invalid email format.'
+src\pages\Admin\AdminProfile.jsx:222:errors.mobile = lang === 'GUJ' ? 'મોબાઇલ નંબર જરૂરી છે.' : 'Mobile number is required.'
+src\pages\Admin\AdminProfile.jsx:224:errors.mobile = lang === 'GUJ' ? 'મોબાઇલ નંબર બરાબર ૧૦ આંકડાનો હોવો જોઈએ.' : 'Mobile number must be exactly 10 digits.'
+src\pages\Admin\AdminProfile.jsx:270:triggerToast(lang === 'GUJ' ? 'પ્રોફાઇલ સાચવવામાં સમસ્યા આવી.' : 'An error occurred while saving the profile.', 'error')
+src\pages\Admin\AdminProfile.jsx:327:errors.current_password = lang === 'GUJ' ? 'વર્તમાન પાસવર્ડ જરૂરી છે.' : 'Current password is required.'
+src\pages\Admin\AdminProfile.jsx:330:errors.new_password = lang === 'GUJ' ? 'નવો પાસવર્ડ જરૂરી છે.' : 'New password is required.'
+src\pages\Admin\AdminProfile.jsx:333:errors.confirm_password = lang === 'GUJ' ? 'નવા પાસવર્ડની પુષ્ટિ જરૂરી છે.' : 'Password confirmation is required.'
+src\pages\Admin\AdminProfile.jsx:337:errors.confirm_password = lang === 'GUJ' ? 'નવા પાસવર્ડો મેળ ખાતા નથી.' : 'New passwords do not match.'
+src\pages\Admin\AdminProfile.jsx:342:? 'કૃપા કરીને મજબૂત પાસવર્ડ દાખલ કરો (કેપિટલ અક્ષરો, અંકો અને ચિહ્નો સાથે ઓછામાં ઓછા ૮ અક્ષરો).'
+src\pages\Admin\AdminProfile.jsx:372:triggerToast(lang === 'GUJ' ? 'ગુપ્ત કોડ બદલવામાં નિષ્ફળતા.' : 'Failed to change password.', 'error')
+src\pages\Admin\AdminProfile.jsx:401:const errorMsg = err.response?.data?.profile_picture || (lang === 'GUJ' ? 'ફોટો અપલોડ નિષ્ફળ ગયો.' : 'Profile image upload failed.')
+src\pages\Admin\AdminProfile.jsx:422:triggerToast(lang === 'GUJ' ? 'ફોટો દૂર કરવામાં નિષ્ફળતા.' : 'Failed to delete photo.', 'error')
+src\pages\Admin\AdminSchemesManagement.jsx:75:title: 'સરકારી યોજનાઓ વ્યવસ્થાપન',
+src\pages\Admin\AdminSchemesManagement.jsx:76:subtitle: 'રાજ્ય અને કેન્દ્ર સરકારની કૃષિ યોજનાઓનું સંચાલન અને અપડેટ કરો',
+src\pages\Admin\AdminSchemesManagement.jsx:77:totalSchemes: 'કુલ યોજનાઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:78:activeSchemes: 'સક્રિય યોજનાઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:79:expiredSchemes: 'મુદત પૂરી થયેલ યોજનાઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:80:draftSchemes: 'ડ્રાફ્ટ યોજનાઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:81:searchPlaceholder: 'શીર્ષક, વિભાગ, શ્રેણી દ્વારા શોધો...',
+src\pages\Admin\AdminSchemesManagement.jsx:82:filterStatus: 'સ્થિતિ: બધી',
+src\pages\Admin\AdminSchemesManagement.jsx:83:filterFeatured: 'વિશેષતા: બધી',
+src\pages\Admin\AdminSchemesManagement.jsx:84:statusAll: 'બધી સ્થિતિઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:85:statusDraft: 'ડ્રાફ્ટ',
+src\pages\Admin\AdminSchemesManagement.jsx:86:statusActive: 'સક્રિય',
+src\pages\Admin\AdminSchemesManagement.jsx:87:statusExpired: 'મુદત પૂરી થયેલ',
+src\pages\Admin\AdminSchemesManagement.jsx:88:featuredAll: 'બધી વિશેષતાઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:89:featuredYes: 'વિશેષ (Featured)',
+src\pages\Admin\AdminSchemesManagement.jsx:90:featuredNo: 'સામાન્ય',
+src\pages\Admin\AdminSchemesManagement.jsx:91:sortNewest: 'છેલ્લે અપડેટ કરેલ',
+src\pages\Admin\AdminSchemesManagement.jsx:92:sortTitle: 'શીર્ષક (અ થી જ્ઞ)',
+src\pages\Admin\AdminSchemesManagement.jsx:93:addScheme: 'નવી યોજના ઉમેરો',
+src\pages\Admin\AdminSchemesManagement.jsx:94:editScheme: 'સરકારી યોજના સંપાદિત કરો',
+src\pages\Admin\AdminSchemesManagement.jsx:95:viewScheme: 'યોજનાની વિગતો',
+src\pages\Admin\AdminSchemesManagement.jsx:96:schemeTitleLabel: 'યોજનાનું શીર્ષક (અંગ્રેજી)',
+src\pages\Admin\AdminSchemesManagement.jsx:97:schemeTitleGujLabel: 'યોજનાનું શીર્ષક (ગુજરાતી)',
+src\pages\Admin\AdminSchemesManagement.jsx:98:schemeType: 'યોજના પ્રકાર',
+src\pages\Admin\AdminSchemesManagement.jsx:99:department: 'સરકારી વિભાગ',
+src\pages\Admin\AdminSchemesManagement.jsx:100:category: 'શ્રેણી',
+src\pages\Admin\AdminSchemesManagement.jsx:101:district: 'જિલ્લો (વૈકલ્પિક)',
+src\pages\Admin\AdminSchemesManagement.jsx:102:startDate: 'શરૂઆતની તારીખ',
+src\pages\Admin\AdminSchemesManagement.jsx:103:endDate: 'અંતિમ તારીખ',
+src\pages\Admin\AdminSchemesManagement.jsx:104:officialWebsite: 'સત્તાવાર વેબસાઇટ લિંક',
+src\pages\Admin\AdminSchemesManagement.jsx:105:applyLink: 'અરજી કરવાની લિંક',
+src\pages\Admin\AdminSchemesManagement.jsx:106:description: 'યોજનાનું વર્ણન',
+src\pages\Admin\AdminSchemesManagement.jsx:107:eligibility: 'પાત્રતા માપદંડ',
+src\pages\Admin\AdminSchemesManagement.jsx:108:benefits: 'મળવાપાત્ર લાભો',
+src\pages\Admin\AdminSchemesManagement.jsx:109:requiredDocuments: 'જરૂરી દસ્તાવેજો',
+src\pages\Admin\AdminSchemesManagement.jsx:110:statusField: 'સ્થિતિ',
+src\pages\Admin\AdminSchemesManagement.jsx:111:featuredField: 'વિશેષ હાઇલાઇટ કરો (Featured)',
+src\pages\Admin\AdminSchemesManagement.jsx:112:save: 'યોજના સાચવો',
+src\pages\Admin\AdminSchemesManagement.jsx:113:cancel: 'રદ કરો',
+src\pages\Admin\AdminSchemesManagement.jsx:114:create: 'યોજના બનાવો',
+src\pages\Admin\AdminSchemesManagement.jsx:115:update: 'યોજના અપડેટ કરો',
+src\pages\Admin\AdminSchemesManagement.jsx:116:deleteTitle: 'સરકારી યોજના કાઢી નાખો',
+src\pages\Admin\AdminSchemesManagement.jsx:117:deleteConfirmMsg: 'શું તમે ખરેખર આ સરકારી યોજના કાઢી નાખવા માંગો છો? આ સોફ્ટ-ડિલીટ છે જે ખેડૂત દૃશ્યથી છુપાવશે.',
+src\pages\Admin\AdminSchemesManagement.jsx:118:deleteConfirmBtn: 'યોજના દૂર કરો',
+src\pages\Admin\AdminSchemesManagement.jsx:119:actions: 'ક્રિયાઓ',
+src\pages\Admin\AdminSchemesManagement.jsx:120:featuredIcon: 'વિશેષ',
+src\pages\Admin\AdminSchemesManagement.jsx:121:central: 'કેન્દ્રીય',
+src\pages\Admin\AdminSchemesManagement.jsx:122:gujarat: 'ગુજરાત રાજ્ય',
+src\pages\Admin\AdminSchemesManagement.jsx:123:noSchemes: 'કોઈ સરકારી યોજનાઓ મળી નથી',
+src\pages\Admin\AdminSchemesManagement.jsx:124:noSchemesDesc: 'કૃપા કરીને તમારી શોધ ક્વેરી અથવા ફિલ્ટર્સ બદલો.',
+src\pages\Admin\AdminSchemesManagement.jsx:125:loading: 'યોજનાઓ લોડ થઈ રહી છે...',
+src\pages\Admin\AdminSchemesManagement.jsx:126:errorLoad: 'સરકારી યોજનાઓની સૂચિ પુનઃપ્રાપ્ત કરવામાં નિષ્ફળ',
+src\pages\Admin\AdminSchemesManagement.jsx:127:retry: 'ફરીથી પ્રયત્ન કરો',
+src\pages\Admin\AdminSchemesManagement.jsx:128:successCreated: 'સરકારી યોજના સફળતાપૂર્વક બનાવવામાં આવી છે',
+src\pages\Admin\AdminSchemesManagement.jsx:129:successUpdated: 'સરકારી યોજના સફળતાપૂર્વક અપડેટ કરવામાં આવી છે',
+src\pages\Admin\AdminSchemesManagement.jsx:130:successStatus: 'યોજનાની સ્થિતિ બદલાઈ ગઈ છે',
+src\pages\Admin\AdminSchemesManagement.jsx:131:successDeleted: 'સરકારી યોજના સફળતાપૂર્વક કાઢી નાખવામાં આવી છે',
+src\pages\Admin\AdminSchemesManagement.jsx:132:lang: 'ગુજરાતી (GUJ)'
+src\pages\Admin\AdminSchemesManagement.jsx:704:placeholder="e.g. પીએમ કિસાન સન્માન નિધિ"
+src\pages\Authentication\AdminLogin.jsx:33:return errorMsg || 'પ્રવેશ નિષ્ફળ ગયું છે'
+src\pages\Authentication\AdminLogin.jsx:64:triggerToast(res.message || 'પ્રવેશ અસ્વીકાર્ય', 'error')
+src\pages\Authentication\AdminLogin.jsx:76:title="એડમિન કંટ્રોલ પેનલ (Admin Portal)"
+src\pages\Authentication\AdminLogin.jsx:77:subtitle="સિસ્ટમ ઓવરરાઇડ અને વહીવટી પ્રવેશ"
+src\pages\Authentication\AdminLogin.jsx:85:label="વપરાશકર્તા નામ (Username)"
+src\pages\Authentication\AdminLogin.jsx:87:placeholder="એડમિનિસ્ટ્રેટર આઈડી"
+src\pages\Authentication\AdminLogin.jsx:92:required: 'એડમિનિસ્ટ્રેટર આઈડી લખવું ફરજિયાત છે'
+src\pages\Authentication\AdminLogin.jsx:98:label="ગુપ્ત કોડ (Password)"
+src\pages\Authentication\AdminLogin.jsx:101:placeholder="પાસવર્ડ દાખલ કરો"
+src\pages\Authentication\AdminLogin.jsx:106:required: 'પાસવર્ડ ફરજિયાત છે',
+src\pages\Authentication\AdminLogin.jsx:109:message: 'પાસવર્ડમાં ઓછામાં ઓછો ૮ અક્ષર, ૧ કેપિટલ, ૧ સ્મોલ, નંબર અને સ્પેશિયલ કેરેક્ટર હોવો જોઈએ'
+src\pages\Authentication\AdminLogin.jsx:116:સુરક્ષિત પ્રવેશ કરો (Secure Login)
+src\pages\Authentication\ExpertLogin.jsx:34:return errorMsg || 'પ્રવેશ નિષ્ફળ ગયું છે'
+src\pages\Authentication\ExpertLogin.jsx:73:title="કૃષિ નિષ્ણાત પ્રવેશ (Expert Login)"
+src\pages\Authentication\ExpertLogin.jsx:74:subtitle="કૃષિ વિજ્ઞાન સલાહકાર સેવાઓ"
+src\pages\Authentication\ExpertLogin.jsx:82:label="ઈમેલ સરનામું (Email Address)"
+src\pages\Authentication\ExpertLogin.jsx:90:required: 'ઈમેલ આઈડી ફરજિયાત છે',
+src\pages\Authentication\ExpertLogin.jsx:93:message: 'માનક ઈમેલ આઈડી દાખલ કરો'
+src\pages\Authentication\ExpertLogin.jsx:100:label="ગુપ્ત કોડ (Password)"
+src\pages\Authentication\ExpertLogin.jsx:103:placeholder="પાસવર્ડ દાખલ કરો"
+src\pages\Authentication\ExpertLogin.jsx:108:required: 'પાસવર્ડ ફરજિયાત છે',
+src\pages\Authentication\ExpertLogin.jsx:111:message: 'પાસવર્ડમાં ઓછામાં ઓછો ૮ અક્ષર, ૧ કેપિટલ, ૧ સ્મોલ, નંબર અને સ્પેશિયલ કેરેક્ટર હોવો જોઈએ'
+src\pages\Authentication\ExpertLogin.jsx:118:નિષ્ણાત તરીકે લોગિન કરો (Login as Expert)
+src\pages\Authentication\FarmerLogin.jsx:34:return errorMsg || 'પ્રવેશ નિષ્ફળ ગયું છે'
+src\pages\Authentication\FarmerLogin.jsx:66:triggerToast(res.message || 'પ્રવેશ અસ્વીકાર્ય', 'error')
+src\pages\Authentication\FarmerLogin.jsx:78:title="ખેડૂત લોગિન" // "Farmer Login" in Gujarati
+src\pages\Authentication\FarmerLogin.jsx:79:subtitle="ખેડૂત વ્યવસ્થાપન પોર્ટલ પર આપનું સ્વાગત છે" // "Welcome to farmer management portal"
+src\pages\Authentication\FarmerLogin.jsx:87:label="મોબાઈલ નંબર (Mobile Number)"
+src\pages\Authentication\FarmerLogin.jsx:90:placeholder="મોબાઈલ નંબર દાખલ કરો (દા.ત. 9876543210)"
+src\pages\Authentication\FarmerLogin.jsx:95:required: 'મોબાઈલ નંબર ફરજિયાત છે',
+src\pages\Authentication\FarmerLogin.jsx:98:message: 'કૃપા કરીને માન્ય ૧૦-અંકનો મોબાઈલ નંબર દાખલ કરો'
+src\pages\Authentication\FarmerLogin.jsx:105:label="પાસવર્ડ (Password)"
+src\pages\Authentication\FarmerLogin.jsx:108:placeholder="પાસવર્ડ દાખલ કરો"
+src\pages\Authentication\FarmerLogin.jsx:113:required: 'પાસવર્ડ ફરજિયાત છે',
+src\pages\Authentication\FarmerLogin.jsx:116:message: 'પાસવર્ડમાં ઓછામાં ઓછો ૮ અક્ષર, ૧ કેપિટલ, ૧ સ્મોલ, નંબર અને સ્પેશિયલ કેરેક્ટર હોવો જોઈએ'
+src\pages\Authentication\FarmerLogin.jsx:129:<span>યાદ રાખો</span> {/* Remember me */}
+src\pages\Authentication\FarmerLogin.jsx:136:પાસવર્ડ ભૂલી ગયા છો?
+src\pages\Authentication\FarmerLogin.jsx:142:પ્રવેશ કરો (Login)
+src\pages\Authentication\FarmerLogin.jsx:147:<span>નવું ખાતું બનાવવું છે? </span>
+src\pages\Authentication\FarmerLogin.jsx:149:અહીં રજીસ્ટ્રેશન કરો (Register here)
+src\pages\Authentication\FarmerRegister.jsx:44:return errorMsg || 'રજીસ્ટ્રેશન નિષ્ફળ ગયું છે'
+src\pages\Authentication\FarmerRegister.jsx:82:triggerToast(res.message || 'રજીસ્ટ્રેશન સફળ રહ્યું છે! કૃપા કરીને લોગિન કરો.', 'success')
+src\pages\Authentication\FarmerRegister.jsx:85:triggerToast(res.message || 'રજીસ્ટ્રેશન નિષ્ફળ રહ્યું', 'error')
+src\pages\Authentication\FarmerRegister.jsx:97:title="ખેડૂત રજીસ્ટ્રેશન" // "Farmer Registration" in Gujarati
+src\pages\Authentication\FarmerRegister.jsx:98:subtitle="નવું ખાતું બનાવવા માટે માહિતી ભરો" // "Fill info to create a new account"
+src\pages\Authentication\FarmerRegister.jsx:101:backLabel="લોગિન પર પાછા જાઓ"
+src\pages\Authentication\FarmerRegister.jsx:107:label="પૂરું નામ (Full Name)"
+src\pages\Authentication\FarmerRegister.jsx:109:placeholder="તમારું પૂરું નામ દાખલ કરો"
+src\pages\Authentication\FarmerRegister.jsx:113:{...register('fullName', { required: 'પૂરું નામ લખવું ફરજિયાત છે' })}
+src\pages\Authentication\FarmerRegister.jsx:119:label="મોબાઈલ નંબર (Mobile)"
+src\pages\Authentication\FarmerRegister.jsx:122:placeholder="૧૦ આંકડાનો નંબર"
+src\pages\Authentication\FarmerRegister.jsx:127:required: 'મોબાઈલ નંબર ફરજિયાત છે',
+src\pages\Authentication\FarmerRegister.jsx:130:message: 'કૃપા કરીને ૧૦ અંકનો માન્ય નંબર લખો'
+src\pages\Authentication\FarmerRegister.jsx:137:label="ઈમેલ આઈડી (Email)"
+src\pages\Authentication\FarmerRegister.jsx:140:placeholder="દા.ત. name@domain.com"
+src\pages\Authentication\FarmerRegister.jsx:145:required: 'ઈમેલ આઈડી ફરજિયાત છે',
+src\pages\Authentication\FarmerRegister.jsx:148:message: 'કૃપા કરીને યોગ્ય ઈમેલ આઈડી દાખલ કરો'
+src\pages\Authentication\FarmerRegister.jsx:157:label="ગામ (Village)"
+src\pages\Authentication\FarmerRegister.jsx:159:placeholder="ગામનું નામ"
+src\pages\Authentication\FarmerRegister.jsx:163:{...register('village', { required: 'ગામનું નામ ફરજિયાત છે' })}
+src\pages\Authentication\FarmerRegister.jsx:168:label="તાલુકો (Taluka)"
+src\pages\Authentication\FarmerRegister.jsx:170:placeholder="તાલુકાનું નામ"
+src\pages\Authentication\FarmerRegister.jsx:174:{...register('taluka', { required: 'તાલુકો ફરજિયાત છે' })}
+src\pages\Authentication\FarmerRegister.jsx:180:label="જિલ્લો (District)"
+src\pages\Authentication\FarmerRegister.jsx:185:{...register('district', { required: 'જિલ્લો પસંદ કરવો ફરજિયાત છે' })}
+src\pages\Authentication\FarmerRegister.jsx:187:<option value="">જિલ્લો પસંદ કરો</option>
+src\pages\Authentication\FarmerRegister.jsx:195:label="રાજ્ય (State)"
+src\pages\Authentication\FarmerRegister.jsx:208:label="પાસવર્ડ (Password)"
+src\pages\Authentication\FarmerRegister.jsx:211:placeholder="પીન અથવા ગુપ્ત કોડ"
+src\pages\Authentication\FarmerRegister.jsx:216:required: 'પાસવર્ડ ફરજિયાત છે',
+src\pages\Authentication\FarmerRegister.jsx:219:message: 'પાસવર્ડમાં ઓછામાં ઓછો ૮ અક્ષર, ૧ કેપિટલ, ૧ સ્મોલ, નંબર અને સ્પેશિયલ કેરેક્ટર હોવો જોઈએ'
+src\pages\Authentication\FarmerRegister.jsx:226:label="પાસવર્ડ ખાતરી કરો"
+src\pages\Authentication\FarmerRegister.jsx:229:placeholder="ફરીથી પાસવર્ડ દાખલ કરો"
+src\pages\Authentication\FarmerRegister.jsx:234:required: 'પાસવર્ડ ખાતરી કરવો ફરજિયાત છે',
+src\pages\Authentication\FarmerRegister.jsx:235:validate: (val) => val === password || 'પાસવર્ડ એકસમાન નથી'
+src\pages\Authentication\FarmerRegister.jsx:246:{...register('acceptTerms', { required: 'નિયમો અને શરતોનો સ્વીકાર કરવો ફરજિયાત છે' })}
+src\pages\Authentication\FarmerRegister.jsx:248:<span>હું નિયમો અને શરતોનો સ્વીકાર કરું છું (Accept Terms & Conditions)</span>
+src\pages\Authentication\FarmerRegister.jsx:259:ખાતું બનાવો (Register)
+src\pages\Authentication\FarmerRegister.jsx:264:<span>પહેલેથી જ ખાતું છે? </span>
+src\pages\Authentication\FarmerRegister.jsx:266:અહીં લોગિન કરો (Login here)
+src\pages\Authentication\ForgotPasswordFlow.jsx:36:return errorMsg || 'પ્રક્રિયા નિષ્ફળ ગઈ'
+src\pages\Authentication\ForgotPasswordFlow.jsx:71:triggerToast(res.message || 'OTP મોકલવામાં આવ્યો છે!', 'success')
+src\pages\Authentication\ForgotPasswordFlow.jsx:74:triggerToast(res.message || 'મોબાઈલ ચકાસણી નિષ્ફળ ગઈ', 'error')
+src\pages\Authentication\ForgotPasswordFlow.jsx:91:triggerToast(res.message || 'OTP મળ્યો છે!', 'success')
+src\pages\Authentication\ForgotPasswordFlow.jsx:94:triggerToast(res.message || 'OTP અયોગ્ય છે', 'error')
+src\pages\Authentication\ForgotPasswordFlow.jsx:111:triggerToast(res.message || 'પાસવર્ડ સફળતાપૂર્વક બદલાઈ ગયો છે!', 'success')
+src\pages\Authentication\ForgotPasswordFlow.jsx:114:triggerToast(res.message || 'રીસેટ નિષ્ફળ રહ્યું', 'error')
+src\pages\Authentication\ForgotPasswordFlow.jsx:128:? 'પાસવર્ડ પુનઃપ્રાપ્તિ' // Password Recovery
+src\pages\Authentication\ForgotPasswordFlow.jsx:130:? 'OTP ચકાસણી' // OTP Verification
+src\pages\Authentication\ForgotPasswordFlow.jsx:131:: 'નવો પાસવર્ડ સેટ કરો' // Set new password
+src\pages\Authentication\ForgotPasswordFlow.jsx:135:? 'તમારા ખાતાનો રજીસ્ટર્ડ મોબાઈલ નંબર દાખલ કરો'
+src\pages\Authentication\ForgotPasswordFlow.jsx:137:? `અમે તમારા મોબાઈલ નંબર ${userMobile} પર OTP મોકલ્યો છે`
+src\pages\Authentication\ForgotPasswordFlow.jsx:138:: 'કૃપા કરીને નીચે તમારો નવો પાસવર્ડ દાખલ કરો'
+src\pages\Authentication\ForgotPasswordFlow.jsx:142:backLabel="લોગિન પર પાછા જાઓ"
+src\pages\Authentication\ForgotPasswordFlow.jsx:150:label="મોબાઈલ નંબર (Mobile Number)"
+src\pages\Authentication\ForgotPasswordFlow.jsx:153:placeholder="મોબાઈલ નંબર દાખલ કરો"
+src\pages\Authentication\ForgotPasswordFlow.jsx:158:required: 'મોબાઈલ નંબર ફરજિયાત છે',
+src\pages\Authentication\ForgotPasswordFlow.jsx:161:message: 'કૃપા કરીને માન્ય ૧૦-અંકનો મોબાઈલ નંબર પ્રદાન કરો'
+src\pages\Authentication\ForgotPasswordFlow.jsx:166:OTP મોકલો (Send OTP)
+src\pages\Authentication\ForgotPasswordFlow.jsx:175:label="OTP કોડ (6 આંકડાનો)"
+src\pages\Authentication\ForgotPasswordFlow.jsx:179:placeholder="દા.ત. 123456"
+src\pages\Authentication\ForgotPasswordFlow.jsx:184:required: 'OTP ફરજિયાત છે',
+src\pages\Authentication\ForgotPasswordFlow.jsx:187:message: 'OTP કોડ ફક્ત ૬ અંકનો હોવો જોઈએ'
+src\pages\Authentication\ForgotPasswordFlow.jsx:192:કોડ ચકાસો (Verify OTP)
+src\pages\Authentication\ForgotPasswordFlow.jsx:203:triggerToast(res.message || 'નવો OTP મોકલવામાં આવ્યો છે!', 'success')
+src\pages\Authentication\ForgotPasswordFlow.jsx:205:triggerToast(res.message || 'OTP રિસેન્ડ નિષ્ફળ રહ્યો', 'error')
+src\pages\Authentication\ForgotPasswordFlow.jsx:212:ફરીથી OTP મોકલો (Resend OTP)
+src\pages\Authentication\ForgotPasswordFlow.jsx:222:label="નવો પાસવર્ડ (New Password)"
+src\pages\Authentication\ForgotPasswordFlow.jsx:225:placeholder="નવો ગુપ્ત કોડ લખો"
+src\pages\Authentication\ForgotPasswordFlow.jsx:230:required: 'નવો પાસવર્ડ ફરજિયાત છે',
+src\pages\Authentication\ForgotPasswordFlow.jsx:233:message: 'પાસવર્ડમાં ઓછામાં ઓછો ૮ અક્ષર, ૧ કેપિટલ, ૧ સ્મોલ, નંબર અને સ્પેશિયલ કેરેક્ટર હોવો જોઈએ'
+src\pages\Authentication\ForgotPasswordFlow.jsx:238:label="પાસવર્ડની ખાતરી કરો"
+src\pages\Authentication\ForgotPasswordFlow.jsx:241:placeholder="ફરીથી પાસવર્ડ દાખલ કરો"
+src\pages\Authentication\ForgotPasswordFlow.jsx:246:required: 'પાસવર્ડ ખાતરી કરવો ફરજિયાત છે',
+src\pages\Authentication\ForgotPasswordFlow.jsx:247:validate: (val) => val === password || 'પાસવર્ડ એકસમાન નથી'
+src\pages\Authentication\ForgotPasswordFlow.jsx:251:પાસવર્ડ બદલો (Reset Password)
+src\pages\Expert\ConversationView.jsx:30:back: "પાછા જાઓ",
+src\pages\Expert\ConversationView.jsx:31:status: "સ્થિતિ",
+src\pages\Expert\ConversationView.jsx:32:pending: "બાકી છે",
+src\pages\Expert\ConversationView.jsx:33:replied: "જવાબ આપેલ છે",
+src\pages\Expert\ConversationView.jsx:34:closed: "બંધ કરેલ છે",
+src\pages\Expert\ConversationView.jsx:35:closeBtn: "પ્રશ્ન પૂર્ણ કરો",
+src\pages\Expert\ConversationView.jsx:36:sendBtn: "મોકલો",
+src\pages\Expert\ConversationView.jsx:37:typePlaceholder: "તમારો સંદેશ અહીં લખો...",
+src\pages\Expert\ConversationView.jsx:38:initialMessage: "પ્રારંભિક વર્ણન",
+src\pages\Expert\ConversationView.jsx:39:noReplies: "હજી સુધી કોઈ પ્રતિક્રિયા નથી.",
+src\pages\Expert\ConversationView.jsx:40:errorTitle: "વાતચીત લોડ કરવામાં ભૂલ",
+src\pages\Expert\ConversationView.jsx:41:errorDesc: "ચકાસો કે તમે લૉગ ઇન છો અને સર્વર ચાલુ છે.",
+src\pages\Expert\ConversationView.jsx:42:closedMessage: "આ ચર્ચા બંધ થઈ ગઈ છે.",
+src\pages\Expert\ConversationView.jsx:43:replyError: "સંદેશ મોકલવામાં નિષ્ફળતા.",
+src\pages\Expert\ConversationView.jsx:44:validationEmpty: "ખાલી સંદેશ મોકલી શકાતો નથી.",
+src\pages\Expert\ConversationView.jsx:45:farmerLabel: "ખેડૂત",
+src\pages\Expert\ConversationView.jsx:46:expertLabel: "નિષ્ણાત",
+src\pages\Expert\ExpertAvailability.jsx:28:title: "ઉપલબ્ધતા સમય વ્યવસ્થાપન",
+src\pages\Expert\ExpertAvailability.jsx:29:subtitle: "તમારી ઓનલાઇન સ્થિતિ, કામકાજના દિવસો અને સમય સેટ કરો.",
+src\pages\Expert\ExpertAvailability.jsx:30:statusCard: "પરામર્શ માટેની હાજરી સ્થિતિ",
+src\pages\Expert\ExpertAvailability.jsx:31:onlineStatus: "ઓનલાઈન (વાતચીત માટે ઉપલબ્ધ)",
+src\pages\Expert\ExpertAvailability.jsx:32:offlineStatus: "ઓફલાઇન (હાલમાં વ્યસ્ત)",
+src\pages\Expert\ExpertAvailability.jsx:33:workingDays: "કામકાજના દિવસો",
+src\pages\Expert\ExpertAvailability.jsx:34:workingHours: "કામકાજનો સમય",
+src\pages\Expert\ExpertAvailability.jsx:35:startTime: "શરૂઆતનો સમય",
+src\pages\Expert\ExpertAvailability.jsx:36:endTime: "સમાપ્તિ સમય",
+src\pages\Expert\ExpertAvailability.jsx:37:days: ["સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર", "રવિવાર"],
+src\pages\Expert\ExpertAvailability.jsx:38:saveBtn: "સમય સેટિંગ્સ સાચવો",
+src\pages\Expert\ExpertAvailability.jsx:39:saving: "સાચવી રહ્યાં છીએ...",
+src\pages\Expert\ExpertAvailability.jsx:40:loading: "ઉપલબ્ધતા માહિતી લોડ થઈ રહી છે...",
+src\pages\Expert\ExpertAvailability.jsx:41:error: "કન્ફિગરેશન મેળવવામાં નિષ્ફળતા.",
+src\pages\Expert\ExpertAvailability.jsx:42:success: "ઉપલબ્ધતા સમય સફળતાપૂર્વક સાચવવામાં આવ્યો છે!",
+src\pages\Expert\ExpertAvailability.jsx:43:warningOffline: "ચેતવણી: ઓફલાઇન મોડ કરવાથી ખેડૂતો કૃષિ સલાહ મેળવવા માટે તમારો સંપર્ક સાધી શકશે નહીં."
+src\pages\Expert\ExpertAvailability.jsx:192:triggerMessage('error', lang === 'GUJ' ? 'સાચવવાનું નિષ્ફળ ગયું.' : 'Failed to save settings.')
+src\pages\Expert\ExpertDashboard.jsx:81:title: "નિષ્ણાત ડેશબોર્ડ હબ",
+src\pages\Expert\ExpertDashboard.jsx:82:subtitle: "ખેડૂતના પ્રશ્નોની સમીક્ષા કરી સલાહ આપો અને વિગતો તપાસો.",
+src\pages\Expert\ExpertDashboard.jsx:83:totalConsults: "કુલ પરામર્શ",
+src\pages\Expert\ExpertDashboard.jsx:84:pendingConsults: "બાકી પરામર્શ",
+src\pages\Expert\ExpertDashboard.jsx:85:completedConsults: "પૂર્ણ પરામર્શ",
+src\pages\Expert\ExpertDashboard.jsx:86:avgRating: "સરેરાશ રેટિંગ",
+src\pages\Expert\ExpertDashboard.jsx:87:experience: "અનુભવ",
+src\pages\Expert\ExpertDashboard.jsx:88:availStatus: "ઉપલબ્ધતા સ્થિતિ",
+src\pages\Expert\ExpertDashboard.jsx:89:recentInquiries: "તાજેતરના પરામર્શ વિનંતીઓ",
+src\pages\Expert\ExpertDashboard.jsx:90:todaysSchedule: "આજનું શેડ્યૂલ",
+src\pages\Expert\ExpertDashboard.jsx:91:profileSummary: "પ્રોફાઇલ વિગતો",
+src\pages\Expert\ExpertDashboard.jsx:92:farmer: "ખેડૂતનું નામ",
+src\pages\Expert\ExpertDashboard.jsx:93:subject: "સમસ્યા / વિષય",
+src\pages\Expert\ExpertDashboard.jsx:94:time: "મોકલ્યા તારીખ",
+src\pages\Expert\ExpertDashboard.jsx:95:status: "સ્થિતિ",
+src\pages\Expert\ExpertDashboard.jsx:96:action: "કાર્ય",
+src\pages\Expert\ExpertDashboard.jsx:97:quickView: "વાતચીત જુઓ",
+src\pages\Expert\ExpertDashboard.jsx:98:active: "કન્સલ્ટિંગ ચાલુ / હાજર",
+src\pages\Expert\ExpertDashboard.jsx:99:inactive: "હાજર નથી / વ્યસ્ત",
+src\pages\Expert\ExpertDashboard.jsx:100:years: "વર્ષનો",
+src\pages\Expert\ExpertDashboard.jsx:101:outOf: "૫ માંથી",
+src\pages\Expert\ExpertDashboard.jsx:102:loading: "ડેશબોર્ડ લોડ થઈ રહ્યું છે...",
+src\pages\Expert\ExpertDashboard.jsx:103:error: "ડેશબોર્ડ ડેટા મેળવવામાં નિષ્ફળતા.",
+src\pages\Expert\ExpertDashboard.jsx:104:noConsultations: "હજી સુધી કોઈ પરામર્શ વિનંતીઓ મળી નથી.",
+src\pages\Expert\ExpertDashboard.jsx:105:noConsultationsDesc: "જ્યારે ખેડૂતો પ્રશ્નો સબમિટ કરશે ત્યારે તે અહીં દેખાશે.",
+src\pages\Expert\ExpertDashboard.jsx:106:noSchedule: "આજે કોઈ મુલાકાત શેડ્યૂલ થયેલ નથી.",
+src\pages\Expert\ExpertDashboard.jsx:107:languages: "ભાષાઓ",
+src\pages\Expert\ExpertDashboard.jsx:108:qualification: "લાયકાત",
+src\pages\Expert\ExpertDashboard.jsx:109:specialization: "વિશેષતા",
+src\pages\Expert\ExpertDashboard.jsx:110:district: "જિલ્લો"
+src\pages\Expert\ExpertDashboard.jsx:224:નિષ્ણાત સત્ર • Expert Live Portal
+src\pages\Expert\ExpertDashboard.jsx:227:આવકાર, {profile?.name || 'કૃષિ નિષ્ણાત'}!
+src\pages\Expert\ExpertDashboard.jsx:237:<span>પોસ્ટ સ્ટેટસ (Status)</span>
+src\pages\Expert\ExpertDashboard.jsx:249:<span>{stats.active_status ? 'સ્થિતિ વ્યસ્ત કરો' : 'સેવા ચાલુ કરો'}</span>
+src\pages\Expert\ExpertDashboard.jsx:336:<span>ચાલુ/બંધ કરો</span>
+src\pages\Expert\ExpertDashboard.jsx:413:<FiUser size={15} /> <span>પ્રોફાઇલ સંચાલન (Manage Profile)</span>
+src\pages\Expert\ExpertDashboard.jsx:508:{q.status === 'Pending' ? (lang === 'GUJ' ? 'જવાબ બાકી' : 'Pending') :
+src\pages\Expert\ExpertDashboard.jsx:509:q.status === 'Replied' ? (lang === 'GUJ' ? 'જવાબ આપેલ' : 'Replied') :
+src\pages\Expert\ExpertDashboard.jsx:510:(lang === 'GUJ' ? 'બંધ કરેલ' : 'Closed')}
+src\pages\Expert\ExpertFarmerList.jsx:26:title: "ખેડૂતોની યાદી",
+src\pages\Expert\ExpertFarmerList.jsx:27:subtitle: "તમામ ખેડૂતો જુઓ જેમણે નિષ્ણાત પરામર્શ માટે સંપર્ક કર્યો છે.",
+src\pages\Expert\ExpertFarmerList.jsx:28:searchPlaceholder: "ખેડૂતનું નામ અથવા વિષય શોધો...",
+src\pages\Expert\ExpertFarmerList.jsx:29:farmer: "ખેડૂતનું નામ",
+src\pages\Expert\ExpertFarmerList.jsx:30:latestTopic: "છેલ્લો વિષય",
+src\pages\Expert\ExpertFarmerList.jsx:31:totalQueries: "કુલ પ્રશ્નો",
+src\pages\Expert\ExpertFarmerList.jsx:32:lastContact: "છેલ્લો સંપર્ક",
+src\pages\Expert\ExpertFarmerList.jsx:33:action: "કાર્ય",
+src\pages\Expert\ExpertFarmerList.jsx:34:viewChat: "વાતચીત જુઓ",
+src\pages\Expert\ExpertFarmerList.jsx:35:noFarmers: "કોઈ ખેડૂત મળ્યા નથી.",
+src\pages\Expert\ExpertFarmerList.jsx:36:noFarmersDesc: "જ્યારે ખેડૂતો પરામર્શ માટે અરજી કરશે ત્યારે તેમની વિગતો અહીં દેખાશે.",
+src\pages\Expert\ExpertFarmerList.jsx:37:loading: "ખેડૂતોની યાદી લોડ થઈ રહી છે..."
+src\pages\Expert\ExpertInbox.jsx:28:title: "નિષ્ણાત પરામર્શ ઇનબોક્સ",
+src\pages\Expert\ExpertInbox.jsx:29:subtitle: "ખેડૂતો દ્વારા સબમિટ કરાયેલ કૃષિ સમસ્યાઓની સમીક્ષા કરો અને નિષ્ણાત સલાહ આપો",
+src\pages\Expert\ExpertInbox.jsx:30:tableFarmer: "ખેડૂતનું નામ",
+src\pages\Expert\ExpertInbox.jsx:31:tableSubject: "સમસ્યા / વિષય",
+src\pages\Expert\ExpertInbox.jsx:32:tableDate: "મોકલ્યા તારીખ",
+src\pages\Expert\ExpertInbox.jsx:33:tableStatus: "સ્થિતિ",
+src\pages\Expert\ExpertInbox.jsx:34:tableAction: "કાર્ય",
+src\pages\Expert\ExpertInbox.jsx:35:pending: "જવાબ બાકી",
+src\pages\Expert\ExpertInbox.jsx:36:replied: "જવાબ આપેલ",
+src\pages\Expert\ExpertInbox.jsx:37:closed: "બંધ કરેલ છે",
+src\pages\Expert\ExpertInbox.jsx:38:openChat: "વાતચીત ખોલો",
+src\pages\Expert\ExpertInbox.jsx:39:noQueries: "કોઈ ખેડૂત પરામર્શ પ્રશ્નો મળ્યા નથી",
+src\pages\Expert\ExpertInbox.jsx:40:noQueriesDesc: "તમારા જિલ્લા અથવા વિશેષતા માટે મોકલેલા પ્રશ્નો અહીં દેખાશે.",
+src\pages\Expert\ExpertInbox.jsx:41:loading: "ઇનબોક્સ લોડ થઈ રહ્યું છે...",
+src\pages\Expert\ExpertInbox.jsx:42:error: "ઇનબોક્સ લોડ કરવામાં સમસ્યા આવી રહી છે.",
+src\pages\Expert\ExpertProfile.jsx:83:triggerProfileMsg('error', lang === 'GUJ' ? 'લાયકાત ફરજિયાત છે.' : 'Qualification is required.')
+src\pages\Expert\ExpertProfile.jsx:88:triggerProfileMsg('error', lang === 'GUJ' ? 'અનુભવ 0-80 વર્ષની વચ્ચે હોવો જરૂરી છે.' : 'Experience must be between 0 and 80 years.')
+src\pages\Expert\ExpertProfile.jsx:92:triggerProfileMsg('error', lang === 'GUJ' ? 'મોબાઈલ નંબર ૧૦ અંકનો હોવો જોઈએ.' : 'Phone must be exactly 10 digits.')
+src\pages\Expert\ExpertProfile.jsx:111:triggerProfileMsg('success', lang === 'GUJ' ? 'પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થયું!' : 'Profile updated successfully!')
+src\pages\Expert\ExpertProfile.jsx:144:setPwdMsg({ type: 'error', text: lang === 'GUJ' ? 'નવો પાસવર્ડ મેળ ખાતો નથી.' : 'New passwords do not match.' })
+src\pages\Expert\ExpertProfile.jsx:150:text: lang === 'GUJ' ? 'પાસવર્ડ ઓછામાં ઓછો ૬ અક્ષરનો હોવો જોઈએ.' : 'Password must be at least 6 characters.'
+src\pages\Expert\ExpertProfile.jsx:160:text: lang === 'GUJ' ? 'પાસવર્ડ સફળતાપૂર્વક અપડેટ થયો!' : 'Password updated successfully!'
+src\pages\Expert\ExpertProfile.jsx:197:title: "નિષ્ણાત વ્યાવસાયિક પ્રોફાઇલ",
+src\pages\Expert\ExpertProfile.jsx:198:subtitle: "તમારા કૃષિ પરામર્શક ઓળખપત્રો જુઓ અને સંચાલિત કરો.",
+src\pages\Expert\ExpertProfile.jsx:199:securityTitle: "એકાઉન્ટ અને પાસવર્ડ સુરક્ષા",
+src\pages\Expert\ExpertProfile.jsx:200:changePwd: "અહીંથી પાસવર્ડ બદલો",
+src\pages\Expert\ExpertProfile.jsx:201:currPwd: "વર્તમાન ગુપ્ત કોડ",
+src\pages\Expert\ExpertProfile.jsx:202:newPwd: "નવો ગુપ્ત કોડ",
+src\pages\Expert\ExpertProfile.jsx:203:confPwd: "નવા ગુપ્ત કોડની પુષ્ટિ કરો",
+src\pages\Expert\ExpertProfile.jsx:204:updatePwdBtn: "પાસવર્ડ અપડેટ કરો",
+src\pages\Expert\ExpertProfile.jsx:205:certInfo: "પ્રમાણપત્ર સ્થિતિ",
+src\pages\Expert\ExpertProfile.jsx:206:verifiedText: "સરકારી રજિસ્ટર્ડ કન્સલ્ટન્ટ",
+src\pages\Expert\ExpertProfile.jsx:207:registerDate: "નોંધણી તારીખ",
+src\pages\Expert\ExpertProfile.jsx:208:totalConsults: "કુલ નિષ્પાદિત કેસો",
+src\pages\Expert\ExpertProfile.jsx:209:editProfile: "પ્રોફાઇલ સંપાદિત કરો",
+src\pages\Expert\ExpertProfile.jsx:210:cancelEdit: "રદ કરો",
+src\pages\Expert\ExpertProfile.jsx:211:saveProfile: "ફેરફારો સાચવો",
+src\pages\Expert\ExpertProfile.jsx:212:bioLabel: "વ્યાવસાયિક પરિચય",
+src\pages\Expert\ExpertProfile.jsx:213:qualLabel: "લાયકાત / ડિગ્રી",
+src\pages\Expert\ExpertProfile.jsx:214:expLabel: "અનુભવ (વર્ષ)",
+src\pages\Expert\ExpertProfile.jsx:215:phoneLabel: "સંપર્ક ફોન",
+src\pages\Expert\ExpertProfile.jsx:216:photoLabel: "પ્રોફાઇલ ફોટો URL",
+src\pages\Expert\ExpertProfile.jsx:217:profileInfo: "વ્યાવસાયિક વિગતો"
+src\pages\Expert\ExpertProfile.jsx:343:placeholder={lang === 'GUJ' ? 'તમારો પ્રોફેશનલ પરિચય લખો...' : 'Write your professional biography...'}
+src\pages\Expert\ExpertProfile.jsx:422:<p className="text-slate-700 font-semibold">{profile.experience} {lang === 'GUJ' ? 'વર્ષ' : 'Years'}</p>
+src\pages\Farmer\CropRecommendation.jsx:23:title: "🌾 પાક ભલામણ કેન્દ્ર (Crop Recommendation)",
+src\pages\Farmer\CropRecommendation.jsx:24:subtitle: "જમીન અને હવામાન આધારિત વૈજ્ઞાનિક પાકની ભલામણ",
+src\pages\Farmer\CropRecommendation.jsx:25:citySelect: "નજીકનું શહેર પસંદ કરો (Weather Auto-sync):",
+src\pages\Farmer\CropRecommendation.jsx:26:titleInputs: "જમીનના પોષક તત્ત્વો માપો",
+src\pages\Farmer\CropRecommendation.jsx:27:nLabel: "નાઇટ્રોજન (N)",
+src\pages\Farmer\CropRecommendation.jsx:28:pLabel: "ફોસ્ફરસ (P)",
+src\pages\Farmer\CropRecommendation.jsx:29:kLabel: "પોટેશિયમ (K)",
+src\pages\Farmer\CropRecommendation.jsx:30:phLabel: "પીએચ (pH Value)",
+src\pages\Farmer\CropRecommendation.jsx:31:rainfallLabel: "વરસાદ (Rainfall in mm)",
+src\pages\Farmer\CropRecommendation.jsx:32:tempLabel: "તાપમાન (Temperature °C) - ઓટો",
+src\pages\Farmer\CropRecommendation.jsx:33:humidityLabel: "ભેજ (Humidity %) - ઓટો",
+src\pages\Farmer\CropRecommendation.jsx:34:nHelp: "નાઇટ્રોજન સ્તર (0-140)",
+src\pages\Farmer\CropRecommendation.jsx:35:pHelp: "ફોસ્ફરસ સ્તર (5-145)",
+src\pages\Farmer\CropRecommendation.jsx:36:kHelp: "પોટેશિયમ સ્તર (5-205)",
+src\pages\Farmer\CropRecommendation.jsx:37:phHelp: "એસિડિટી સ્કેલ (0-14)",
+src\pages\Farmer\CropRecommendation.jsx:38:rainfallHelp: "અંદાજિત વરસાદ (20-300 mm)",
+src\pages\Farmer\CropRecommendation.jsx:39:recommendBtn: "યોગ્ય પાકની ભલામણ શોધો",
+src\pages\Farmer\CropRecommendation.jsx:40:recommending: "ભલામણ શોધી રહ્યા છીએ...",
+src\pages\Farmer\CropRecommendation.jsx:41:weatherLoading: "હવામાન માહિતી સિંક થઈ રહી છે...",
+src\pages\Farmer\CropRecommendation.jsx:42:weatherSyncSuccess: "હવામાન વિગતો સફળતાપૂર્વક અપડેટ થઈ!",
+src\pages\Farmer\CropRecommendation.jsx:43:weatherSyncFail: "હવામાન લાઈવ વિગતો લોડ કરવામાં નિષ્ફળ. કૃપા કરીને ઓટો તાપમાન સેટ કરો.",
+src\pages\Farmer\CropRecommendation.jsx:44:resultsTitle: "સિસ્ટમ આગ્રહિત ભલામણ (Recommendation Results)",
+src\pages\Farmer\CropRecommendation.jsx:45:recommendedCrop: "ભલામણ કરેલ પાક:",
+src\pages\Farmer\CropRecommendation.jsx:46:confidence: "મોડેલ યોગ્યતા (Confidence Score):",
+src\pages\Farmer\CropRecommendation.jsx:47:errorEmpty: "કૃપા કરીને બધા ખાલી ખાના ભરો.",
+src\pages\Farmer\CropRecommendation.jsx:48:errorInvalidRange: "કૃપા કરીને સાચા મૂલ્યો દાખલ કરો: pH (0-14), N, P, K અને વરસાદ (>= 0).",
+src\pages\Farmer\CropRecommendation.jsx:49:predictionError: "પાકની ભલામણ આગાહી કરવામાં કંઈક ભૂલ થઈ. કૃપા કરીને ફરી પ્રયાસ કરો.",
+src\pages\Farmer\CropRecommendation.jsx:50:inputSummary: "ગણતરી કરેલ ઇનપુટ વિગતો",
+src\pages\Farmer\CropRecommendation.jsx:51:backToInputs: "નવી ભલામણ કરો",
+src\pages\Farmer\CropRecommendation.jsx:54:suitabilityTitle: "સુસંગતતા સ્કોર (Suitability Score)",
+src\pages\Farmer\CropRecommendation.jsx:55:badgeExcellent: "શ્રેષ્ઠ (Excellent)",
+src\pages\Farmer\CropRecommendation.jsx:56:badgeGood: "સારું (Good)",
+src\pages\Farmer\CropRecommendation.jsx:57:badgeModerate: "મધ્યમ (Moderate)",
+src\pages\Farmer\CropRecommendation.jsx:58:badgeNotRecommended: "ભલામણ નથી (Not Recommended)",
+src\pages\Farmer\CropRecommendation.jsx:59:suLabelTemp: "તાપમાન",
+src\pages\Farmer\CropRecommendation.jsx:60:suLabelRain: "વરસાદની શક્યતા",
+src\pages\Farmer\CropRecommendation.jsx:61:suLabelHum: "ભેજ",
+src\pages\Farmer\CropRecommendation.jsx:62:suLabelSeason: "વર્તમાન ઋતુ",
+src\pages\Farmer\CropRecommendation.jsx:63:suRecSentence: "આ હવામાન પરિસ્થિતિઓ વર્તમાન પાકના વિકાસ માટે સંપૂર્ણ આધાર પૂરો પાડે છે."
+src\pages\Farmer\CropRecommendation.jsx:111:{ name: 'Rajkot', labelGuj: 'રાજકોટ (Rajkot)', labelEng: 'Rajkot' },
+src\pages\Farmer\CropRecommendation.jsx:112:{ name: 'Ahmedabad', labelGuj: 'અમદાવાદ (Ahmedabad)', labelEng: 'Ahmedabad' },
+src\pages\Farmer\CropRecommendation.jsx:113:{ name: 'Surat', labelGuj: 'સુરત (Surat)', labelEng: 'Surat' },
+src\pages\Farmer\CropRecommendation.jsx:114:{ name: 'Vadodara', labelGuj: 'વડોદરા (Vadodara)', labelEng: 'Vadodara' },
+src\pages\Farmer\CropRecommendation.jsx:115:{ name: 'Bhavnagar', labelGuj: 'ભાવનગર (Bhavnagar)', labelEng: 'Bhavnagar' },
+src\pages\Farmer\CropRecommendation.jsx:116:{ name: 'Junagadh', labelGuj: 'જૂનાગઢ (Junagadh)', labelEng: 'Junagadh' },
+src\pages\Farmer\CropRecommendation.jsx:117:{ name: 'Jamnagar', labelGuj: 'જામનગર (Jamnagar)', labelEng: 'Jamnagar' },
+src\pages\Farmer\CropRecommendation.jsx:118:{ name: 'Morbi', labelGuj: 'મોરબી (Morbi)', labelEng: 'Morbi' },
+src\pages\Farmer\CropRecommendation.jsx:119:{ name: 'Amreli', labelGuj: 'અમરેલી (Amreli)', labelEng: 'Amreli' },
+src\pages\Farmer\CropRecommendation.jsx:120:{ name: 'Gandhinagar', labelGuj: 'ગાંધીનગર (Gandhinagar)', labelEng: 'Gandhinagar' },
+src\pages\Farmer\CropRecommendation.jsx:121:{ name: 'Nadiad', labelGuj: 'નડિયાદ (Nadiad)', labelEng: 'Nadiad' },
+src\pages\Farmer\CropRecommendation.jsx:122:{ name: 'Anand', labelGuj: 'આણંદ (Anand)', labelEng: 'Anand' },
+src\pages\Farmer\CropRecommendation.jsx:123:{ name: 'Mehsana', labelGuj: 'મહેસાણા (Mehsana)', labelEng: 'Mehsana' },
+src\pages\Farmer\CropRecommendation.jsx:124:{ name: 'Surendranagar', labelGuj: 'સુરેન્દ્રનગર (Surendranagar)', labelEng: 'Surendranagar' },
+src\pages\Farmer\CropRecommendation.jsx:125:{ name: 'Bharuch', labelGuj: 'ભરૂચ (Bharuch)', labelEng: 'Bharuch' },
+src\pages\Farmer\CropRecommendation.jsx:126:{ name: 'Navsari', labelGuj: 'નવસારી (Navsari)', labelEng: 'Navsari' },
+src\pages\Farmer\CropRecommendation.jsx:127:{ name: 'Veraval', labelGuj: 'વેરાવળ (Veraval)', labelEng: 'Veraval' },
+src\pages\Farmer\CropRecommendation.jsx:128:{ name: 'Porbandar', labelGuj: 'પોરબંદર (Porbandar)', labelEng: 'Porbandar' },
+src\pages\Farmer\CropRecommendation.jsx:129:{ name: 'Godhra', labelGuj: 'ગોધરા (Godhra)', labelEng: 'Godhra' },
+src\pages\Farmer\CropRecommendation.jsx:130:{ name: 'Bhuj', labelGuj: 'ભુજ (Bhuj)', labelEng: 'Bhuj' },
+src\pages\Farmer\CropRecommendation.jsx:131:{ name: 'Ankleshwar', labelGuj: 'અંકલેશ્વર (Ankleshwar)', labelEng: 'Ankleshwar' },
+src\pages\Farmer\CropRecommendation.jsx:132:{ name: 'Patan', labelGuj: 'પાટણ (Patan)', labelEng: 'Patan' },
+src\pages\Farmer\CropRecommendation.jsx:133:{ name: 'Palanpur', labelGuj: 'પાલનપુર (Palanpur)', labelEng: 'Palanpur' },
+src\pages\Farmer\CropRecommendation.jsx:134:{ name: 'Dahod', labelGuj: 'દાહોદ (Dahod)', labelEng: 'Dahod' },
+src\pages\Farmer\CropRecommendation.jsx:135:{ name: 'Valsad', labelGuj: 'વલસાડ (Valsad)', labelEng: 'Valsad' },
+src\pages\Farmer\CropRecommendation.jsx:136:{ name: 'Vapi', labelGuj: 'વાપી (Vapi)', labelEng: 'Vapi' },
+src\pages\Farmer\CropRecommendation.jsx:137:{ name: 'Gondal', labelGuj: 'ગોંડલ (Gondal)', labelEng: 'Gondal' },
+src\pages\Farmer\CropRecommendation.jsx:138:{ name: 'Jetpur', labelGuj: 'જેતપુર (Jetpur)', labelEng: 'Jetpur' },
+src\pages\Farmer\CropRecommendation.jsx:139:{ name: 'Deesa', labelGuj: 'ડીસા (Deesa)', labelEng: 'Deesa' },
+src\pages\Farmer\CropRecommendation.jsx:140:{ name: 'Mahuva', labelGuj: 'મહુવા (Mahuva)', labelEng: 'Mahuva' },
+src\pages\Farmer\CropRecommendation.jsx:141:{ name: 'Botad', labelGuj: 'બોટાદ (Botad)', labelEng: 'Botad' },
+src\pages\Farmer\CropRecommendation.jsx:142:{ name: 'Adipur', labelGuj: 'આદિપુર (Adipur)', labelEng: 'Adipur' },
+src\pages\Farmer\CropRecommendation.jsx:143:{ name: 'Gandhidham', labelGuj: 'ગાંધીધામ (Gandhidham)', labelEng: 'Gandhidham' },
+src\pages\Farmer\CropRecommendation.jsx:144:{ name: 'Himmatnagar', labelGuj: 'હિંમતનગર (Himmatnagar)', labelEng: 'Himmatnagar' },
+src\pages\Farmer\CropRecommendation.jsx:145:{ name: 'Sidhpur', labelGuj: 'સિદ્ધપુર (Sidhpur)', labelEng: 'Sidhpur' },
+src\pages\Farmer\CropRecommendation.jsx:146:{ name: 'Una', labelGuj: 'ઉના (Una)', labelEng: 'Una' },
+src\pages\Farmer\CropRecommendation.jsx:147:{ name: 'Visnagar', labelGuj: 'વિસનગર (Visnagar)', labelEng: 'Visnagar' },
+src\pages\Farmer\CropRecommendation.jsx:148:{ name: 'Keshod', labelGuj: 'કેશોદ (Keshod)', labelEng: 'Keshod' },
+src\pages\Farmer\CropRecommendation.jsx:149:{ name: 'Dhrangadhra', labelGuj: 'ધ્રાંગધ્રા (Dhrangadhra)', labelEng: 'Dhrangadhra' },
+src\pages\Farmer\CropRecommendation.jsx:150:{ name: 'Anjar', labelGuj: 'અંજાર (Anjar)', labelEng: 'Anjar' },
+src\pages\Farmer\CropRecommendation.jsx:151:{ name: 'Dakor', labelGuj: 'ડાકોર (Dakor)', labelEng: 'Dakor' },
+src\pages\Farmer\CropRecommendation.jsx:152:{ name: 'Savarkundla', labelGuj: 'સાવરકુંડલા (Savarkundla)', labelEng: 'Savarkundla' },
+src\pages\Farmer\CropRecommendation.jsx:153:{ name: 'Kadi', labelGuj: 'કડી (Kadi)', labelEng: 'Kadi' },
+src\pages\Farmer\CropRecommendation.jsx:154:{ name: 'Vyara', labelGuj: 'વ્યારા (Vyara)', labelEng: 'Vyara' },
+src\pages\Farmer\CropRecommendation.jsx:155:{ name: 'Upleta', labelGuj: 'ઉપલેટા (Upleta)', labelEng: 'Upleta' },
+src\pages\Farmer\CropRecommendation.jsx:156:{ name: 'Bardoli', labelGuj: 'બારડોલી (Bardoli)', labelEng: 'Bardoli' },
+src\pages\Farmer\CropRecommendation.jsx:157:{ name: 'Khambhat', labelGuj: 'ખંભાત (Khambhat)', labelEng: 'Khambhat' },
+src\pages\Farmer\CropRecommendation.jsx:158:{ name: 'Borsad', labelGuj: 'બોરસદ (Borsad)', labelEng: 'Borsad' },
+src\pages\Farmer\CropRecommendation.jsx:159:{ name: 'Petlad', labelGuj: 'પેટલાદ (Petlad)', labelEng: 'Petlad' },
+src\pages\Farmer\CropRecommendation.jsx:160:{ name: 'Dholka', labelGuj: 'ધોળકા (Dholka)', labelEng: 'Dholka' },
+src\pages\Farmer\CropRecommendation.jsx:161:{ name: 'Viramgam', labelGuj: 'વિરમગામ (Viramgam)', labelEng: 'Viramgam' },
+src\pages\Farmer\CropRecommendation.jsx:162:{ name: 'Kapadvanj', labelGuj: 'કપડવંજ (Kapadvanj)', labelEng: 'Kapadvanj' },
+src\pages\Farmer\CropRecommendation.jsx:163:{ name: 'Bilimora', labelGuj: 'બીલીમોરા (Bilimora)', labelEng: 'Bilimora' },
+src\pages\Farmer\CropRecommendation.jsx:164:{ name: 'Radhanpur', labelGuj: 'રાધનપુર (Radhanpur)', labelEng: 'Radhanpur' },
+src\pages\Farmer\CropRecommendation.jsx:165:{ name: 'Limbdi', labelGuj: 'લીંમડી (Limbdi)', labelEng: 'Limbdi' },
+src\pages\Farmer\CropRecommendation.jsx:166:{ name: 'Mansa', labelGuj: 'માણસા (Mansa)', labelEng: 'Mansa' },
+src\pages\Farmer\CropRecommendation.jsx:167:{ name: 'Sanand', labelGuj: 'સાણંદ (Sanand)', labelEng: 'Sanand' },
+src\pages\Farmer\CropRecommendation.jsx:168:{ name: 'Halol', labelGuj: 'હાલોલ (Halol)', labelEng: 'Halol' },
+src\pages\Farmer\CropRecommendation.jsx:169:{ name: 'Idar', labelGuj: 'ઈડર (Idar)', labelEng: 'Idar' },
+src\pages\Farmer\CropRecommendation.jsx:170:{ name: 'Chhota Udepur', labelGuj: 'છોટા ઉદેપુર (Chhota Udepur)', labelEng: 'Chhota Udepur' },
+src\pages\Farmer\CropRecommendation.jsx:171:{ name: 'Lunawada', labelGuj: 'લુણાવાડા (Lunawada)', labelEng: 'Lunawada' },
+src\pages\Farmer\CropRecommendation.jsx:172:{ name: 'Jasdan', labelGuj: 'જસદણ (Jasdan)', labelEng: 'Jasdan' },
+src\pages\Farmer\CropRecommendation.jsx:173:{ name: 'Devgadh Baria', labelGuj: 'દેવગઢ બારિયા (Devgadh Baria)', labelEng: 'Devgadh Baria' },
+src\pages\Farmer\CropRecommendation.jsx:174:{ name: 'Dharampur', labelGuj: 'ધરમપુર (Dharampur)', labelEng: 'Dharampur' },
+src\pages\Farmer\CropRecommendation.jsx:175:{ name: 'Rajula', labelGuj: 'રાજુલા (Rajula)', labelEng: 'Rajula' },
+src\pages\Farmer\CropRecommendation.jsx:176:{ name: 'Sihor', labelGuj: 'સિહોર (Sihor)', labelEng: 'Sihor' },
+src\pages\Farmer\CropRecommendation.jsx:177:{ name: 'Thangadh', labelGuj: 'થાણગઢ (Thangadh)', labelEng: 'Thangadh' },
+src\pages\Farmer\CropRecommendation.jsx:178:{ name: 'Wankaner', labelGuj: 'વાંકાનેર (Wankaner)', labelEng: 'Wankaner' },
+src\pages\Farmer\CropRecommendation.jsx:179:{ name: 'Vadnagar', labelGuj: 'વડનગર (Vadnagar)', labelEng: 'Vadnagar' },
+src\pages\Farmer\CropRecommendation.jsx:180:{ name: 'Khedbrahma', labelGuj: 'ખેડબ્રહ્મા (Khedbrahma)', labelEng: 'Khedbrahma' },
+src\pages\Farmer\CropRecommendation.jsx:181:{ name: 'Padra', labelGuj: 'પાદરા (Padra)', labelEng: 'Padra' },
+src\pages\Farmer\CropRecommendation.jsx:182:{ name: 'Karjan', labelGuj: 'કરજણ (Karjan)', labelEng: 'Karjan' },
+src\pages\Farmer\CropRecommendation.jsx:183:{ name: 'Umreth', labelGuj: 'ઉમરેઠ (Umreth)', labelEng: 'Umreth' },
+src\pages\Farmer\CropRecommendation.jsx:184:{ name: 'Bagasara', labelGuj: 'બગસરા (Bagasara)', labelEng: 'Bagasara' },
+src\pages\Farmer\CropRecommendation.jsx:185:{ name: 'Bhanvad', labelGuj: 'ભાણવડ (Bhanvad)', labelEng: 'Bhanvad' },
+src\pages\Farmer\CropRecommendation.jsx:186:{ name: 'Lathi', labelGuj: 'લાઠી (Lathi)', labelEng: 'Lathi' },
+src\pages\Farmer\CropRecommendation.jsx:187:{ name: 'Manavadar', labelGuj: 'માણાવદર (Manavadar)', labelEng: 'Manavadar' },
+src\pages\Farmer\CropRecommendation.jsx:188:{ name: 'Okha', labelGuj: 'ઓખા (Okha)', labelEng: 'Okha' },
+src\pages\Farmer\CropRecommendation.jsx:189:{ name: 'Dwarka', labelGuj: 'દ્વારકા (Dwarka)', labelEng: 'Dwarka' },
+src\pages\Farmer\CropRecommendation.jsx:190:{ name: 'Tharad', labelGuj: 'થરાદ (Tharad)', labelEng: 'Tharad' },
+src\pages\Farmer\CropRecommendation.jsx:191:{ name: 'Talod', labelGuj: 'તલોદ (Talod)', labelEng: 'Talod' },
+src\pages\Farmer\CropRecommendation.jsx:192:{ name: 'Modasa', labelGuj: 'મોડાસા (Modasa)', labelEng: 'Modasa' },
+src\pages\Farmer\CropRecommendation.jsx:193:{ name: 'Songadh', labelGuj: 'સોનગઢ (Songadh)', labelEng: 'Songadh' },
+src\pages\Farmer\CropRecommendation.jsx:194:{ name: 'Mundra', labelGuj: 'મુન્દ્રા (Mundra)', labelEng: 'Mundra' },
+src\pages\Farmer\CropRecommendation.jsx:195:{ name: 'Sojitra', labelGuj: 'સોજિત્રા (Sojitra)', labelEng: 'Sojitra' },
+src\pages\Farmer\CropRecommendation.jsx:196:{ name: 'Chikhli', labelGuj: 'ચીખલી (Chikhli)', labelEng: 'Chikhli' },
+src\pages\Farmer\CropRecommendation.jsx:197:{ name: 'Kodinar', labelGuj: 'કોડિનાર (Kodinar)', labelEng: 'Kodinar' },
+src\pages\Farmer\CropRecommendation.jsx:198:{ name: 'Mithapur', labelGuj: 'મીઠાપુર (Mithapur)', labelEng: 'Mithapur' },
+src\pages\Farmer\CropRecommendation.jsx:199:{ name: 'Sayan', labelGuj: 'સાયણ (Sayan)', labelEng: 'Sayan' },
+src\pages\Farmer\CropRecommendation.jsx:200:{ name: 'Umbergaon', labelGuj: 'ઉમરગામ (Umbergaon)', labelEng: 'Umbergaon' },
+src\pages\Farmer\CropRecommendation.jsx:201:{ name: 'Vallabh Vidyanagar', labelGuj: 'વલ્લભ વિદ્યાનગર (Vallabh Vidyanagar)', labelEng: 'Vallabh Vidyanagar' },
+src\pages\Farmer\CropRecommendation.jsx:202:{ name: 'Wadhwan', labelGuj: 'વઢવાણ (Wadhwan)', labelEng: 'Wadhwan' },
+src\pages\Farmer\CropRecommendation.jsx:203:{ name: 'Zalod', labelGuj: 'ઝાલોદ (Zalod)', labelEng: 'Zalod' },
+src\pages\Farmer\CropRecommendation.jsx:204:{ name: 'Daji', labelGuj: 'દાજી (Daji)', labelEng: 'Daji' },
+src\pages\Farmer\CropRecommendation.jsx:205:{ name: 'Vagra', labelGuj: 'વાગરા (Vagra)', labelEng: 'Vagra' },
+src\pages\Farmer\CropRecommendation.jsx:206:{ name: 'Valod', labelGuj: 'વાલોડ (Valod)', labelEng: 'Valod' },
+src\pages\Farmer\CropRecommendation.jsx:207:{ name: 'Vansda', labelGuj: 'વાંસદા (Vansda)', labelEng: 'Vansda' },
+src\pages\Farmer\CropRecommendation.jsx:208:{ name: 'Mandvi', labelGuj: 'માંડવી (Mandvi)', labelEng: 'Mandvi' },
+src\pages\Farmer\CropRecommendation.jsx:209:{ name: 'Talaja', labelGuj: 'તળાજા (Talaja)', labelEng: 'Talaja' },
+src\pages\Farmer\CropRecommendation.jsx:210:{ name: 'Lalpur', labelGuj: 'લાલપુર (Lalpur)', labelEng: 'Lalpur' },
+src\pages\Farmer\CropRecommendation.jsx:211:{ name: 'Dhrol', labelGuj: 'ધ્રોલ (Dhrol)', labelEng: 'Dhrol' },
+src\pages\Farmer\CropRecommendation.jsx:212:{ name: 'Kalavad', labelGuj: 'કાલાવડ (Kalavad)', labelEng: 'Kalavad' },
+src\pages\Farmer\CropRecommendation.jsx:213:{ name: 'Jodiya', labelGuj: 'જોડિયા (Jodiya)', labelEng: 'Jodiya' },
+src\pages\Farmer\CropRecommendation.jsx:214:{ name: 'Maliya', labelGuj: 'માળિયા (Maliya)', labelEng: 'Maliya' },
+src\pages\Farmer\CropRecommendation.jsx:215:{ name: 'Halvad', labelGuj: 'હળવદ (Halvad)', labelEng: 'Halvad' },
+src\pages\Farmer\CropRecommendation.jsx:216:{ name: 'Dhoraji', labelGuj: 'ધોરાજી (Dhoraji)', labelEng: 'Dhoraji' },
+src\pages\Farmer\CropRecommendation.jsx:217:{ name: 'Kutiyana', labelGuj: 'કુતિયાણા (Kutiyana)', labelEng: 'Kutiyana' },
+src\pages\Farmer\CropRecommendation.jsx:218:{ name: 'Ranavav', labelGuj: 'રાણાવાવ (Ranavav)', labelEng: 'Ranavav' },
+src\pages\Farmer\CropRecommendation.jsx:219:{ name: 'Vanthali', labelGuj: 'વંથલી (Vanthali)', labelEng: 'Vanthali' },
+src\pages\Farmer\CropRecommendation.jsx:220:{ name: 'Mangrol', labelGuj: 'માણગ્રોલ (Mangrol)', labelEng: 'Mangrol' }
+src\pages\Farmer\CropRecommendation.jsx:501:{lang === 'GUJ' ? 'મારું ખેતર પસંદ કરો' : 'Use My Farm'}
+src\pages\Farmer\CropRecommendation.jsx:508:{lang === 'GUJ' ? 'શહેર પસંદ કરો' : 'Select City'}
+src\pages\Farmer\CropRecommendation.jsx:523:placeholder={lang === 'GUJ' ? 'શહેર શોધો (દા.ત. Rajkot)...' : 'Search Gujarat City...'}
+src\pages\Farmer\CropRecommendation.jsx:564:{lang === 'GUJ' ? 'તમારું ખેતર પસંદ કરો (GPS સંકલન માટે):' : 'Select Your Farm (For GPS Sync):'}
+src\pages\Farmer\CropRecommendation.jsx:572:<option value="" disabled>{lang === 'GUJ' ? 'કોઈ ખેતર ઉપલબ્ધ નથી' : 'No farms available'}</option>
+src\pages\Farmer\CropRecommendation.jsx:805:{lang === 'GUJ' ? 'આગાહી પરિણામ ખાલી છે.' : 'No Recommendation Loaded.'}
+src\pages\Farmer\CropRecommendation.jsx:809:? 'જમીનના મૂલ્યો દાખલ કરીને શોધો બટન દબાવો જેથી પાકની ગણતરી કરી શકાય.'
+src\pages\Farmer\CropRecords.jsx:90:setErrorMsg('પાક રેકોર્ડ્સ પ્રોસેસ કરવામાં ભૂલ આવી.')
+src\pages\Farmer\CropRecords.jsx:92:setErrorMsg(err.response.data?.message || err.response.data?.detail || 'પાક રેકોર્ડ્સ મેળવી શકાયા નથી.')
+src\pages\Farmer\CropRecords.jsx:94:setErrorMsg('કનેક્ટીવીટી સમસ્યા! કૃપા કરીને ફરી ટ્રાય કરો.')
+src\pages\Farmer\CropRecords.jsx:106:setErrorMsg(res?.message || 'પાક રેકોર્ડ્સ મેળવી શકાયા નથી.')
+src\pages\Farmer\CropRecords.jsx:110:setErrorMsg('પાક રેકોર્ડ્સ પ્રોસેસ કરવામાં ભૂલ આવી.')
+src\pages\Farmer\CropRecords.jsx:155:setSuccessMsg('પાક રેકોર્ડ સફળ થયો. કૃપા કરીને વેચાણની વિગતો પૂર્ણ કરો.');
+src\pages\Farmer\CropRecords.jsx:172:setErrorMsg(res.message || 'માહિતી સાચવી શકાઈ નહિ.');
+src\pages\Farmer\CropRecords.jsx:176:setErrorMsg('માહિતી સાચવતી વખતે અણધારી સમસ્યા આવી.');
+src\pages\Farmer\CropRecords.jsx:207:alert("વેચાણ ડેટા મેળવવામાં મુશ્કેલી. કૃપા કરીને થોડીવાર પછી પ્રયાસ કરો.");
+src\pages\Farmer\CropRecords.jsx:219:'કપાસ': { days: 180, yieldPerAcre: 150 },
+src\pages\Farmer\CropRecords.jsx:221:'મગફળી': { days: 120, yieldPerAcre: 70 },
+src\pages\Farmer\CropRecords.jsx:223:'ઘઉં': { days: 125, yieldPerAcre: 80 },
+src\pages\Farmer\CropRecords.jsx:225:'જીરું': { days: 110, yieldPerAcre: 25 },
+src\pages\Farmer\CropRecords.jsx:227:'દિવેલા': { days: 180, yieldPerAcre: 60 },
+src\pages\Farmer\CropRecords.jsx:228:'એરંડા': { days: 180, yieldPerAcre: 60 }
+src\pages\Farmer\CropRecords.jsx:283:if (!formData.farm) errors.farm = 'ખેતર પસંદ કરવું ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:284:if (!formData.crop_name.trim()) errors.crop_name = 'પાકનું નામ ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:285:if (!formData.crop_variety.trim()) errors.crop_variety = 'પાકની જાત ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:286:if (!formData.sowing_date) errors.sowing_date = 'વાવણી તારીખ ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:287:if (!formData.expected_harvest_date) errors.expected_harvest_date = 'અંદાજિત લણણી તારીખ ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:291:errors.area_used = 'વપરાયેલ જમીનનું માપ ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:293:errors.area_used = 'જમીનનું માપ 0 થી વધુ હોવું જોઈએ'
+src\pages\Farmer\CropRecords.jsx:329:errors.expected_yield = 'અંદાજિત ઉત્પાદન ફરજિયાત છે'
+src\pages\Farmer\CropRecords.jsx:331:errors.expected_yield = 'અંદાજિત ઉત્પાદન 0 થી વધુ હોવું જોઈએ'
+src\pages\Farmer\CropRecords.jsx:337:errors.expected_harvest_date = 'અંદાજિત લણણી તારીખ વાવણી તારીખથી પહેલાં ન હોઈ શકે'
+src\pages\Farmer\CropRecords.jsx:342:errors.harvest_date = 'લણણી તારીખ વાવણી તારીખથી પહેલાં ન હોઈ શકે'
+src\pages\Farmer\CropRecords.jsx:351:errors[field] = 'ખર્ચ શૂન્ય અથવા તેથી વધુ હોવો જોઈએ'
+src\pages\Farmer\CropRecords.jsx:356:errors.actual_yield = 'વાસ્તવિક ઉત્પાદન શૂન્ય અથવા વધુ હોવું જોઈએ'
+src\pages\Farmer\CropRecords.jsx:359:errors.selling_price = 'વેચાણ કિંમત શૂન્ય અથવા વધુ હોવી જોઈએ'
+src\pages\Farmer\CropRecords.jsx:362:errors.sold_quantity = 'વેચેલો જથ્થો શૂન્ય અથવા વધુ હોવો જોઈએ'
+src\pages\Farmer\CropRecords.jsx:467:setErrorMsg('માહિતી સાચવતી વખતે અણધારી સમસ્યા આવી.')
+src\pages\Farmer\CropRecords.jsx:469:setErrorMsg(err.response.data?.message || err.response.data?.detail || 'પાક રેકોર્ડ સાચવવામાં અડચણ આવી. કૃપા કરીને વિગતો તપાસો.')
+src\pages\Farmer\CropRecords.jsx:471:setErrorMsg('કનેક્ટીવીટી સમસ્યા! કૃપા કરીને ફરી ટ્રાય કરો.')
+src\pages\Farmer\CropRecords.jsx:479:setSuccessMsg(selectedCrop ? 'પાકની માહિતી સફળતાપૂર્વક અપડેટ થઈ.' : 'પાક રેકોર્ડ સફળતાપૂર્વક ઉમેરાયો.')
+src\pages\Farmer\CropRecords.jsx:493:setErrorMsg(res?.message || 'માહિતી સાચવી શકાઈ નહિ.')
+src\pages\Farmer\CropRecords.jsx:497:setErrorMsg('માહિતી સાચવતી વખતે અણધારી સમસ્યા આવી.')
+src\pages\Farmer\CropRecords.jsx:522:setErrorMsg('કાઢી નાખવામાં મુશ્કેલી પડી.')
+src\pages\Farmer\CropRecords.jsx:524:setErrorMsg(err.response.data?.message || err.response.data?.detail || 'કાઢી નાખવામાં મુશ્કેલી પડી.')
+src\pages\Farmer\CropRecords.jsx:526:setErrorMsg('કનેક્ટીવીટી સમસ્યા! કૃપા કરીને ફરી ટ્રાય કરો.')
+src\pages\Farmer\CropRecords.jsx:534:setSuccessMsg('પાક રેકોર્ડ સફળતાપૂર્વક કાઢી નાખવામાં આવ્યો.')
+src\pages\Farmer\CropRecords.jsx:544:setErrorMsg(res?.message || 'રેકોર્ડ કાઢી નાખવામાં નિષ્ફળતા.')
+src\pages\Farmer\CropRecords.jsx:548:setErrorMsg('કાઢી નાખવામાં મુશ્કેલી પડી.')
+src\pages\Farmer\CropRecords.jsx:582:<span>🌾</span> પાક રેકોર્ડ્સ (Crop Records)
+src\pages\Farmer\CropRecords.jsx:585:તમારા તમામ પાકની વાવણી, ખર્ચ, તબક્કા અને લણણીના રેકોર્ડનું સંચાલન કરો
+src\pages\Farmer\CropRecords.jsx:590:પાક ઉમેરતા પહેલાં કૃપા કરીને ઓછામાં ઓછું એક ખેતર ઉમેરો.
+src\pages\Farmer\CropRecords.jsx:599:<span>નવો પાક ઉમેરો (Add Crop)</span>
+src\pages\Farmer\CropRecords.jsx:629:<span className="text-[10px] uppercase font-bold text-dark-light/75">સક્રિય પાકો (Active Crops)</span>
+src\pages\Farmer\CropRecords.jsx:630:<h4 className="text-lg font-bold text-dark">{activeCropsCount} પાક</h4>
+src\pages\Farmer\CropRecords.jsx:638:<span className="text-[10px] uppercase font-bold text-dark-light/75">કુલ રોકાણ (Total Investment)</span>
+src\pages\Farmer\CropRecords.jsx:647:<span className="text-[10px] uppercase font-bold text-dark-light/75">કુલ ઉત્પાદન (Actual Yield)</span>
+src\pages\Farmer\CropRecords.jsx:648:<h4 className="text-lg font-bold text-dark">{totalYield > 0 ? `${totalYield} મણ` : 'રેકોર્ડ નથી'}</h4>
+src\pages\Farmer\CropRecords.jsx:664:placeholder="પાકનું નામ અથવા જાત શોધો..."
+src\pages\Farmer\CropRecords.jsx:682:<option value="">બધા ખેતર</option>
+src\pages\Farmer\CropRecords.jsx:695:<option value="">બધા તબક્કા</option>
+src\pages\Farmer\CropRecords.jsx:696:<option value="Sown">વાવેતર કરેલ (Sown)</option>
+src\pages\Farmer\CropRecords.jsx:697:<option value="Growing">ઉગતો પાક (Growing)</option>
+src\pages\Farmer\CropRecords.jsx:698:<option value="Harvested">લણેલો પાક (Harvested)</option>
+src\pages\Farmer\CropRecords.jsx:699:<option value="Sold">વેચાયેલ (Sold)</option>
+src\pages\Farmer\CropRecords.jsx:742:title="કોઈ પાક રેકોર્ડ મળ્યો નથી"
+src\pages\Farmer\CropRecords.jsx:744:? 'પસંદ કરેલ ફિલ્ટર્સ અથવા સર્ચ માટે કોઈ ડેટા નથી.'
+src\pages\Farmer\CropRecords.jsx:745:: 'તમે હજુ સુધી કોઈપણ પાકની વિગતો દાખલ કરી નથી. પાક ઉમેરવા ઉપર પ્લસ પર ક્લિક કરો.'}
+src\pages\Farmer\CropRecords.jsx:746:actionText={!searchQuery && !filterFarm && !filterStatus && farms.length > 0 ? "નવો પાક ઉમેરો" : undefined}
+src\pages\Farmer\CropRecords.jsx:755:<th className="p-4">પાક / જાત</th>
+src\pages\Farmer\CropRecords.jsx:756:<th className="p-4">ખેતર</th>
+src\pages\Farmer\CropRecords.jsx:757:<th className="p-4">ઋતુ</th>
+src\pages\Farmer\CropRecords.jsx:758:<th className="p-4">જમીન (એકર)</th>
+src\pages\Farmer\CropRecords.jsx:759:<th className="p-4">તબક્કો (Status)</th>
+src\pages\Farmer\CropRecords.jsx:760:<th className="p-4 text-right">કુલ ખર્ચ</th>
+src\pages\Farmer\CropRecords.jsx:761:<th className="p-4 text-center">ક્રિયાઓ</th>
+src\pages\Farmer\CropRecords.jsx:776:{crop.farm_name || `ખેતર ID: ${crop.farm}`}
+src\pages\Farmer\CropRecords.jsx:790:{crop.crop_status === 'Sown' ? 'વાવેતર (Sown)' :
+src\pages\Farmer\CropRecords.jsx:791:crop.crop_status === 'Growing' ? 'ઉગતો (Growing)' :
+src\pages\Farmer\CropRecords.jsx:792:crop.crop_status === 'Harvested' ? 'લણેલો (Harvest)' :
+src\pages\Farmer\CropRecords.jsx:793:'વેચાયેલ (Sold)'}
+src\pages\Farmer\CropRecords.jsx:860:<span className="block text-[9px] font-bold text-dark-light uppercase">વાવણી વિસ્તાર</span>
+src\pages\Farmer\CropRecords.jsx:864:<span className="block text-[9px] font-bold text-dark-light uppercase">પાક આરોગ્ય (Health)</span>
+src\pages\Farmer\CropRecords.jsx:869:{detailCrop.disease_status === 'Healthy' ? 'સ્વસ્થ' :
+src\pages\Farmer\CropRecords.jsx:870:detailCrop.disease_status === 'Monitored' ? 'સાવચેત' :
+src\pages\Farmer\CropRecords.jsx:871:'રોગગ્રસ્ત'}
+src\pages\Farmer\CropRecords.jsx:878:<span className="text-[9px] font-bold text-dark-light uppercase tracking-wider block">સમયરેખા (Timeline)</span>
+src\pages\Farmer\CropRecords.jsx:881:<span className="text-dark-light flex items-center gap-1"><FiCalendar size={11} /> વાવણી:</span>
+src\pages\Farmer\CropRecords.jsx:885:<span className="text-dark-light flex items-center gap-1"><FiCalendar size={11} /> અંદાજિત લણણી:</span>
+src\pages\Farmer\CropRecords.jsx:890:<span className="text-emerald-700 flex items-center gap-1"><FiCheck size={12} /> વાસ્તવિક લણણી:</span>
+src\pages\Farmer\CropRecords.jsx:900:<span className="text-[9px] font-bold text-dark-light uppercase tracking-wider">ખર્ચ બ્રેકડાઉન</span>
+src\pages\Farmer\CropRecords.jsx:904:<div className="flex justify-between"><span>બીજ:</span><strong className="text-dark">₹{detailCrop.seed_cost || 0}</strong></div>
+src\pages\Farmer\CropRecords.jsx:905:<div className="flex justify-between"><span>ખાતર:</span><strong className="text-dark">₹{detailCrop.fertilizer_cost || 0}</strong></div>
+src\pages\Farmer\CropRecords.jsx:906:<div className="flex justify-between"><span>જંતુનાશક:</span><strong className="text-dark">₹{detailCrop.pesticide_cost || 0}</strong></div>
+src\pages\Farmer\CropRecords.jsx:907:<div className="flex justify-between"><span>મજૂરી:</span><strong className="text-dark">₹{detailCrop.labour_cost || 0}</strong></div>
+src\pages\Farmer\CropRecords.jsx:909:<span>અન્ય ખર્ચ:</span><strong className="text-dark">₹{detailCrop.other_cost || 0}</strong>
+src\pages\Farmer\CropRecords.jsx:917:<span className="text-[9px] font-bold text-dark-light uppercase tracking-wider block">ઉત્પાદન વિગતો (Yield Metrics)</span>
+src\pages\Farmer\CropRecords.jsx:920:<span className="text-[10px] text-dark-light">અંદાજિત ઉત્પાદન:</span>
+src\pages\Farmer\CropRecords.jsx:921:<div className="font-bold text-dark">{detailCrop.expected_yield} મણ</div>
+src\pages\Farmer\CropRecords.jsx:925:<span className="text-[10px] text-emerald-700">વાસ્તવિક ઉત્પાદન:</span>
+src\pages\Farmer\CropRecords.jsx:926:<div className="font-extrabold text-emerald-800">{detailCrop.actual_yield} મણ</div>
+src\pages\Farmer\CropRecords.jsx:933:<span className="text-[10px] text-dark-light">વેચાણ કિંમત:</span>
+src\pages\Farmer\CropRecords.jsx:934:<div className="font-bold text-dark">₹{detailCrop.selling_price} / મણ</div>
+src\pages\Farmer\CropRecords.jsx:937:<span className="text-[10px] text-dark-light">વેચેલ જથ્થો:</span>
+src\pages\Farmer\CropRecords.jsx:938:<div className="font-bold text-dark">{detailCrop.sold_quantity} મણ</div>
+src\pages\Farmer\CropRecords.jsx:948:<span className="block text-[9px] font-bold text-dark-light uppercase">ખાસ નોંધ (Notes)</span>
+src\pages\Farmer\CropRecords.jsx:962:<span>સુધારો કરો (Edit)</span>
+src\pages\Farmer\CropRecords.jsx:969:<span>કાઢી નાખો (Delete)</span>
+src\pages\Farmer\CropRecords.jsx:988:? 'પાકની વિગતો સુધારો (Edit Crop Record)'
+src\pages\Farmer\CropRecords.jsx:989:: 'નવો પાક રેકોર્ડ ઉમેરો (AddNew Crop Record)'}
+src\pages\Farmer\CropRecords.jsx:1007:ખેતર (Select Farm) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1016:<option value="">ખેતર પસંદ કરો</option>
+src\pages\Farmer\CropRecords.jsx:1028:ઋતુ (Season)
+src\pages\Farmer\CropRecords.jsx:1036:<option value="Kharif">ખરીફ (Kharif)</option>
+src\pages\Farmer\CropRecords.jsx:1037:<option value="Rabi">રવિ (Rabi)</option>
+src\pages\Farmer\CropRecords.jsx:1038:<option value="Summer">ઉનાળુ (Summer)</option>
+src\pages\Farmer\CropRecords.jsx:1046:પાકનું નામ (Crop Name) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1051:placeholder="દા.ત. ઘઉં, કપાસ, મગફળી"
+src\pages\Farmer\CropRecords.jsx:1064:પાકની જાત (Variety) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1069:placeholder="દા.ત. લોક-વન (Lok-1), GW-496"
+src\pages\Farmer\CropRecords.jsx:1085:વાવણી તારીખ <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1102:અંદાજિત લણણી તારીખ <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1119:વાસ્તવિક લણણી તારીખ (જો થઈ હોય)
+src\pages\Farmer\CropRecords.jsx:1139:વાવેતર વિસ્તાર <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1145:placeholder="દા.ત. 3.2"
+src\pages\Farmer\CropRecords.jsx:1157:<label className="text-xs font-bold text-dark/75 mb-1.5">એકમ</label>
+src\pages\Farmer\CropRecords.jsx:1164:<option value="Acre">એકર (Acre)</option>
+src\pages\Farmer\CropRecords.jsx:1165:<option value="Hectare">હેક્ટર (Hectare)</option>
+src\pages\Farmer\CropRecords.jsx:1171:અંદાજિત ઉત્પાદન (મણ) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\CropRecords.jsx:1177:placeholder="દા.ત. 150"
+src\pages\Farmer\CropRecords.jsx:1190:વાસ્તવિક ઉત્પાદન (મણ)
+src\pages\Farmer\CropRecords.jsx:1196:placeholder="લણણી બાદ"
+src\pages\Farmer\CropRecords.jsx:1211:<h4 className="text-xs font-bold text-dark uppercase tracking-wider">રોકાણ ખર્ચ (Investments Breakdown)</h4>
+src\pages\Farmer\CropRecords.jsx:1213:કુલ ખર્ચ: {formatCurrency(formData.total_cost)}
+src\pages\Farmer\CropRecords.jsx:1218:<label className="text-[10px] font-bold text-dark/75 mb-1">બીજ ખર્ચ (₹)</label>
+src\pages\Farmer\CropRecords.jsx:1230:<label className="text-[10px] font-bold text-dark/75 mb-1">ખાતર ખર્ચ (₹)</label>
+src\pages\Farmer\CropRecords.jsx:1242:<label className="text-[10px] font-bold text-dark/75 mb-1">જંતુનાશક (₹)</label>
+src\pages\Farmer\CropRecords.jsx:1254:<label className="text-[10px] font-bold text-dark/75 mb-1">મજૂરી ખર્ચ (₹)</label>
+src\pages\Farmer\CropRecords.jsx:1266:<label className="text-[10px] font-bold text-dark/75 mb-1">અન્ય ખર્ચ (₹)</label>
+src\pages\Farmer\CropRecords.jsx:1282:<label className="text-xs text-dark-light mb-1.5">વેચાણ કિંમત (₹ પ્રતિ મણ)</label>
+src\pages\Farmer\CropRecords.jsx:1287:placeholder="દા.ત. 1200"
+src\pages\Farmer\CropRecords.jsx:1299:<label className="text-xs text-dark-light mb-1.5">વેચેલો જથ્થો (મણ)</label>
+src\pages\Farmer\CropRecords.jsx:1304:placeholder="દા.ત. 120"
+src\pages\Farmer\CropRecords.jsx:1319:<label className="text-xs font-bold text-dark/75 mb-1.5">પાકનો તબક્કો (Status)</label>
+src\pages\Farmer\CropRecords.jsx:1326:<option value="Sown">વાવેતર કરેલ (Sown)</option>
+src\pages\Farmer\CropRecords.jsx:1327:<option value="Growing">ઉગતો પાક (Growing)</option>
+src\pages\Farmer\CropRecords.jsx:1328:<option value="Harvested">લણેલો પાક (Harvested)</option>
+src\pages\Farmer\CropRecords.jsx:1329:<option value="Sold">વેચાયેલ (Sold)</option>
+src\pages\Farmer\CropRecords.jsx:1334:<label className="text-xs font-bold text-dark/75 mb-1.5">સ્વાસ્થ્ય તબક્કો (Health)</label>
+src\pages\Farmer\CropRecords.jsx:1341:<option value="Healthy">લાલ નહિ - તંદુરસ્ત (Healthy)</option>
+src\pages\Farmer\CropRecords.jsx:1342:<option value="Healthy (Low Risk)">ઓછું જોખમ (Healthy Low Risk)</option>
+src\pages\Farmer\CropRecords.jsx:1343:<option value="Monitored">રેખરેખ હેઠળ (Monitored)</option>
+src\pages\Farmer\CropRecords.jsx:1344:<option value="Diseased">બીમાર / ચેપી (Diseased)</option>
+src\pages\Farmer\CropRecords.jsx:1350:<label className="text-xs text-dark-light mb-1.5">નોંધ / માહિતી (Notes)</label>
+src\pages\Farmer\CropRecords.jsx:1354:placeholder="પાક વિશે કોઈ ખાસ નોંધ ઉમેરો..."
+src\pages\Farmer\CropRecords.jsx:1363:<label className="text-xs text-dark-light mb-1.5">પાકનો ફોટો (Optional Crop Image)</label>
+src\pages\Farmer\CropRecords.jsx:1367:<span>ફોટો પસંદ કરો</span>
+src\pages\Farmer\CropRecords.jsx:1403:રદ કરો (Cancel)
+src\pages\Farmer\CropRecords.jsx:1411:સાચવો (Save)
+src\pages\Farmer\CropRecords.jsx:1423:<span className="text-red-500">⚠️</span> કાઢી નાખવાની ખાતરી કરો
+src\pages\Farmer\CropRecords.jsx:1426:શું તમે ખરેખર પાકનો રેકોર્ડ <strong>"{selectedCrop.crop_name}"</strong> ની વિગતો કાઢી નાખવા માંગો છો? આ નિર્ણય પાછો ખેંચી શકાશે નહીં.
+src\pages\Farmer\CropRecords.jsx:1434:રદ કરો (Cancel)
+src\pages\Farmer\CropRecords.jsx:1441:હા, કાઢી નાખો
+src\pages\Farmer\CropRecords.jsx:1453:setSuccessMsg(isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+src\pages\Farmer\DiseaseDetection.jsx:22:{ id: 'Tomato', name: 'ટમેટા (Tomato)' },
+src\pages\Farmer\DiseaseDetection.jsx:23:{ id: 'Cotton', name: 'કપાસ (Cotton)' },
+src\pages\Farmer\DiseaseDetection.jsx:24:{ id: 'Wheat', name: 'ઘઉં (Wheat)' },
+src\pages\Farmer\DiseaseDetection.jsx:25:{ id: 'Rice', name: 'ડાંગર/ચોખા (Rice)' },
+src\pages\Farmer\DiseaseDetection.jsx:26:{ id: 'Potato', name: 'બટાકા (Potato)' },
+src\pages\Farmer\DiseaseDetection.jsx:27:{ id: 'Groundnut', name: 'મગફળી (Groundnut)' },
+src\pages\Farmer\DiseaseDetection.jsx:28:{ id: 'Mustard', name: 'રાઈ (Mustard)' },
+src\pages\Farmer\DiseaseDetection.jsx:29:{ id: 'Cumin', name: 'જીરૂ (Cumin)' }
+src\pages\Farmer\DiseaseDetection.jsx:58:setErrorMsg('ઇતિહાસ લોડ કરવામાં ભૂલ આવી (Failed to load history)')
+src\pages\Farmer\DiseaseDetection.jsx:68:setErrorMsg('ફાઇલનું કદ 5MB કરતાં ઓછું હોવું જોઈએ (File size must be less than 5MB)')
+src\pages\Farmer\DiseaseDetection.jsx:110:setErrorMsg('ફાઇલનું કદ 5MB કરતાં ઓછું હોવું જોઈએ (File size must be less than 5MB)')
+src\pages\Farmer\DiseaseDetection.jsx:117:setErrorMsg('ફક્ત ઇમેજ ફાઇલ જ માન્ય છે (Only image files are allowed)')
+src\pages\Farmer\DiseaseDetection.jsx:137:setErrorMsg('કૃપા કરીને પહેલા પાક પસંદ કરો (Please select a crop first)')
+src\pages\Farmer\DiseaseDetection.jsx:141:setErrorMsg('કૃપા કરીને પાંદડાનો ફોટો અપલોડ કરો (Please upload a leaf image)')
+src\pages\Farmer\DiseaseDetection.jsx:162:setSuccessMsg('રોગ નિદાન સફળતાપૂર્વક પૂર્ણ થયું! (Diagnosis completed successfully!)')
+src\pages\Farmer\DiseaseDetection.jsx:165:setErrorMsg(res.message || 'નિદાન નિષ્ફળ રહ્યું (Diagnosis failed)')
+src\pages\Farmer\DiseaseDetection.jsx:169:setErrorMsg('સર્વર સાથે જોડાણ થઈ શક્યું નહીં. ફરી પ્રયાસ કરો (Server connection failed)')
+src\pages\Farmer\DiseaseDetection.jsx:177:if (!confirm('શું તમે ખરેખર આ રેકોર્ડ કાઢી નાખવા માંગો છો?')) return
+src\pages\Farmer\DiseaseDetection.jsx:189:setErrorMsg('રેકોર્ડ કાઢી નાખવામાં નિષ્ફળતા (Failed to delete record)')
+src\pages\Farmer\DiseaseDetection.jsx:194:if (!confirm('શું તમે ખરેખર બધો જ ઇતિહાસ સાફ કરવા માંગો છો?')) return
+src\pages\Farmer\DiseaseDetection.jsx:204:setErrorMsg('ઇતિહાસ સાફ કરવામાં ભૂલ (Failed to clear history)')
+src\pages\Farmer\DiseaseDetection.jsx:220:<span>🍂</span> પાક રોગ નિદાન (Crop Disease Diagnosis)
+src\pages\Farmer\DiseaseDetection.jsx:223:તમારા પાકના પાંદડાનો ફોટો અપલોડ કરી અને ત્વરિત AI રોગ નિદાન મેળવો
+src\pages\Farmer\DiseaseDetection.jsx:228:<span>AI Engine Active (ગુજરાત ઝોન)</span>
+src\pages\Farmer\DiseaseDetection.jsx:255:૧. નવું રોગ નિદાન વિશ્લેષણ (New Diagnosis)
+src\pages\Farmer\DiseaseDetection.jsx:261:પાક પસંદ કરો (Select Crop) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\DiseaseDetection.jsx:268:<option value="">--- પાંદડા પાક પસંદ કરો ---</option>
+src\pages\Farmer\DiseaseDetection.jsx:278:પાંદડાનો ફોટો અપલોડ કરો (Leaf Photo) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\DiseaseDetection.jsx:302:ફોટો અહીં ડ્રેગ એન્ડ ડ્રોપ કરો અથવા
+src\pages\Farmer\DiseaseDetection.jsx:305:બ્રાઉઝ કરો (Browse Image)
+src\pages\Farmer\DiseaseDetection.jsx:308:કેમેરાથી સીધો ફોટો પણ લઇ શકાય છે (JPEG, PNG)
+src\pages\Farmer\DiseaseDetection.jsx:348:<span>રોગ શોધો (Run Diagnosis)</span>
+src\pages\Farmer\DiseaseDetection.jsx:366:<span>વિશ્લેષણ પરિણામ (Diagnostic Analysis Result)</span>
+src\pages\Farmer\DiseaseDetection.jsx:376:વિશ્વાસ સ્તર (Confidence):
+src\pages\Farmer\DiseaseDetection.jsx:395:<span className="text-[10px] uppercase font-bold text-dark-light">પાકનું નામ</span>
+src\pages\Farmer\DiseaseDetection.jsx:401:<span className="text-[10px] uppercase font-bold text-dark-light">આકસ્મિક રોગ નિદાન</span>
+src\pages\Farmer\DiseaseDetection.jsx:420:{diagnosisResult.status === 'Healthy' ? 'પાક તંદુરસ્ત છે! (Healthy Crop)' : 'રોગની હાજરી મળી છે (Crop Infected!)'}
+src\pages\Farmer\DiseaseDetection.jsx:424:? 'તમારા પાકના આ પાંદડામાં કોઈ રોગચાળાના લક્ષણો જોવા મળ્યા નથી. સારી માવજત ચાલુ રાખો.'
+src\pages\Farmer\DiseaseDetection.jsx:425:: `આ પાંદડામાં ${diagnosisResult.prediction} ના લક્ષણો જણાય છે. કૃપા કરીને નીચે સૂચવેલ ઇલાજ કરો.`}
+src\pages\Farmer\DiseaseDetection.jsx:435:<span>🧪</span> ઉપચાર (Treatment Measures)
+src\pages\Farmer\DiseaseDetection.jsx:438:{diagnosisResult.treatment || 'ઉપચાર ની માહિતી ઉપલબ્ધ નથી.'}
+src\pages\Farmer\DiseaseDetection.jsx:443:<span>🛡️</span> અટકાવવાના પગલા (Prevention)
+src\pages\Farmer\DiseaseDetection.jsx:446:{diagnosisResult.prevention || 'અટકાવવાની માહિતી ઉપલબ્ધ નથી.'}
+src\pages\Farmer\DiseaseDetection.jsx:456:<span>📊</span> વર્ગ સંભાવના વિશ્લેષણ (Model Class Probabilities)
+src\pages\Farmer\DiseaseDetection.jsx:465:{className === 'Healthy' ? 'તંદુરસ્ત (Healthy)' : className}
+src\pages\Farmer\DiseaseDetection.jsx:493:<span>નિદાન ઇતિહાસ (Diagnosis History)</span>
+src\pages\Farmer\DiseaseDetection.jsx:501:<span>બધા રેકોર્ડ સાફ કરો</span>
+src\pages\Farmer\DiseaseDetection.jsx:509:<span className="text-xs text-dark-light mt-3">ઇતિહાસ લોડ થાય છે...</span>
+src\pages\Farmer\DiseaseDetection.jsx:514:<h4 className="text-xs font-bold text-dark mb-1">હજુ કોઈ રોગ નિદાન કરવામાં આવ્યું નથી</h4>
+src\pages\Farmer\DiseaseDetection.jsx:516:અહીં તમારા તાજેતરના લીધેલા ફોટોની ચકાસણી અને તપાસ પરિણામોનો એકત્રિત ઇતિહાસ સંગ્રહિત થશે.
+src\pages\Farmer\DiseaseDetection.jsx:553:{record.status === 'Healthy' ? 'તંદુરસ્ત' : 'રોગગ્રસ્ત'}
+src\pages\Farmer\ExpertConsultation.jsx:51:title: "કૃષિ નિષ્ણાત સેવાઓ",
+src\pages\Farmer\ExpertConsultation.jsx:52:subtitle: "તમારા ખેતીના પ્રશ્નો અને સમસ્યાઓના ઉકેલ માટે ગુજરાતના પ્રમાણિત કૃષિ નિષ્ણાતો સાથે જોડાઓ",
+src\pages\Farmer\ExpertConsultation.jsx:53:searchPlaceholder: "નિષ્ણાતનું નામ, વિશેષતા અથવા ભાષા દ્વારા શોધો...",
+src\pages\Farmer\ExpertConsultation.jsx:54:districtLabel: "જિલ્લો",
+src\pages\Farmer\ExpertConsultation.jsx:55:allDistricts: "બધા જિલ્લા",
+src\pages\Farmer\ExpertConsultation.jsx:56:specializationLabel: "વિશેષતા",
+src\pages\Farmer\ExpertConsultation.jsx:57:allSpecializations: "બધી વિશેષતાઓ",
+src\pages\Farmer\ExpertConsultation.jsx:58:experience: "વર્ષનો અનુભવ",
+src\pages\Farmer\ExpertConsultation.jsx:59:languages: "ભાષાઓ",
+src\pages\Farmer\ExpertConsultation.jsx:60:rating: "રેટિંગ",
+src\pages\Farmer\ExpertConsultation.jsx:61:callBtn: "ફોન કરો",
+src\pages\Farmer\ExpertConsultation.jsx:62:emailBtn: "ઈમેલ મોકલો",
+src\pages\Farmer\ExpertConsultation.jsx:63:viewDetails: "વિગતો જુઓ",
+src\pages\Farmer\ExpertConsultation.jsx:64:close: "બંધ કરો",
+src\pages\Farmer\ExpertConsultation.jsx:65:availability: "ઉપલબ્ધતા સમય",
+src\pages\Farmer\ExpertConsultation.jsx:66:officeAddress: "ઓફિસનું સરનામું",
+src\pages\Farmer\ExpertConsultation.jsx:67:googleMapBtn: "ગુગલ મેપ પર જુઓ",
+src\pages\Farmer\ExpertConsultation.jsx:68:noExperts: "કોઈ કૃષિ નિષ્ણાત મળ્યા નથી",
+src\pages\Farmer\ExpertConsultation.jsx:69:noExpertsDesc: "કૃપા કરીને શોધો અથવા પસંદ કરેલ જિલ્લો બદલો અથવા ફિલ્ટર સાફ કરો.",
+src\pages\Farmer\ExpertConsultation.jsx:70:resetFilters: "ફિલ્ટર સાફ કરો",
+src\pages\Farmer\ExpertConsultation.jsx:71:loading: "કૃષિ નિષ્ણાતોની માહિતી લોડ થઈ રહી છે...",
+src\pages\Farmer\ExpertConsultation.jsx:72:errorTitle: "માહિતી મેળવવામાં નિષ્ફળતા",
+src\pages\Farmer\ExpertConsultation.jsx:73:errorDesc: "સર્વરમાંથી નિષ્ણાતોની પ્રોફાઇલ લોડ કરવામાં સમસ્યા આવી છે. કૃપા કરીને ફરી ટ્રાય કરો.",
+src\pages\Farmer\ExpertConsultation.jsx:74:retry: "ફરી પ્રયાસ કરો"
+src\pages\Farmer\ExpertConsultation.jsx:191:{lang === 'GUJ' ? 'મારા સવાલો (My Queries)' : 'My Queries'}
+src\pages\Farmer\ExpertConsultation.jsx:205:{lang === 'GUJ' ? 'શોધો (Search)' : 'Search'}
+src\pages\Farmer\ExpertConsultation.jsx:465:<FiAward /> {lang === 'GUJ' ? 'શિક્ષણ' : 'Qualification'}
+src\pages\Farmer\ExpertConsultation.jsx:474:<FiCalendar /> {lang === 'GUJ' ? 'અનુભવ' : 'Experience'}
+src\pages\Farmer\ExpertConsultation.jsx:542:<span>{lang === 'GUJ' ? 'પરામર્શ પૂછો (Ask Consultation)' : 'Ask Consultation / Chat'}</span>
+src\pages\Farmer\FarmerDashboard.jsx:261:બંધ કરો (Close)
+src\pages\Farmer\FarmerDashboard.jsx:604:<FiLayers className="text-emerald-600" /> વાવેતર પાક (Current Crops)
+src\pages\Farmer\FarmerProfile.jsx:63:english: "English (અંગ્રેજી)",
+src\pages\Farmer\FarmerProfile.jsx:64:gujarati: "Gujarati (ગુજરાતી)",
+src\pages\Farmer\FarmerProfile.jsx:86:title: "ખેડૂત પ્રોફાઇલ ડેશબોર્ડ",
+src\pages\Farmer\FarmerProfile.jsx:87:subtitle: "તમારી વ્યક્તિગત વિગતો, સરનામું અને પ્રાદેશિક ભાષા પસંદગીઓનું વ્યવસ્થાપન કરો.",
+src\pages\Farmer\FarmerProfile.jsx:88:editProfile: "પ્રોફાઇલ સંપાદિત કરો",
+src\pages\Farmer\FarmerProfile.jsx:89:cancelEdit: "રદ કરો",
+src\pages\Farmer\FarmerProfile.jsx:90:saveProfile: "ફેરફારો સાચવો",
+src\pages\Farmer\FarmerProfile.jsx:91:fullName: "સાચું નામ (પૂરું નામ)",
+src\pages\Farmer\FarmerProfile.jsx:92:email: "ઇમેઇલ સરનામું",
+src\pages\Farmer\FarmerProfile.jsx:93:mobile: "મોબાઇલ નંબર",
+src\pages\Farmer\FarmerProfile.jsx:94:village: "ગામ",
+src\pages\Farmer\FarmerProfile.jsx:95:taluka: "તાલુકો",
+src\pages\Farmer\FarmerProfile.jsx:96:district: "જિલ્લો",
+src\pages\Farmer\FarmerProfile.jsx:97:state: "રાજ્ય",
+src\pages\Farmer\FarmerProfile.jsx:98:pincode: "પિનકોડ",
+src\pages\Farmer\FarmerProfile.jsx:99:preferredLanguage: "પસંદગીની ભાષા",
+src\pages\Farmer\FarmerProfile.jsx:100:accountCreated: "ખાતું બનાવ્યાની તારીખ",
+src\pages\Farmer\FarmerProfile.jsx:101:personalInfo: "વ્યક્તિગત માહિતી",
+src\pages\Farmer\FarmerProfile.jsx:102:addressDetails: "સરનામાની વિગતો",
+src\pages\Farmer\FarmerProfile.jsx:103:selectLanguage: "ભાષા પસંદ કરો",
+src\pages\Farmer\FarmerProfile.jsx:104:english: "English (અંગ્રેજી)",
+src\pages\Farmer\FarmerProfile.jsx:105:gujarati: "Gujarati (ગુજરાતી)",
+src\pages\Farmer\FarmerProfile.jsx:106:loading: "પ્રોફાઇલ લોડ થઈ રહી છે...",
+src\pages\Farmer\FarmerProfile.jsx:107:loadError: "પ્રોફાઇલ લોડ કરવામાં નિષ્ફળ. કૃપા કરીને ફરી પ્રયાસ કરો.",
+src\pages\Farmer\FarmerProfile.jsx:108:successMsg: "પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ ગઈ છે!",
+src\pages\Farmer\FarmerProfile.jsx:109:photoUpload: "પ્રોફાઇલ ફોટો અપલોડ કરો",
+src\pages\Farmer\FarmerProfile.jsx:110:photoUploadHint: "છબી ફાઇલ પસંદ કરો (મહત્તમ ૨ એમબી)",
+src\pages\Farmer\FarmerProfile.jsx:111:requiredField: "બધા ફીલ્ડ્સ ભરવા ફરજિયાત છે.",
+src\pages\Farmer\FarmerProfile.jsx:112:invalidMobile: "મોબાઇલ નંબર બરાબર ૧૦ અંકનો હોવો જોઈએ.",
+src\pages\Farmer\FarmerProfile.jsx:113:invalidPincode: "પિનકોડ બરાબર ૬ અંકનો હોવો જોઈએ.",
+src\pages\Farmer\FarmerProfile.jsx:114:saveInProgress: "ફેરફારો સાચવી રહ્યા છીએ...",
+src\pages\Farmer\FarmerProfile.jsx:115:registrationDate: "નોંધણી તારીખ",
+src\pages\Farmer\FarmerProfile.jsx:116:verificationStatus: "ચકાસણી સ્થિતિ",
+src\pages\Farmer\FarmerProfile.jsx:117:verifiedText: "ચકાસાયેલ ખેડૂત ખાતું",
+src\pages\Farmer\FarmerProfile.jsx:118:activeStatus: "સક્રિય",
+src\pages\Farmer\FarmerProfile.jsx:119:verifiedBadge: "મંજૂર",
+src\pages\Farmer\FarmerProfile.jsx:120:unverifiedBadge: "ચકાસણી બાકી",
+src\pages\Farmer\FarmerProfile.jsx:121:districtPlaceholder: "દા.ત. આણંદ",
+src\pages\Farmer\FarmerProfile.jsx:122:talukaPlaceholder: "દા.ત. પેટલાદ",
+src\pages\Farmer\FarmerProfile.jsx:123:villagePlaceholder: "દા.ત. ધર્મજ",
+src\pages\Farmer\FarmerProfile.jsx:124:pincodePlaceholder: "દા.ત. ૩૮૮૪૩૦"
+src\pages\Farmer\FarmerProfile.jsx:323:<Button onClick={fetchUserProfile} className="mt-4 bg-emerald-600 text-white font-bold">{lang === 'GUJ' ? 'ફરી પ્રયાસ કરો' : 'Retry'}</Button>
+src\pages\Farmer\FarmerProfile.jsx:391:<p className="text-dark-light/80 mt-0.5">{lang === 'GUJ' ? 'ખાતું વણાયેલું અને સક્રિય છે' : 'Account linked & active'}</p>
+src\pages\Farmer\GovernmentSchemes.jsx:18:title: "🏛 સરકારી યોજનાઓ (Government Schemes)",
+src\pages\Farmer\GovernmentSchemes.jsx:19:subtitle: "ગુજરાતના ખેડૂતો માટે કેન્દ્રીય અને રાજ્ય સરકારની કલ્યાણકારી યોજનાઓ",
+src\pages\Farmer\GovernmentSchemes.jsx:20:searchPlaceholder: "યોજનાનું નામ અથવા વિગત શોધો... (દા.ત. કિસાન, વીમો)",
+src\pages\Farmer\GovernmentSchemes.jsx:21:filterTitle: "યોજના પ્રકાર અને લાભો:",
+src\pages\Farmer\GovernmentSchemes.jsx:22:eligibility: "લાયકાત (Eligibility)",
+src\pages\Farmer\GovernmentSchemes.jsx:23:benefits: "લાભ અને સહાય (Benefits)",
+src\pages\Farmer\GovernmentSchemes.jsx:24:requiredDocs: "જરૂરી દસ્તાવેજો (Required Documents)",
+src\pages\Farmer\GovernmentSchemes.jsx:25:officialSite: "સત્તાવાર વેબસાઇટ",
+src\pages\Farmer\GovernmentSchemes.jsx:26:applyNow: "અહીં અરજી કરો",
+src\pages\Farmer\GovernmentSchemes.jsx:27:viewDetails: "વિગતો જુઓ",
+src\pages\Farmer\GovernmentSchemes.jsx:28:close: "બંધ કરો",
+src\pages\Farmer\GovernmentSchemes.jsx:29:loading: "યોજનાઓ લોડ થઈ રહી છે...",
+src\pages\Farmer\GovernmentSchemes.jsx:30:noSchemes: "કોઈ મેળ ખાતી યોજના મળી નથી. કૃપા કરીને અન્ય કીવર્ડ સાથે શોધો.",
+src\pages\Farmer\GovernmentSchemes.jsx:31:errorTitle: "સિસ્ટમ ભૂલ (System Error)",
+src\pages\Farmer\GovernmentSchemes.jsx:32:errorDesc: "યોજનાઓની યાદી મેળવવામાં સમસ્યા આવી રહી છે.",
+src\pages\Farmer\GovernmentSchemes.jsx:33:retry: "ફરી પ્રયાસ કરો",
+src\pages\Farmer\GovernmentSchemes.jsx:34:farmerCategory: "લાભાર્થી શ્રેણી (Farmer Category)",
+src\pages\Farmer\GovernmentSchemes.jsx:35:cropCategory: "પાક પ્રકાર (Crop Category)",
+src\pages\Farmer\GovernmentSchemes.jsx:36:status: "સ્થિતિ",
+src\pages\Farmer\GovernmentSchemes.jsx:37:active: "સક્રિય",
+src\pages\Farmer\GovernmentSchemes.jsx:38:central: "કેન્દ્રીય યોજના",
+src\pages\Farmer\GovernmentSchemes.jsx:39:gujarat: "ગુજરાત રાજ્ય યોજના",
+src\pages\Farmer\GovernmentSchemes.jsx:40:detailsTitle: "યોજના વિગતવાર માહિતી"
+src\pages\Farmer\GovernmentSchemes.jsx:70:{ id: 'Central', labelGuj: 'કેન્દ્રીય (Central)', labelEng: 'Central' },
+src\pages\Farmer\GovernmentSchemes.jsx:71:{ id: 'Gujarat', labelGuj: 'ગુજરાત (Gujarat)', labelEng: 'Gujarat' },
+src\pages\Farmer\GovernmentSchemes.jsx:72:{ id: 'Insurance', labelGuj: 'વીમો (Insurance)', labelEng: 'Insurance' },
+src\pages\Farmer\GovernmentSchemes.jsx:73:{ id: 'Loan', labelGuj: 'ધિરાણ / લોન (Loan)', labelEng: 'Loan' },
+src\pages\Farmer\GovernmentSchemes.jsx:74:{ id: 'Subsidy', labelGuj: 'સહાય / Subsidy', labelEng: 'Subsidy' },
+src\pages\Farmer\GovernmentSchemes.jsx:75:{ id: 'Organic', labelGuj: 'સજીવ ખેતી (Organic)', labelEng: 'Organic' },
+src\pages\Farmer\GovernmentSchemes.jsx:76:{ id: 'Solar', labelGuj: 'સોલાર સોલ્યુશન (Solar)', labelEng: 'Solar' },
+src\pages\Farmer\GovernmentSchemes.jsx:77:{ id: 'Irrigation', labelGuj: 'સિંચાઈ (Irrigation)', labelEng: 'Irrigation' }
+src\pages\Farmer\GovernmentSchemes.jsx:144:'Insurance': ['insurance', 'bima', 'બિમા', 'વીમો', 'વીમા', 'suraksha', 'સુરક્ષા'],
+src\pages\Farmer\GovernmentSchemes.jsx:145:'Loan': ['loan', 'credit', 'kredit', 'kcc', 'ધિરાણ', 'લોન', 'ક્રેડિટ', 'વ્યાજ'],
+src\pages\Farmer\GovernmentSchemes.jsx:146:'Subsidy': ['subsidy', 'સહાય', 'સબસિડી', 'અનામત', 'સહાયતા', 'મદદ'],
+src\pages\Farmer\GovernmentSchemes.jsx:147:'Organic': ['organic', 'સજીવ', 'ઓર્ગેનિક', 'ગાય', 'સેન્દ્રિય', 'કુદરતી'],
+src\pages\Farmer\GovernmentSchemes.jsx:148:'Solar': ['solar', 'સૂર્ય', 'સોલાર', 'વીજળી', 'surya', 'ઉર્જા'],
+src\pages\Farmer\GovernmentSchemes.jsx:149:'Irrigation': ['irrigation', 'sinchai', 'સિંચાઈ', 'ટપક', 'સૂક્ષ્મ', 'કૂવો', 'પાણી']
+src\pages\Farmer\GovernmentSchemes.jsx:284:<h3 className="font-bold text-dark text-lg">{lang === 'GUJ' ? 'યોજના મળી નથી' : 'No Schemes Found'}</h3>
+src\pages\Farmer\GovernmentSchemes.jsx:290:{lang === 'GUJ' ? 'બધું સાફ કરો' : 'Clear Filters'}
+src\pages\Farmer\GovernmentSchemes.jsx:322:{isCentral ? (lang === 'GUJ' ? 'કેન્દ્ર' : 'Central') : (lang === 'GUJ' ? 'ગુજરાત' : 'Gujarat')}
+src\pages\Farmer\GovernmentSchemes.jsx:376:<span>{lang === 'GUJ' ? 'અરજી' : 'Apply'}</span>
+src\pages\Farmer\GovernmentSchemes.jsx:397:{activeDetailScheme.scheme_type === 'Central' ? (lang === 'GUJ' ? 'કેન્દ્ર' : 'Central') : (lang === 'GUJ' ? 'ગુજરાત' : 'Gujarat')}
+src\pages\Farmer\GovernmentSchemes.jsx:417:{lang === 'GUJ' ? 'અંગ્રેજી નામ (English Title):' : 'ગુજરાતી નામ (Gujarati Name):'}
+src\pages\Farmer\GovernmentSchemes.jsx:427:<h4 className="font-extrabold text-xs text-primary uppercase tracking-wider select-none">{lang === 'GUJ' ? 'યોજનાની વિગત (Description)' : 'Scheme Description'}</h4>
+src\pages\Farmer\MarketPrices.jsx:22:title: "📈 લાઈવ બજાર ભાવો (Live Market Prices)",
+src\pages\Farmer\MarketPrices.jsx:23:subtitle: "ગુજરાત માર્કેટ યાર્ડ (APMC) સરકારી એગમાર્કનેટ (AGMARKNET) લાઈવ ભાવો",
+src\pages\Farmer\MarketPrices.jsx:24:searchPlaceholder: "પાકનું નામ શોધો... (દા.ત. કપાસ, જીરૂ)",
+src\pages\Farmer\MarketPrices.jsx:25:allDistricts: "બધા જિલ્લા (All Districts)",
+src\pages\Farmer\MarketPrices.jsx:26:districtSelector: "જિલ્લો પસંદ કરો (Select District)",
+src\pages\Farmer\MarketPrices.jsx:27:refreshBtn: "ભાવ અપડેટ કરો (Refresh)",
+src\pages\Farmer\MarketPrices.jsx:28:refreshing: "અપડેટ થઈ રહ્યું છે...",
+src\pages\Farmer\MarketPrices.jsx:29:lastUpdated: "છેલ્લે અપડેટ કરેલ",
+src\pages\Farmer\MarketPrices.jsx:30:cropName: "પાક (Crop)",
+src\pages\Farmer\MarketPrices.jsx:31:marketName: "બજાર (Market)",
+src\pages\Farmer\MarketPrices.jsx:32:minPrice: "ન્યૂનતમ ભાવ (Min Price)",
+src\pages\Farmer\MarketPrices.jsx:33:maxPrice: "મહત્તમ ભાવ (Max Price)",
+src\pages\Farmer\MarketPrices.jsx:34:modalPrice: "મધ્યમ ભાવ (Modal Price)",
+src\pages\Farmer\MarketPrices.jsx:35:arrivalQty: "આવક જથ્થો (Quintal)",
+src\pages\Farmer\MarketPrices.jsx:36:date: "તારીખ",
+src\pages\Farmer\MarketPrices.jsx:37:source: "સ્ત્રોત",
+src\pages\Farmer\MarketPrices.jsx:38:priceUnit: "/ ક્વિન્ટલ (૧૦૦ કિલો)",
+src\pages\Farmer\MarketPrices.jsx:39:todayBadges: "આજે મુખ્ય પાકોના ભાવો (Today's Key Crop Prices)",
+src\pages\Farmer\MarketPrices.jsx:40:bestMarketTitle: "💡 શ્રેષ્ઠ બજાર ભલામણ (Best Market Recommendation)",
+src\pages\Farmer\MarketPrices.jsx:41:selectCropRec: "પાકની ભલામણ જોવા માટે પસંદ કરો:",
+src\pages\Farmer\MarketPrices.jsx:42:suggestedMarket: "ભલામણ કરેલ માર્કેટ (Suggested Market)",
+src\pages\Farmer\MarketPrices.jsx:43:expectedPrice: "અપેક્ષિત વેચાણ કિંમત (Expected Selling Price)",
+src\pages\Farmer\MarketPrices.jsx:44:extraIncome: "વધારાની અંદાજિત કમાણી (Extra Income)",
+src\pages\Farmer\MarketPrices.jsx:45:comparedTo: "બીજા બજાર કરતા વધારે ચોખ્ખો નફો",
+src\pages\Farmer\MarketPrices.jsx:46:perQuintal: "ક્વિન્ટલ દીઠ",
+src\pages\Farmer\MarketPrices.jsx:47:noData: "કોઈ બજાર ભાવો મળ્યા નથી. કૃપા કરીને રીફ્રેશ બટન દબાવો.",
+src\pages\Farmer\MarketPrices.jsx:48:sourceLive: "સરકારી લાઈવ ફીડ",
+src\pages\Farmer\MarketPrices.jsx:49:sourceOffline: "લોકલ ડેટાબેઝ કેશ",
+src\pages\Farmer\MarketPrices.jsx:50:loading: "બજારના લાઈવ ભાવો મેળવી રહ્યા છીએ..."
+src\pages\Farmer\MarketPrices.jsx:87:"cotton": ["cotton", "કપાસ", "kapas"],
+src\pages\Farmer\MarketPrices.jsx:88:"groundnut": ["groundnut", "મગફળી", "magfali", "sing"],
+src\pages\Farmer\MarketPrices.jsx:89:"cumin": ["cumin", "જીરૂ", "jeera", "jiru"],
+src\pages\Farmer\MarketPrices.jsx:90:"wheat": ["wheat", "ઘઉં", "ghau", "ghaun"],
+src\pages\Farmer\MarketPrices.jsx:91:"mustard": ["mustard", "રાઈ", "rai"],
+src\pages\Farmer\MarketPrices.jsx:92:"castor seed": ["castor seed", "દિવેલા", "divela", "eranda"]
+src\pages\Farmer\MarketPrices.jsx:161:? (lang === 'GUJ' ? ' / મણ (૨૦ કિલો)' : ' / Man (20 kg)')
+src\pages\Farmer\MarketPrices.jsx:162:: (lang === 'GUJ' ? ' / ક્વિન્ટલ (૧૦૦ કિલો)' : ' / Quintal (100 kg)')
+src\pages\Farmer\MarketPrices.jsx:165:? (lang === 'GUJ' ? 'મણ દીઠ' : 'per Man')
+src\pages\Farmer\MarketPrices.jsx:166:: (lang === 'GUJ' ? 'ક્વિન્ટલ દીઠ' : 'per Quintal')
+src\pages\Farmer\MarketPrices.jsx:193:setErrorMsg('બજાર ભાવો લોડ કરવામાં સમસ્યા આવી છે.')
+src\pages\Farmer\MarketPrices.jsx:212:setSuccessMsg('નવીનતમ એગમાર્કનેટ સરકારી ભાવો સફળતાપૂર્વક અપડેટ થયા.')
+src\pages\Farmer\MarketPrices.jsx:218:setErrorMsg('લાઈવ સરકારી એગમાર્કનેટ કનેક્શન મળી શક્યું નહિ. અગાઉ સંગ્રહિત કેશ ડેટા વપરાઈ રહ્યો છે.')
+src\pages\Farmer\MarketPrices.jsx:298:? bestRecord.market_name.replace("APMC", "માર્કેટ યાર્ડ")
+src\pages\Farmer\MarketPrices.jsx:302:? worstRecord.market_name.replace("APMC", "માર્કેટ યાર્ડ")
+src\pages\Farmer\MarketPrices.jsx:378:? `આજનો નવો સરકારી બજાર ભાવ મેળવી શકાયો નથી. નવીનતમ ઉપલબ્ધ સરકારી બજાર માહિતી દર્શાવવામાં આવી રહી છે (તારીખ: ${formatDate(prices[0].price_date)}, સ્ત્રોત: AGMARKNET).`
+src\pages\Farmer\MarketPrices.jsx:495:? (lang === 'GUJ' ? 'સરકારી બજાર કેશ' : 'Govt. Market Cache')
+src\pages\Farmer\MarketPrices.jsx:523:/{priceUnit === 'man' ? (lang === 'GUJ' ? 'મણ' : 'Man') : (lang === 'GUJ' ? 'ક્વિન્ટલ' : 'Qt')}
+src\pages\Farmer\MarketPrices.jsx:578:{lang === 'GUJ' ? 'તારીખ:' : 'Date:'}
+src\pages\Farmer\MarketPrices.jsx:598:પ્રતિ ક્વિન્ટલ (Per Quintal)
+src\pages\Farmer\MarketPrices.jsx:607:પ્રતિ મણ (Per Man)
+src\pages\Farmer\MarketPrices.jsx:624:{lang === 'GUJ' ? 'પસંદ કરેલી તારીખ માટે કોઈ બજાર ભાવો ઉપલબ્ધ નથી.' : 'No market data available for selected date.'}
+src\pages\Farmer\MarketPrices.jsx:627:{lang === 'GUJ' ? 'કૃપા કરીને બીજી કોઈ ભૂતકાળની તારીખ પસંદ કરો અથવા ભાવ અપડેટ કરો.' : 'Please select another historical date or update today\'s prices.'}
+src\pages\Farmer\MarketPrices.jsx:663:? price.market_name.replace("APMC", "માર્કેટ યાર્ડ")
+src\pages\Farmer\MyConsultations.jsx:30:title: "મારા પ્રશ્નોનો ઇતિહાસ",
+src\pages\Farmer\MyConsultations.jsx:31:subtitle: "તમારા સક્રિય પ્રશ્નો અને નિષ્ણાતો દ્વારા આપવામાં આવેલ જવાબોનો ઇતિહાસ જુઓ",
+src\pages\Farmer\MyConsultations.jsx:32:newQueryBtn: "નવો પ્રશ્ન પૂછો",
+src\pages\Farmer\MyConsultations.jsx:33:tableSubject: "સમસ્યા / વિષય",
+src\pages\Farmer\MyConsultations.jsx:34:tableExpert: "કૃષિ નિષ્ણાત",
+src\pages\Farmer\MyConsultations.jsx:35:tableDate: "મોકલ્યા તારીખ",
+src\pages\Farmer\MyConsultations.jsx:36:tableStatus: "સ્થિતિ",
+src\pages\Farmer\MyConsultations.jsx:37:tableAction: "કાર્ય",
+src\pages\Farmer\MyConsultations.jsx:38:pending: "બાકી છે",
+src\pages\Farmer\MyConsultations.jsx:39:replied: "જવાબ આપેલ છે",
+src\pages\Farmer\MyConsultations.jsx:40:closed: "બંધ કરેલ છે",
+src\pages\Farmer\MyConsultations.jsx:41:openChat: "ચેટ ખોલો",
+src\pages\Farmer\MyConsultations.jsx:42:noQueries: "કોઈ પરામર્શ પ્રશ્નો મળ્યા નથી",
+src\pages\Farmer\MyConsultations.jsx:43:noQueriesDesc: "ઉપરના બટન પર ક્લિક કરીને તમારો પહેલો પ્રશ્ન સબમિટ કરો.",
+src\pages\Farmer\MyConsultations.jsx:44:loading: "ઇતિહાસ લોડ થઈ રહ્યો છે...",
+src\pages\Farmer\MyConsultations.jsx:45:error: "માહિતી મેળવવામાં સમસ્યા આવી રહી છે.",
+src\pages\Farmer\MyConsultations.jsx:46:back: "નિષ્ણાતોની યાદી પર પાછા જાઓ"
+src\pages\Farmer\MyFarms.jsx:73:setErrorMsg('કનેક્ટીવીટી સમસ્યા! કૃપા કરીને ફરી ટ્રાય કરો.')
+src\pages\Farmer\MyFarms.jsx:81:if (!formData.farm_name.trim()) errors.farm_name = 'ખેતરનું નામ લખવું ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:82:if (!formData.village.trim()) errors.village = 'ગામનું નામ ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:83:if (!formData.taluka.trim()) errors.taluka = 'તાલુકો ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:84:if (!formData.district.trim()) errors.district = 'જિલ્લો પસંદ કરવો ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:88:errors.total_area = 'કુલ જમીનનું માપ ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:90:errors.total_area = 'જમીનનું માપ 0 થી વધુ હોવું જોઈએ'
+src\pages\Farmer\MyFarms.jsx:93:if (!formData.soil_type.trim()) errors.soil_type = 'જમીનનો પ્રકાર ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:94:if (!formData.irrigation_type.trim()) errors.irrigation_type = 'સિંચાઈ પદ્ધતિ ફરજિયાત છે'
+src\pages\Farmer\MyFarms.jsx:165:setErrorMsg(res.message || 'માહિતી સાચવી શકાઈ નહિ.')
+src\pages\Farmer\MyFarms.jsx:169:setErrorMsg('ખેતર સાચવવામાં અડચણ આવી. વિગતો તપાસો.')
+src\pages\Farmer\MyFarms.jsx:195:alert('ભૂલ: લોકેશન મેળવી શકાયું નથી. કૃપા કરીને સ્થાનની પરવાનગી આપો.')
+src\pages\Farmer\MyFarms.jsx:223:setErrorMsg('ડેલીટ કરવામાં અડચણ આવી.')
+src\pages\Farmer\MyFarms.jsx:245:<span>🌱</span> મારા ખેતરો (My Farms)
+src\pages\Farmer\MyFarms.jsx:248:તમારા તમામ સરવે પ્લોટ્સ અને ખેતરોનું સંચાલન અહીં કરો
+src\pages\Farmer\MyFarms.jsx:257:<span>નવું ખેતર ઉમેરો (Add Farm)</span>
+src\pages\Farmer\MyFarms.jsx:282:placeholder="ખેતરનું નામ, ગામ અથવા જિલ્લો શોધો..."
+src\pages\Farmer\MyFarms.jsx:303:title="આ સાઈટ પર કોઈ ખેતર મળ્યું નથી"
+src\pages\Farmer\MyFarms.jsx:304:description={searchQuery ? 'અન્ય કોઈ નામ અથવા વિગત ટાઈપ કરીને ફરીથી સર્ચ કરો.' : 'તમારી પાસે હાલમાં સંચાલન માટે કોઈ સક્રિય જમીન રેકોર્ડ નથી. નવું ખેતર ઉમેરવા અહી પ્લસ પર ક્લિક કરો.'}
+src\pages\Farmer\MyFarms.jsx:305:actionText={!searchQuery ? "નવું ખેતર ઉમેરો" : undefined}
+src\pages\Farmer\MyFarms.jsx:332:જિ. {farm.district}, તા. {farm.taluka}, ગામ. {farm.village}
+src\pages\Farmer\MyFarms.jsx:337:<span className="block text-[9px] uppercase font-bold text-dark-light/65">જમીનનો પ્રકાર</span>
+src\pages\Farmer\MyFarms.jsx:341:<span className="block text-[9px] uppercase font-bold text-dark-light/65">સિંચાઈ પદ્ધતિ</span>
+src\pages\Farmer\MyFarms.jsx:385:<span className="text-xs text-dark-light uppercase font-semibold">ચોક્કસ વિગતો (Farm Info)</span>
+src\pages\Farmer\MyFarms.jsx:398:<span className="text-[10px] font-bold text-dark-light uppercase tracking-wider block">ભૌગોલિક સ્થાન</span>
+src\pages\Farmer\MyFarms.jsx:401:<span className="text-dark-light">ગામ:</span> <strong className="text-dark">{detailFarm.village}</strong>
+src\pages\Farmer\MyFarms.jsx:404:<span className="text-dark-light">તાલુકો:</span> <strong className="text-dark">{detailFarm.taluka}</strong>
+src\pages\Farmer\MyFarms.jsx:407:<span className="text-dark-light">જિલ્લો:</span> <strong className="text-dark">{detailFarm.district}</strong>
+src\pages\Farmer\MyFarms.jsx:410:<span className="text-dark-light">રાજ્ય:</span> <strong className="text-dark">{detailFarm.state}</strong>
+src\pages\Farmer\MyFarms.jsx:417:<span className="text-[10px] font-bold text-dark-light uppercase tracking-wider block">જમીનની માહિતી (Specifications)</span>
+src\pages\Farmer\MyFarms.jsx:421:<span className="text-dark-light">કુલ ક્ષેત્રફળ:</span>
+src\pages\Farmer\MyFarms.jsx:425:<span className="text-dark-light">જમીનનો પ્રકાર:</span>
+src\pages\Farmer\MyFarms.jsx:429:<span className="text-dark-light">સિંચાઈ પદ્ધતિ:</span>
+src\pages\Farmer\MyFarms.jsx:437:<span className="text-[10px] font-bold text-dark-light uppercase tracking-wider block">GPS લોકેશન (Coordinates)</span>
+src\pages\Farmer\MyFarms.jsx:439:<div>Lattitude: {detailFarm.latitude ? detailFarm.latitude : 'અનુભૂતિ વગરની'}</div>
+src\pages\Farmer\MyFarms.jsx:440:<div>Longitude: {detailFarm.longitude ? detailFarm.longitude : 'અનુભૂતિ વગરની'}</div>
+src\pages\Farmer\MyFarms.jsx:453:<span>સુધારો કરો (Edit)</span>
+src\pages\Farmer\MyFarms.jsx:460:<span>કાઢી નાખો (Delete)</span>
+src\pages\Farmer\MyFarms.jsx:479:? 'ખેતરની માહિતી સુધારો (Edit Farm)'
+src\pages\Farmer\MyFarms.jsx:480:: 'નવું ખેતર ઉમેરો (Register New Farm)'}
+src\pages\Farmer\MyFarms.jsx:496:ખેતરનું નામ (Farm Name) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:502:placeholder="દા.ત. મારા ઘર પાછળનું સીમ અથવા પ્લોટ A"
+src\pages\Farmer\MyFarms.jsx:515:ગામ (Village) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:521:placeholder="ગામનું નામ"
+src\pages\Farmer\MyFarms.jsx:533:તાલુકો (Taluka) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:539:placeholder="તાલુકો"
+src\pages\Farmer\MyFarms.jsx:553:જિલ્લો (District) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:561:<option value="">જિલ્લો પસંદ કરો</option>
+src\pages\Farmer\MyFarms.jsx:587:જમીનનું માપ (Total Area) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:594:placeholder="દા.ત. 5.5"
+src\pages\Farmer\MyFarms.jsx:605:<label className="text-xs font-bold text-dark/75 mb-1.5">એકમ (Unit)</label>
+src\pages\Farmer\MyFarms.jsx:611:<option value="Acre">એકર (Acre)</option>
+src\pages\Farmer\MyFarms.jsx:612:<option value="Hectare">હેક્ટર (Hectare)</option>
+src\pages\Farmer\MyFarms.jsx:621:જમીનનો પ્રકાર (Soil Type) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:627:placeholder="દા.ત. કાળી, લાલ અથવા ગોરાડુ જમીન"
+src\pages\Farmer\MyFarms.jsx:639:સિંચાઈ પદ્ધતિ (Irrigation Type) <span className="text-red-500 font-bold">*</span>
+src\pages\Farmer\MyFarms.jsx:645:placeholder="દા.ત. ટપક સિંચાઈ, કુવો, નહેર"
+src\pages\Farmer\MyFarms.jsx:657:<label className="text-xs text-dark-light font-bold">GPS Coordinates (વૈકલ્પિક)</label>
+src\pages\Farmer\MyFarms.jsx:665:{locationLoading ? 'મેળવવામાં આવી રહ્યું છે...' : 'મારું વર્તમાન લોકેશન વાપરો'}
+src\pages\Farmer\MyFarms.jsx:675:placeholder="દા.ત. 23.0225"
+src\pages\Farmer\MyFarms.jsx:688:placeholder="દા.ત. 72.5714"
+src\pages\Farmer\MyFarms.jsx:705:રદ કરો (Cancel)
+src\pages\Farmer\MyFarms.jsx:713:સાચવો (Save)
+src\pages\Farmer\MyFarms.jsx:725:<span className="text-red-500">⚠️</span> કાઢી નાખવાની ખાતરી કરો
+src\pages\Farmer\MyFarms.jsx:728:શું તમે ખરેખર ખેતર <strong>"{selectedFarm.farm_name}"</strong> ની નોંધ કાઢી નાખવા માંગો છો? આ નિર્ણય પાછો ખેંચી શકાશે નહીં.
+src\pages\Farmer\MyFarms.jsx:737:રદ કરો (Cancel)
+src\pages\Farmer\MyFarms.jsx:744:રદ કરો અને કાઢી નાખો
+src\pages\Farmer\ProfitCalculator.jsx:142:if (!expenseForm.crop) errors.crop = 'પાક પસંદ કરવો જરૂરી છે.'
+src\pages\Farmer\ProfitCalculator.jsx:144:errors.amount = 'ખર્ચની રકમ 0 થી વધુ હોવી જોઈએ.'
+src\pages\Farmer\ProfitCalculator.jsx:146:if (!expenseForm.expense_date) errors.expense_date = 'ખર્ચ તારીખ જરૂરી છે.'
+src\pages\Farmer\ProfitCalculator.jsx:153:if (!salesForm.crop) errors.crop = 'પાક પસંદ કરવો જરૂરી છે.'
+src\pages\Farmer\ProfitCalculator.jsx:154:if (!salesForm.market_yard.trim()) errors.market_yard = 'માર્કેટ યાર્ડનું નામ જરૂરી છે.'
+src\pages\Farmer\ProfitCalculator.jsx:156:errors.sold_quantity = 'વેચેલો જથ્થો 0 થી વધુ હોવો જોઈશે.'
+src\pages\Farmer\ProfitCalculator.jsx:159:errors.price_per_kg = 'કિંમત (પ્રતિ કિલો) 0 થી વધુ હોવી જોઈશે.'
+src\pages\Farmer\ProfitCalculator.jsx:161:if (!salesForm.sale_date) errors.sale_date = 'વેચાણ તારીખ અપાયેલી હોવી જરૂરી છે.'
+src\pages\Farmer\ProfitCalculator.jsx:180:setSuccessMsg(editExpense ? 'ખર્ચ સફળતાપૂર્વક અપડેટ થયો.' : 'નવો ખર્ચ સફળતાપૂર્વક ઉમેરાયો.')
+src\pages\Farmer\ProfitCalculator.jsx:184:setErrorMsg(res.message || 'માહિતી સંગ્રહ નિષ્ફળ.')
+src\pages\Farmer\ProfitCalculator.jsx:188:setErrorMsg('તપાસ કરો કે વિગતો સાચી છે અને ફરીથી પ્રયાસ કરો.')
+src\pages\Farmer\ProfitCalculator.jsx:208:setSuccessMsg(editSales ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+src\pages\Farmer\ProfitCalculator.jsx:212:setErrorMsg(res.message || 'માહિતી સંગ્રહ નિષ્ફળ.')
+src\pages\Farmer\ProfitCalculator.jsx:216:setErrorMsg('સિસ્ટમ એરર! કૃપા રકમ વિગતો ચકાસો.')
+src\pages\Farmer\ProfitCalculator.jsx:292:setSuccessMsg('રેકોર્ડ સફળતાપૂર્વક કાઢી નાખવામાં આવ્યો.')
+src\pages\Farmer\ProfitCalculator.jsx:295:setErrorMsg(res.message || 'કાઢી નાખવામાં નિષ્ફળતા.')
+src\pages\Farmer\ProfitCalculator.jsx:299:setErrorMsg('કાઢી નાખવામાં મુશ્કેલી પડી.')
+src\pages\Farmer\ProfitCalculator.jsx:355:<span>📊</span> નફાની ગણતરી (Farm Profit Calculator)
+src\pages\Farmer\ProfitCalculator.jsx:358:તમારા પાક પાછળ થતાં કુલ ખર્ચ, વેચાણ અને ચોખ્ખો નફાનું વિશ્લેષણ મેળવો
+src\pages\Farmer\ProfitCalculator.jsx:367:<span>ખર્ચ ઉમેરો (Add Expense)</span>
+src\pages\Farmer\ProfitCalculator.jsx:374:<span>વેચાણ ઉમેરો (Add Sale)</span>
+src\pages\Farmer\ProfitCalculator.jsx:401:<span className="text-xs font-bold text-dark/75">પાક પસંદગી (Select Crop):</span>
+src\pages\Farmer\ProfitCalculator.jsx:408:<option value="all">બધા સક્રિય પાક (All Crops)</option>
+src\pages\Farmer\ProfitCalculator.jsx:422:<span className="text-[10px] uppercase font-bold text-dark-light/85">કુલ આવક (Revenue)</span>
+src\pages\Farmer\ProfitCalculator.jsx:432:<span className="text-[10px] uppercase font-bold text-dark-light/85">કુલ સરવાળો ખર્ચ (Expense)</span>
+src\pages\Farmer\ProfitCalculator.jsx:442:<span className="text-[10px] uppercase font-bold text-dark-light/85">ચોખ્ખો નફો (Net Profit)</span>
+src\pages\Farmer\ProfitCalculator.jsx:454:<span className="text-[10px] uppercase font-bold text-dark-light/85">નફાનો સીમાડો (Profit Margin)</span>
+src\pages\Farmer\ProfitCalculator.jsx:465:<span>🍩</span> પાક ખર્ચ શ્રેણી (Expense Split)
+src\pages\Farmer\ProfitCalculator.jsx:470:<p className="text-xs font-semibold">પસંદ કરેલ પાક પર કોઈ રજિસ્ટર્ડ ખર્ચ નથી.</p>
+src\pages\Farmer\ProfitCalculator.jsx:490:<span className="text-[9px] font-bold text-dark-light uppercase">ખર્ચ સરવાળો</span>
+src\pages\Farmer\ProfitCalculator.jsx:515:ખર્ચ લિસ્ટ (Expenses)
+src\pages\Farmer\ProfitCalculator.jsx:521:વેચાણ લિસ્ટ (Sales)
+src\pages\Farmer\ProfitCalculator.jsx:534:placeholder="ખર્ચ વિગત {t('common.search')}..."
+src\pages\Farmer\ProfitCalculator.jsx:551:<option value="all">બધા પ્રકાર (All Categories)</option>
+src\pages\Farmer\ProfitCalculator.jsx:552:<option value="Seed">બીજ (Seed)</option>
+src\pages\Farmer\ProfitCalculator.jsx:553:<option value="Fertilizer">ખાતર (Fertilizer)</option>
+src\pages\Farmer\ProfitCalculator.jsx:554:<option value="Pesticide">જંતુનાશક (Pesticide)</option>
+src\pages\Farmer\ProfitCalculator.jsx:555:<option value="Labour">મજૂરી (Labour)</option>
+src\pages\Farmer\ProfitCalculator.jsx:556:<option value="Irrigation">પિયત (Irrigation)</option>
+src\pages\Farmer\ProfitCalculator.jsx:557:<option value="Machinery">મશીનરી (Machinery)</option>
+src\pages\Farmer\ProfitCalculator.jsx:558:<option value="Transportation">ટ્રાન્સપોર્ટ (Transportation)</option>
+src\pages\Farmer\ProfitCalculator.jsx:559:<option value="Other">અન્ય (Other)</option>
+src\pages\Farmer\ProfitCalculator.jsx:569:title="કોઈ ખર્ચ રેકોર્ડ મળ્યો નથી"
+src\pages\Farmer\ProfitCalculator.jsx:570:description={expenseSearch || expenseTypeFilter !== 'all' ? "પસંદ કરેલ ફિલ્ટર્સ અથવા સર્ચ માટે કોઈ ડેટા નથી." : "તમારા પાક માટેના ખર્ચની વિગતો અહીં ઉમેરો."}
+src\pages\Farmer\ProfitCalculator.jsx:571:actionText={!(expenseSearch || expenseTypeFilter !== 'all') ? "ખર્ચ ઉમેરો (Add Expense)" : undefined}
+src\pages\Farmer\ProfitCalculator.jsx:580:<th className="p-3">ખર્ચ પ્રકાર</th>
+src\pages\Farmer\ProfitCalculator.jsx:582:<th className="p-3">રકમ</th>
+src\pages\Farmer\ProfitCalculator.jsx:583:<th className="p-3 text-center">ક્રિયાઓ</th>
+src\pages\Farmer\ProfitCalculator.jsx:590:{exp.crop_name || `પાક ID: ${exp.crop}`}
+src\pages\Farmer\ProfitCalculator.jsx:608:title="સુધારો કરો"
+src\pages\Farmer\ProfitCalculator.jsx:615:title="કાઢી નાખો"
+src\pages\Farmer\ProfitCalculator.jsx:639:placeholder="યાર્ડ અથવા પાક {t('common.search')}..."
+src\pages\Farmer\ProfitCalculator.jsx:658:title="કોઈ વેચાણ રેકોર્ડ મળ્યો નથી"
+src\pages\Farmer\ProfitCalculator.jsx:659:description={salesSearch ? "પસંદ કરેલ સર્ચ માટે કોઈ ડેટા નથી." : "તમારા લણેલા પાક વેચાણની વિગતો અહીં ઉમેરો."}
+src\pages\Farmer\ProfitCalculator.jsx:660:actionText={!salesSearch ? "વેચાણ ઉમેરો (Add Sale)" : undefined}
+src\pages\Farmer\ProfitCalculator.jsx:669:<th className="p-3">માર્કેટ યાર્ડ</th>
+src\pages\Farmer\ProfitCalculator.jsx:670:<th className="p-3">જથ્થો (kg)</th>
+src\pages\Farmer\ProfitCalculator.jsx:672:<th className="p-3">કુલ આવક</th>
+src\pages\Farmer\ProfitCalculator.jsx:673:<th className="p-3 text-center">ક્રિયાઓ</th>
+src\pages\Farmer\ProfitCalculator.jsx:680:{sale.crop_name || `પાક ID: ${sale.crop}`}
+src\pages\Farmer\ProfitCalculator.jsx:692:title="સુધારો કરો"
+src\pages\Farmer\ProfitCalculator.jsx:699:title="કાઢી નાખો"
+src\pages\Farmer\ProfitCalculator.jsx:725:{editExpense ? 'ખર્ચ સુધારો (Edit Expense)' : 'નવો ખર્ચ ઉમેરો (Add New Expense)'}
+src\pages\Farmer\ProfitCalculator.jsx:738:<label className="text-[10px] font-bold text-dark/75 mb-1">આસક્ત પાક (Target Crop) *</label>
+src\pages\Farmer\ProfitCalculator.jsx:744:<option value="">પાક પસંદ કરો</option>
+src\pages\Farmer\ProfitCalculator.jsx:754:<label className="text-[10px] font-bold text-dark/75 mb-1">ખર્ચનો પ્રકાર (Expense Type)</label>
+src\pages\Farmer\ProfitCalculator.jsx:760:<option value="Seed">બીજ (Seed)</option>
+src\pages\Farmer\ProfitCalculator.jsx:761:<option value="Fertilizer">ખાતર (Fertilizer)</option>
+src\pages\Farmer\ProfitCalculator.jsx:762:<option value="Pesticide">જંતુનાશક (Pesticide)</option>
+src\pages\Farmer\ProfitCalculator.jsx:763:<option value="Labour">મજૂરી (Labour)</option>
+src\pages\Farmer\ProfitCalculator.jsx:764:<option value="Irrigation">પિયત (Irrigation)</option>
+src\pages\Farmer\ProfitCalculator.jsx:765:<option value="Machinery">મશીનરી (Machinery)</option>
+src\pages\Farmer\ProfitCalculator.jsx:766:<option value="Transportation">ટ્રાન્સપોર્ટ (Transportation)</option>
+src\pages\Farmer\ProfitCalculator.jsx:767:<option value="Other">અન્ય (Other)</option>
+src\pages\Farmer\ProfitCalculator.jsx:772:<label className="text-[10px] font-bold text-dark/75 mb-1">ખર્ચની રકમ (Amount) *</label>
+src\pages\Farmer\ProfitCalculator.jsx:785:<label className="text-[10px] font-bold text-dark/75 mb-1">ખર્ચ તારીખ (Expense Date) *</label>
+src\pages\Farmer\ProfitCalculator.jsx:796:<label className="text-[10px] font-bold text-dark/75 mb-1">સ્પષ્ટીકરણ / નોંધ (Description)</label>
+src\pages\Farmer\ProfitCalculator.jsx:812:રદ કરો (Cancel)
+src\pages\Farmer\ProfitCalculator.jsx:820:Save (સાચવો)
+src\pages\Farmer\ProfitCalculator.jsx:832:setSuccessMsg(isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+src\pages\Farmer\ProfitCalculator.jsx:845:<h3 className="font-extrabold text-sm">કોઈ આઇટમ કાઢી નાખવાની ખાતરી છે?</h3>
+src\pages\Farmer\ProfitCalculator.jsx:847:<p className="text-dark-light font-medium">આ ક્રિયા કાયમી છે અને પાછી લાવી શકાશે નહીં. શું તમે ખરેખર આગળ વધવા માંગો છો?</p>
+src\pages\Farmer\ProfitCalculator.jsx:856:ના (Cancel)
+src\pages\Farmer\SendMessage.jsx:33:title: "નવો પ્રશ્ન પૂછો",
+src\pages\Farmer\SendMessage.jsx:34:subtitle: "તમારા કૃષિ પ્રશ્નનું વર્ણન કરો અને નિષ્ણાતોની સલાહ મેળવવા માટે ફોટો અપલોડ કરો",
+src\pages\Farmer\SendMessage.jsx:35:expertLabel: "કૃષિ નિષ્ણાત પસંદ કરો",
+src\pages\Farmer\SendMessage.jsx:36:subjectLabel: "વિષય / ટાઇટલ",
+src\pages\Farmer\SendMessage.jsx:37:subjectPlaceholder: "દા.ત. કપાસના પાકમાં રોગચાળો, ટામેટાના પાકમાં જીવાત નિયંત્રણ...",
+src\pages\Farmer\SendMessage.jsx:38:messageLabel: "તમારી સમસ્યાનું વર્ણન",
+src\pages\Farmer\SendMessage.jsx:39:messagePlaceholder: "લક્ષણો, સમયગાળો, જમીનનો પ્રકાર અને અન્ય માહિતી વિગતવાર જણાવો...",
+src\pages\Farmer\SendMessage.jsx:40:uploadPhoto: "પાકનો ફોટો અપલોડ કરો (વૈકલ્પિક)",
+src\pages\Farmer\SendMessage.jsx:41:submitBtn: "પ્રશ્ન સબમિટ કરો",
+src\pages\Farmer\SendMessage.jsx:42:cancelBtn: "રદ કરો",
+src\pages\Farmer\SendMessage.jsx:43:loadingExperts: "નિષ્ણાતોની યાદી લોડ થઈ રહી છે...",
+src\pages\Farmer\SendMessage.jsx:44:submitting: "સબમિટ થઈ રહ્યું છે...",
+src\pages\Farmer\SendMessage.jsx:45:successMsg: "પ્રશ્ન સફળતાપૂર્વક મોકલવામાં આવ્યો છે!",
+src\pages\Farmer\SendMessage.jsx:46:errFetch: "નિષ્ણાતોની માહિતી મેળવવામાં નિષ્ફળતા.",
+src\pages\Farmer\SendMessage.jsx:47:errSubmit: "પ્રશ્ન સબમિટ કરવામાં નિષ્ફળતા. કૃપા કરીને વિગતો તપાસો.",
+src\pages\Farmer\SendMessage.jsx:48:validationExpert: "કૃપા કરીને એક નિષ્ણાત પસંદ કરો.",
+src\pages\Farmer\SendMessage.jsx:49:validationSubject: "કૃપા કરીને વિષય લખો.",
+src\pages\Farmer\SendMessage.jsx:50:validationMessage: "કૃપા કરીને સમસ્યાનું વર્ણન લખો.",
+src\pages\Farmer\SendMessage.jsx:51:back: "પાછા જાઓ"
+src\pages\Farmer\Weather.jsx:26:'clear sky': 'સ્વચ્છ આકાશ (Clear Sky)',
+src\pages\Farmer\Weather.jsx:27:'few clouds': 'થોડા વાદળો (Few Clouds)',
+src\pages\Farmer\Weather.jsx:28:'scattered clouds': 'છૂટાછવાયા વાદળો (Scattered Clouds)',
+src\pages\Farmer\Weather.jsx:29:'broken clouds': 'ખંડિત વાદળો (Broken Clouds)',
+src\pages\Farmer\Weather.jsx:30:'shower rain': 'વરસાદી ઝાપટાં (Shower Rain)',
+src\pages\Farmer\Weather.jsx:31:'rain': 'વરસાદ (Rain)',
+src\pages\Farmer\Weather.jsx:32:'light rain': 'હળવો વરસાદ (Light Rain)',
+src\pages\Farmer\Weather.jsx:33:'moderate rain': 'મધ્યમ વરસાદ (Moderate Rain)',
+src\pages\Farmer\Weather.jsx:34:'heavy intensity rain': 'ભારે વરસાદ (Heavy Rain)',
+src\pages\Farmer\Weather.jsx:35:'thunderstorm': 'ગાજવીજ સાથે વાવાઝોડું (Thunderstorm)',
+src\pages\Farmer\Weather.jsx:36:'snow': 'બરફ (Snow)',
+src\pages\Farmer\Weather.jsx:37:'mist': 'ઝાંખું ધુમ્મસ (Mist)',
+src\pages\Farmer\Weather.jsx:38:'smoke': 'ધુમાડો (Smoke)',
+src\pages\Farmer\Weather.jsx:39:'haze': 'ધુમ્મસ (Haze)',
+src\pages\Farmer\Weather.jsx:40:'dust': 'ધૂળની ડમરી (Dust)',
+src\pages\Farmer\Weather.jsx:41:'fog': 'ગાઢ ધુમ્મસ (Fog)',
+src\pages\Farmer\Weather.jsx:42:'overcast clouds': 'વાદળછાયું (Overcast Clouds)'
+src\pages\Farmer\Weather.jsx:55:title: "🌤 હવામાન વિભાગ (Live Weather)",
+src\pages\Farmer\Weather.jsx:56:subtitle: "ગુજરાત ખેતીવાડી હવામાન માહિતી અને લાઈવ અપડેટ્સ",
+src\pages\Farmer\Weather.jsx:57:searchPlaceholder: "શહેરનું નામ અંગ્રેજીમાં લખો (દા.ત. Rajkot)",
+src\pages\Farmer\Weather.jsx:58:selectCity: "અહીંથી શહેર પસંદ કરો (Quick Select):",
+src\pages\Farmer\Weather.jsx:59:searchBtn: "શોધો",
+src\pages\Farmer\Weather.jsx:60:refreshBtn: "તાજું કરો (Refresh)",
+src\pages\Farmer\Weather.jsx:61:refreshing: "તાજું થઈ રહ્યું છે...",
+src\pages\Farmer\Weather.jsx:62:lastUpdated: "છેલ્લે અપડેટ",
+src\pages\Farmer\Weather.jsx:63:loading: "લાઈવ હવામાન વિગતો મેળવી રહ્યા છીએ...",
+src\pages\Farmer\Weather.jsx:64:weatherTitle: "વર્તમાન હવામાન વિગતો",
+src\pages\Farmer\Weather.jsx:67:feelsLike: "શારીરિક અનુભવ (Feels Like)",
+src\pages\Farmer\Weather.jsx:68:humidity: "ભેજ (Humidity)",
+src\pages\Farmer\Weather.jsx:69:pressure: "હવાનું દબાણ (Pressure)",
+src\pages\Farmer\Weather.jsx:70:windSpeed: "પવનની ગતિ (Wind Speed)",
+src\pages\Farmer\Weather.jsx:71:windDirection: "પવનની દિશા (Wind Dir)",
+src\pages\Farmer\Weather.jsx:72:visibility: "દ્રશ્યતા (Visibility)",
+src\pages\Farmer\Weather.jsx:73:cloudCover: "વાદળાંનું પ્રમાણ (Clouds)",
+src\pages\Farmer\Weather.jsx:74:sunrise: "સૂર્યોદય (Sunrise)",
+src\pages\Farmer\Weather.jsx:75:sunset: "સૂર્યાસ્ત (Sunset)",
+src\pages\Farmer\Weather.jsx:76:coords: "અક્ષાંશ / રેખાંશ (Coord)",
+src\pages\Farmer\Weather.jsx:77:country: "દેશ (Country)",
+src\pages\Farmer\Weather.jsx:78:timestamp: "નોંધાયેલ સમય (Timestamp)",
+src\pages\Farmer\Weather.jsx:81:errorTitle: "હવામાન ચેતવણી (Weather Alert)",
+src\pages\Farmer\Weather.jsx:82:errorInvalidCity: "અમાન્ય શહેર! શહેર મળ્યું નથી, કૃપા કરીને ઇંગ્લિશ સ્પેલિંગ તપાસો. (Invalid City)",
+src\pages\Farmer\Weather.jsx:83:errorApiOffline: "હવામાન સર્વિસ પ્રોવાઇડર બંધ છે અથવા API ચાવી પૂર્વનિર્ધારિત નથી. (API Offline)",
+src\pages\Farmer\Weather.jsx:84:errorBackendOffline: "FarmVerse વેધર સર્વર કનેક્ટીવટી ડાઉન છે. (Backend Offline)",
+src\pages\Farmer\Weather.jsx:85:errorNetwork: "નેટવങ്ക് ભૂલ! કૃપા કરીને ઇન્ટરનેટ જોડાણ તપાસો. (Network Error)",
+src\pages\Farmer\Weather.jsx:88:errorNoCoordsGuj: "આ ફાર્મ માટે Latitude અને Longitude ઉપલબ્ધ નથી.\nતેથી હવામાન બતાવી શકાતું નથી.\nકૃપા કરીને Farm Edit કરીને Coordinates ઉમેરો.",
+src\pages\Farmer\Weather.jsx:93:insightsTitle: "સ્માર્ટ હવામાન સલાહ (Smart Insights)",
+src\pages\Farmer\Weather.jsx:94:insightRain: "🌧 24 કલાકમાં વરસાદની શક્યતા છે. આજે પિયત (સિંચાઈ) ટાળો.",
+src\pages\Farmer\Weather.jsx:95:insightTemp: "🔥 વધુ તાપમાન. સવારે 8 પહેલાં અથવા સાંજે 6 પછી પિયત કરો.",
+src\pages\Farmer\Weather.jsx:96:insightWind: "💨 ભારે પવન. જંતુનાશક દવાનો છંટકાવ ટાળો.",
+src\pages\Farmer\Weather.jsx:97:insightHumidity: "⚠ વધુ ભેજ. ફૂગજન્ય રોગો માટે પાકનું નિરીક્ષણ કરો.",
+src\pages\Farmer\Weather.jsx:98:insightNormal: "✅ હવામાનની સ્થિતિ સામાન્ય ખેતીકામ માટે અનુકૂળ છે.",
+src\pages\Farmer\Weather.jsx:101:irrigationTitle: "સ્માર્ટ સિંચાઈ સલાહકાર (Irrigation Advisor)",
+src\pages\Farmer\Weather.jsx:102:irrigStatusReqFalse: "❌ સિંચાઈની જરૂર નથી",
+src\pages\Farmer\Weather.jsx:103:irrigReasonRain: "ભારે વરસાદની અપેક્ષા છે.",
+src\pages\Farmer\Weather.jsx:104:irrigStatusReqTrue: "✅ સિંચાઈની ભલામણ છે",
+src\pages\Farmer\Weather.jsx:105:irrigReasonTemp: "હાઈ ટેમ્પરેચર અને સૂકું હવામાન.",
+src\pages\Farmer\Weather.jsx:106:irrigTimeTemp: "સવારે 6 - 8 અથવા સાંજે 6 - 8",
+src\pages\Farmer\Weather.jsx:107:irrigAdviceTemp: "બાષ્પીભવન અટકાવવા ઠંડા કલાકોમાં પિયત કરો.",
+src\pages\Farmer\Weather.jsx:108:irrigStatusDelay: "⏳ સિંચાઈ મોડી કરો",
+src\pages\Farmer\Weather.jsx:109:irrigReasonHumid: "હવામાં વધુ ભેજ છે અને વરસાદની શક્યતા છે.",
+src\pages\Farmer\Weather.jsx:110:irrigStatusWind: "⚠ પવનની ચેતવણી",
+src\pages\Farmer\Weather.jsx:111:irrigReasonWind: "હવામાનમાં ભારે પવનની ગતિ છે.",
+src\pages\Farmer\Weather.jsx:112:irrigAdviceWind: "પાણી ઉડી ન જાય તે માટે ફુવારા પદ્ધતિ (સ્પ્રિંકલર) ટાળો.",
+src\pages\Farmer\Weather.jsx:113:irrigStatusNormal: "✅ સામાન્ય સ્થિતિ",
+src\pages\Farmer\Weather.jsx:114:irrigReasonNormal: "હવામાન સામાન્ય સિંચાઈ માટે અનુકૂળ છે.",
+src\pages\Farmer\Weather.jsx:115:irrigAdviceNormal: "તમારા નિયમિત પિયત શેડ્યૂલનું પાલન છો.",
+src\pages\Farmer\Weather.jsx:116:irrigLabelStatus: "સ્થિતિ",
+src\pages\Farmer\Weather.jsx:117:irrigLabelReason: "કારણ",
+src\pages\Farmer\Weather.jsx:118:irrigLabelTime: "પિયતનો સમય",
+src\pages\Farmer\Weather.jsx:119:irrigLabelAdvice: "સલાહ",
+src\pages\Farmer\Weather.jsx:122:plannerTitle: "સ્માર્ટ સાપ્તાહિક ફાર્મ પ્લાનર",
+src\pages\Farmer\Weather.jsx:123:plannerSubtitle: "આગામી 7 દિવસનું ખેતી આયોજન",
+src\pages\Farmer\Weather.jsx:124:planActIrrig: "સિંચાઈ શિડ્યુલ",
+src\pages\Farmer\Weather.jsx:125:planActFert: "ખાતર વાવણી",
+src\pages\Farmer\Weather.jsx:126:planActSpray: "દવા છંટકાવ",
+src\pages\Farmer\Weather.jsx:127:planActHarvest: "કાપણી (Harvest)",
+src\pages\Farmer\Weather.jsx:128:planActSowing: "વાવેતર (Sowing)",
+src\pages\Farmer\Weather.jsx:130:actIrrigSkip: "સિંચાઈ ટાળો",
+src\pages\Farmer\Weather.jsx:131:actIrrigRec: "સિંચાઈ કરો",
+src\pages\Farmer\Weather.jsx:132:actFertSkip: "ખાતર ટાળો",
+src\pages\Farmer\Weather.jsx:133:actFertRec: "મધ્યમ",
+src\pages\Farmer\Weather.jsx:134:actSpraySkip: "છંટકાવ ટાળો",
+src\pages\Farmer\Weather.jsx:135:actSprayRec: "યોગ્ય સમય",
+src\pages\Farmer\Weather.jsx:136:actHarvSkip: "કાપણી મોડી કરો",
+src\pages\Farmer\Weather.jsx:137:actHarvRec: "કાપણી શરૂ કરો",
+src\pages\Farmer\Weather.jsx:138:actSowGood: "યોગ્ય વાતાવરણ",
+src\pages\Farmer\Weather.jsx:139:actSowBad: "વાવેતર ટાળો",
+src\pages\Farmer\Weather.jsx:141:planOverallScore: "એકંદર ફાર્મિંગ સ્કોર",
+src\pages\Farmer\Weather.jsx:142:planAISummary: "AI ફાર્મ સારાંશ",
+src\pages\Farmer\Weather.jsx:143:planSelectText: "વિગતવાર પ્લાનર જોવા માટે કોઈ એક દિવસ ઉપર ક્લિક કરો.",
+src\pages\Farmer\Weather.jsx:144:day: "દિવસ"
+src\pages\Farmer\Weather.jsx:180:errorNoCoordsGuj: "આ ફાર્મ માટે Latitude અને Longitude ઉપલબ્ધ નથી.\nતેથી હવામાન બતાવી શકાતું નથી.\nકૃપા કરીને Farm Edit કરીને Coordinates ઉમેરો.",
+src\pages\Farmer\Weather.jsx:241:{ name: 'Rajkot', labelGuj: 'રાજકોટ (Rajkot)', labelEng: 'Rajkot' },
+src\pages\Farmer\Weather.jsx:242:{ name: 'Ahmedabad', labelGuj: 'અમદાવાદ (Ahmedabad)', labelEng: 'Ahmedabad' },
+src\pages\Farmer\Weather.jsx:243:{ name: 'Surat', labelGuj: 'સુરત (Surat)', labelEng: 'Surat' },
+src\pages\Farmer\Weather.jsx:244:{ name: 'Vadodara', labelGuj: 'વડોદરા (Vadodara)', labelEng: 'Vadodara' },
+src\pages\Farmer\Weather.jsx:245:{ name: 'Bhavnagar', labelGuj: 'ભાવનગર (Bhavnagar)', labelEng: 'Bhavnagar' },
+src\pages\Farmer\Weather.jsx:246:{ name: 'Junagadh', labelGuj: 'જૂનાગઢ (Junagadh)', labelEng: 'Junagadh' },
+src\pages\Farmer\Weather.jsx:247:{ name: 'Jamnagar', labelGuj: 'જામનગર (Jamnagar)', labelEng: 'Jamnagar' },
+src\pages\Farmer\Weather.jsx:248:{ name: 'Morbi', labelGuj: 'મોરબી (Morbi)', labelEng: 'Morbi' },
+src\pages\Farmer\Weather.jsx:249:{ name: 'Amreli', labelGuj: 'અમરેલી (Amreli)', labelEng: 'Amreli' },
+src\pages\Farmer\Weather.jsx:250:{ name: 'Gandhinagar', labelGuj: 'ગાંધીનગર (Gandhinagar)', labelEng: 'Gandhinagar' }
+src\pages\Farmer\Weather.jsx:335:const daysGuj = ['રવિવાર', 'સોમવાર', 'મંગળવાર', 'બુધવાર', 'ગુરુવાર', 'શુક્રવાર', 'શનિવાર'];
+src\pages\Farmer\Weather.jsx:351:dayNameGuj: isToday ? 'આજે' : daysGuj[dayDate.getDay()],
+src\pages\Farmer\Weather.jsx:464:? `${speed.toFixed(1)} મી/સે (${kmh.toFixed(1)} કિમી/કલાક)`
+src\pages\Farmer\Weather.jsx:471:const directionsGuj = ['ઉત્તર (N)', 'ઉત્તર-પૂર્વ (NE)', 'પૂર્વ (E)', 'દક્ષિણ-પૂર્વ (SE)', 'દક્ષિણ (S)', 'દક્ષિણ-પશ્ચિમ (SW)', 'પશ્ચિમ (W)', 'ઉત્તર-પશ્ચિમ (NW)']
+src\pages\Farmer\Weather.jsx:480:? `${km.toFixed(1)} કિલોમીટર (${meters} મીટર)`
+src\pages\Farmer\Weather.jsx:628:{lang === 'GUJ' ? 'લોકેશન મોડ પસંદ કરો:' : 'Select Location Mode:'}
+src\pages\Farmer\Weather.jsx:637:<span className="hidden sm:inline">{lang === 'GUJ' ? 'મારું ફાર્મ' : 'Use My Farm'}</span>
+src\pages\Farmer\Weather.jsx:645:<span className="hidden sm:inline">{lang === 'GUJ' ? 'શહેર પસંદ કરો' : 'Select City'}</span>
+src\pages\Farmer\Weather.jsx:653:<span className="hidden sm:inline">{lang === 'GUJ' ? 'શોધો' : 'Search City'}</span>
+src\pages\Farmer\Weather.jsx:662:{lang === 'GUJ' ? 'તમારું નોંધાયેલ ફાર્મ પસંદ કરો:' : 'Select your registered farm:'}
+src\pages\Farmer\Weather.jsx:727:{lang === 'GUJ' ? 'શહેર જાતે શોધો (Search Manually):' : 'Search Custom City:'}
+src\pages\Farmer\Weather.jsx:780:{lang === 'GUJ' ? 'જીવંત હવામાન વિગતો' : 'Live Weather Status'}
+src\pages\Farmer\Weather.jsx:966:if (d?.score >= 80) aiSummary = lang === 'GUJ' ? "વાતાવરણ ખેતીલાયક ઉત્તમ છે. વાવેતર અને કાપણી માટે યોગ્ય સમય માનવામાં આવે છે." : "Conditions are highly optimal for major farming activities. Ideal for scheduled operations.";
+src\pages\Farmer\Weather.jsx:967:else if (d?.score >= 60) aiSummary = lang === 'GUJ' ? "મોટાભાગના કાર્યો માટે અનુકૂળ. પરંતુ પવન કે ભેજ વધવાની સંભાવના હોય તો દવા છંટકાવ ટાળવો." : "Favorable conditions. However, exercise standard caution if spraying or applying fertilizers.";
+src\pages\Farmer\Weather.jsx:968:else if (d?.score >= 40) aiSummary = lang === 'GUJ' ? "હવામાન મધ્યમ છે. માત્ર જરૂરી કાર્યો જ પૂરા કરો અને વરસાદ કે પવન અંગે ધ્યાન રાખો." : "Moderate weather. Prioritize essential activities and strictly monitor wind and rain forecasts.";
+src\pages\Farmer\Weather.jsx:969:else aiSummary = lang === 'GUJ' ? "હવામાન ખેતી માટે પ્રતિકૂળ હોવાથી બહારના ખેતીકામ બંધ રાખો. પાકને નુકસાન ન થાય તેની તકેદારી લો." : "Severe weather conditions. Avoid sensitive farming activities like irrigation, spraying, and harvesting.";
+src\pages\Farmer\Weather.jsx:971:let badgeLabelGuj = 'નબળું (Poor)';
+src\pages\Farmer\Weather.jsx:973:if (d?.score >= 80) { strokeColor = '#34d399'; badgeLabelGuj = 'શ્રેષ્ઠ (Excellent)'; }
+src\pages\Farmer\Weather.jsx:974:else if (d?.score >= 60) { strokeColor = '#60a5fa'; badgeLabelGuj = 'સારું (Good)'; }
+src\pages\Farmer\Weather.jsx:975:else if (d?.score >= 40) { strokeColor = '#fcd34d'; badgeLabelGuj = 'મધ્યમ (Moderate)'; }
+src\pages\Farmer\Weather.jsx:1055:{lang === 'GUJ' ? 'આગાહીનો ડેટા ઉપલબ્ધ નથી' : 'No forecast data available'}
+src\pages\Farmer\Weather.jsx:1132:{lang === 'GUJ' ? 'કોઈ હવામાન ડેટા ઉપલબ્ધ નથીં.' : 'No weather information loaded.'}
+src\pages\Farmer\Weather.jsx:1136:? 'શહેરોની યાદીમાંથી કોઈ એક શહેર પસંદ કરો અથવા કસ્ટમ સર્ચ દ્વારા હવામાન મેળવો.'

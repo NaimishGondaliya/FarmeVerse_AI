@@ -190,7 +190,7 @@ export const ExpertConsultation = () => {
                         >
                             {lang === 'GUJ' ? 'મારા સવાલો (My Queries)' : 'My Queries'}
                         </Link>
-                        
+
                     </div>
                 </div>
             </div>
@@ -318,7 +318,7 @@ export const ExpertConsultation = () => {
                                 {/* Rating Badge on TOP Left */}
                                 <div className="absolute top-3 left-3 bg-amber-500/90 text-white font-bold py-1 px-2.5 rounded-full text-xs flex items-center gap-1.5 shadow-xs z-10">
                                     <FiStar className="fill-white" size={12} />
-                                    <span>{expert.rating ? parseFloat(expert.rating).toFixed(1) : '5.0'}</span>
+                                    <span>{expert.rating && parseFloat(expert.rating) > 0 ? parseFloat(expert.rating).toFixed(1) : '—'}</span>
                                 </div>
 
                                 <div className="p-5 flex-1">
@@ -382,26 +382,10 @@ export const ExpertConsultation = () => {
                                 </div>
 
                                 {/* Expert Card Footer Actions */}
-                                <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 grid grid-cols-3 gap-2">
-                                    <a
-                                        href={`tel:${expert.phone}`}
-                                        className="bg-white hover:bg-emerald-50 border border-slate-200 text-slate-700 hover:text-emerald-700 py-2 sm:py-2.5 px-1 rounded-md text-xs font-bold text-center flex items-center justify-center gap-1 shadow-xs transition duration-150"
-                                        title={t.callBtn}
-                                    >
-                                        <FiPhone size={13} className="text-emerald-600" />
-                                        <span className="hidden sm:inline">{t.callBtn}</span>
-                                    </a>
-                                    <a
-                                        href={`mailto:${expert.email}`}
-                                        className="bg-white hover:bg-emerald-50 border border-slate-200 text-slate-700 hover:text-emerald-700 py-2 sm:py-2.5 px-1 rounded-md text-xs font-bold text-center flex items-center justify-center gap-1 shadow-xs transition duration-150"
-                                        title={t.emailBtn}
-                                    >
-                                        <FiMail size={13} className="text-emerald-600" />
-                                        <span className="hidden sm:inline">{t.emailBtn}</span>
-                                    </a>
+                                <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 flex justify-center">
                                     <button
                                         onClick={() => setSelectedExpert(expert)}
-                                        className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-xs font-bold select-none cursor-pointer text-center flex items-center justify-center gap-1 transition duration-150 py-2"
+                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-xs font-bold select-none cursor-pointer text-center flex items-center justify-center gap-1 transition duration-150 py-2.5"
                                     >
                                         <span className="truncate">{t.viewDetails}</span>
                                     </button>
@@ -427,7 +411,7 @@ export const ExpertConsultation = () => {
                         <div className="p-6">
                             {/* Modal Header Card */}
                             <div className="flex items-center gap-4 pb-5 border-b border-slate-100 mb-5 mr-8">
-                                <div className="w-18 h-18 bg-emerald-50 text-emerald-800 font-extrabold text-2xl flex items-center justify-center rounded-full flex-shrink-0 border border-emerald-100 overflow-hidden shadow-inner">
+                                <div className="w-20 h-20 bg-emerald-50 text-emerald-800 font-extrabold text-2xl flex items-center justify-center rounded-full flex-shrink-0 border border-emerald-100 overflow-hidden shadow-inner">
                                     {selectedExpert.photo ? (
                                         <img
                                             src={selectedExpert.photo}
@@ -451,7 +435,7 @@ export const ExpertConsultation = () => {
                                     </h2>
                                     <div className="flex items-center gap-1 mt-1 text-amber-500 font-bold text-sm">
                                         <FiStar className="fill-amber-500" size={14} />
-                                        <span>{selectedExpert.rating ? parseFloat(selectedExpert.rating).toFixed(1) : '5.0'}</span>
+                                        <span>{selectedExpert.rating && parseFloat(selectedExpert.rating) > 0 ? parseFloat(selectedExpert.rating).toFixed(1) : '—'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -518,6 +502,32 @@ export const ExpertConsultation = () => {
                                     </div>
                                 </div>
 
+                                {/* Contact Details */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="bg-slate-50 p-3 rounded-lg flex items-start gap-3">
+                                        <FiPhone className="text-slate-400 mt-0.5 flex-shrink-0" size={16} />
+                                        <div className="flex-1 overflow-hidden">
+                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                                                {lang === 'GUJ' ? 'મોબાઈલ નંબર' : 'Contact Number'}
+                                            </div>
+                                            <div className="text-sm text-slate-700 font-bold">
+                                                {selectedExpert.phone}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded-lg flex items-start gap-3">
+                                        <FiMail className="text-slate-400 mt-0.5 flex-shrink-0" size={16} />
+                                        <div className="flex-1 overflow-hidden">
+                                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                                                {lang === 'GUJ' ? 'ઈમેલ એડ્રેસ' : 'Email Address'}
+                                            </div>
+                                            <div className="text-sm text-slate-700 font-bold truncate" title={selectedExpert.email}>
+                                                {selectedExpert.email}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {/* Google Maps link connection */}
                                 {selectedExpert.google_map_link && (
                                     <a
@@ -541,24 +551,6 @@ export const ExpertConsultation = () => {
                                     <FiMessageSquare size={16} />
                                     <span>{lang === 'GUJ' ? 'પરામર્શ પૂછો (Ask Consultation)' : 'Ask Consultation / Chat'}</span>
                                 </Link>
-                            </div>
-
-                            {/* Actions footer buttons */}
-                            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-                                <a
-                                    href={`tel:${selectedExpert.phone}`}
-                                    className="bg-slate-100 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 text-slate-700 hover:text-emerald-700 font-bold text-sm py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-xs transition duration-150"
-                                >
-                                    <FiPhone className="text-emerald-600" size={16} />
-                                    <span>{t.callBtn}</span>
-                                </a>
-                                <a
-                                    href={`mailto:${selectedExpert.email}`}
-                                    className="bg-slate-100 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 text-slate-700 hover:text-emerald-700 font-bold text-sm py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-xs transition duration-150"
-                                >
-                                    <FiMail className="text-emerald-600" size={16} />
-                                    <span>{t.emailBtn}</span>
-                                </a>
                             </div>
                         </div>
                     </div>

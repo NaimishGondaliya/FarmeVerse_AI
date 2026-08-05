@@ -1,66 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { FiArrowLeft, FiSend, FiCheckCircle, FiLock } from 'react-icons/fi'
+import { FiArrowLeft, FiSend, FiCheckCircle, FiLock, FiStar, FiX } from 'react-icons/fi'
 import { consultationAPI } from '../../services/api'
 import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
+import { formatGujaratiDateTime } from '../../utils/gujaratiFormat'
+import Toast from '../../components/common/Toast'
 
 const BACKEND_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api').replace(/\/api\/?$/, '')
-
-const translations = {
-    ENG: {
-        back: "Back",
-        status: "Status",
-        pending: "Pending",
-        replied: "Replied",
-        closed: "Closed",
-        closeBtn: "Close Consultation",
-        sendBtn: "Send",
-        typePlaceholder: "Type your message here...",
-        initialMessage: "Initial Query Description",
-        noReplies: "No responses yet.",
-        errorTitle: "Error loading conversation",
-        errorDesc: "Ensure you are authorized and the server is online.",
-        closedMessage: "This query thread is closed.",
-        replyError: "Failed to send message.",
-        validationEmpty: "Message content cannot be blank.",
-        farmerLabel: "Farmer",
-        expertLabel: "Expert",
-    },
-    GUJ: {
-        back: "પાછા જાઓ",
-        status: "સ્થિતિ",
-        pending: "બાકી છે",
-        replied: "જવાબ આપેલ છે",
-        closed: "બંધ કરેલ છે",
-        closeBtn: "પ્રશ્ન પૂર્ણ કરો",
-        sendBtn: "મોકલો",
-        typePlaceholder: "તમારો સંદેશ અહીં લખો...",
-        initialMessage: "પ્રારંભિક વર્ણન",
-        noReplies: "હજી સુધી કોઈ પ્રતિક્રિયા નથી.",
-        errorTitle: "વાતચીત લોડ કરવામાં ભૂલ",
-        errorDesc: "ચકાસો કે તમે લૉગ ઇન છો અને સર્વર ચાલુ છે.",
-        closedMessage: "આ ચર્ચા બંધ થઈ ગઈ છે.",
-        replyError: "સંદેશ મોકલવામાં નિષ્ફળતા.",
-        validationEmpty: "ખાલી સંદેશ મોકલી શકાતો નથી.",
-        farmerLabel: "ખેડૂત",
-        expertLabel: "નિષ્ણાત",
-    }
-}
 
 export const ConversationView = () => {
     const { id } = useParams()
     const { language } = useLanguage()
-    const lang = language === 'en' ? 'ENG' : 'GUJ'
+    const { t: tRaw } = useTranslation()
+    const lang = language === 'en' ? 'en' : 'gu'
+    const te = (key) => tRaw(`expert.${key}`)
     const navigate = useNavigate()
     const [consultation, setConsultation] = useState(null)
     const [replyText, setReplyText] = useState('')
     const [isLoading, setIsLoading] = useState(true)
     const [isSending, setIsSending] = useState(false)
     const [error, setError] = useState('')
+    const [toast, setToast] = useState(null)
 
-    const role = localStorage.getItem('role') || 'farmer' // 'farmer' or 'expert'
+    const [showRatingModal, setShowRatingModal] = useState(false)
+    const [rating, setRating] = useState(0)
+    const [reviewText, setReviewText] = useState('')
+    const [isSubmittingRating, setIsSubmittingRating] = useState(false)
+    const [hoverRating, setHoverRating] = useState(0)
+
+    const role = (localStorage.getItem('role') || 'farmer').toLowerCase() // 'farmer' or 'expert'
     const messagesEndRef = useRef(null)
-    const t = translations[lang]
 
     const fetchDetails = async (showLoading = false) => {
         if (showLoading) setIsLoading(true)
@@ -70,7 +40,7 @@ export const ConversationView = () => {
             setError('')
         } catch (err) {
             console.error(err)
-            setError(t.errorDesc)
+            setError(te('errorConvDesc'))
         } finally {
             if (showLoading) setIsLoading(false)
         }
@@ -96,7 +66,7 @@ export const ConversationView = () => {
         e.preventDefault()
         const text = replyText.trim()
         if (!text) {
-            alert(t.validationEmpty)
+            alert(te('validationEmpty'))
             return
         }
         setIsSending(true)
@@ -105,27 +75,52 @@ export const ConversationView = () => {
             setReplyText('')
             fetchDetails(false)
         } catch (err) {
-            alert(t.replyError)
+            alert(te('replyError'))
         } finally {
             setIsSending(false)
         }
     }
 
     const handleCloseThread = async () => {
-        if (window.confirm("Are you sure you want to close this consultation?")) {
+        if (window.confirm(te('confirmClose'))) {
             try {
                 await consultationAPI.close(id)
                 fetchDetails(false)
+                if (role === 'farmer') {
+                    setShowRatingModal(true)
+                }
             } catch (err) {
-                alert("Failed to close consultation.")
+                alert(te('closeError'))
             }
+        }
+    }
+
+    const handleRatingSubmit = async (e) => {
+        e.preventDefault()
+        if (rating === 0) {
+            alert(lang === 'gu' ? 'કૃપા કરીને રેટિંગ આપો' : 'Please provide a rating (1-5 stars).')
+            return
+        }
+        setIsSubmittingRating(true)
+        try {
+            await consultationAPI.submitRating(id, { rating, review: reviewText })
+            setShowRatingModal(false)
+            setRating(0)
+            setReviewText('')
+            fetchDetails(false)
+            setToast({ message: lang === 'gu' ? 'રેટિંગ સફળતાપૂર્વક સબમિટ થયું!' : 'Rating submitted successfully!', type: 'success' })
+            setTimeout(() => setToast(null), 3000)
+        } catch (err) {
+            alert(lang === 'gu' ? 'રેટિંગ સબમિટ કરવામાં નિષ્ફળતા' : 'Failed to submit rating.')
+        } finally {
+            setIsSubmittingRating(false)
         }
     }
 
     if (isLoading) {
         return (
             <div className="p-8 max-w-4xl mx-auto flex items-center justify-center min-h-[50vh]">
-                <div className="text-center font-semibold text-primary">{t.typePlaceholder} Loading...</div>
+                <div className="text-center font-semibold text-primary">{te('loadingConv')}</div>
             </div>
         )
     }
@@ -134,13 +129,13 @@ export const ConversationView = () => {
         return (
             <div className="p-8 max-w-4xl mx-auto">
                 <div className="bg-red-50 border border-red-200 text-red-700 p-6 rounded-lg text-center">
-                    <h3 className="font-bold text-lg">{t.errorTitle}</h3>
-                    <p className="mt-2">{error || t.errorDesc}</p>
+                    <h3 className="font-bold text-lg">{te('errorConv')}</h3>
+                    <p className="mt-2">{error || te('errorConvDesc')}</p>
                     <button
                         onClick={() => navigate(-1)}
                         className="mt-4 bg-primary text-white px-4 py-2 rounded font-bold hover:bg-primary-dark transition"
                     >
-                        {t.back}
+                        {te('back')}
                     </button>
                 </div>
             </div>
@@ -149,8 +144,16 @@ export const ConversationView = () => {
 
     const isClosed = consultation.status === 'Closed'
 
+    const statusLabel = (status) => {
+        if (status === 'Pending') return te('convPending')
+        if (status === 'Replied') return te('convReplied')
+        return te('convClosed')
+    }
+
     return (
-        <div className="max-w-4xl mx-auto p-4 md:p-6 min-h-[85vh] flex flex-col">
+        <div className="max-w-4xl mx-auto p-4 md:p-6 min-h-[85vh] flex flex-col relative">
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+
             {/* Header */}
             <div className="bg-white rounded-t-2xl shadow-md p-4 md:p-6 border-b border-light flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -163,24 +166,32 @@ export const ConversationView = () => {
                     <div>
                         <h2 className="text-lg md:text-xl font-extrabold text-slate-800">{consultation.subject}</h2>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {role === 'expert' ? `${t.farmerLabel}: ${consultation.farmer_name}` : `${t.expertLabel}: ${consultation.expert_name} (${consultation.expert_specialization})`}
+                            {role === 'expert'
+                                ? `${te('farmerLabel')}: ${consultation.farmer_name}`
+                                : `${te('expertLabel')}: ${consultation.expert_name} (${consultation.expert_specialization})`}
                         </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-3 self-end md:self-auto">
-                    {/* Language Switch */}
-
-
                     {/* Status Badge */}
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${consultation.status === 'Pending' ? 'bg-amber-100 text-amber-800' :
                         consultation.status === 'Replied' ? 'bg-emerald-100 text-emerald-800' :
                             'bg-slate-100 text-slate-800'
                         }`}>
-                        {consultation.status === 'Pending' ? t.pending :
-                            consultation.status === 'Replied' ? t.replied :
-                                t.closed}
+                        {statusLabel(consultation.status)}
                     </span>
+
+                    {/* Rate Expert Button if closed & unrated */}
+                    {(isClosed && role === 'farmer' && !consultation.has_rating) && (
+                        <button
+                            onClick={() => setShowRatingModal(true)}
+                            className="bg-amber-50 hover:bg-amber-100 text-amber-700 px-3 py-1 rounded-md text-xs font-bold transition flex items-center gap-1.5"
+                        >
+                            <FiStar size={14} className="fill-amber-500" />
+                            <span>{lang === 'gu' ? 'રેટિંગ આપો' : 'Rate Expert'}</span>
+                        </button>
+                    )}
 
                     {/* Close action */}
                     {!isClosed && (
@@ -189,7 +200,7 @@ export const ConversationView = () => {
                             className="bg-red-50 hover:bg-red-100 text-red-700 px-3 py-1 rounded-md text-xs font-bold transition flex items-center gap-1.5"
                         >
                             <FiCheckCircle size={14} />
-                            <span>{t.closeBtn}</span>
+                            <span>{te('closeBtn')}</span>
                         </button>
                     )}
                 </div>
@@ -201,7 +212,7 @@ export const ConversationView = () => {
                 <div className="flex items-start gap-2.5 max-w-[85%] self-start">
                     <div className="bg-white rounded-2xl rounded-tl-none p-4 shadow-sm border border-slate-100">
                         <span className="text-[10px] text-slate-400 font-extrabold uppercase block mb-1">
-                            {t.farmerLabel} - {consultation.farmer_name}
+                            {te('farmerLabel')} - {consultation.farmer_name}
                         </span>
                         <p className="text-sm font-semibold text-slate-700">{consultation.message}</p>
 
@@ -216,7 +227,7 @@ export const ConversationView = () => {
                             </div>
                         )}
                         <span className="text-[9px] text-slate-400 block text-right mt-1.5">
-                            {new Date(consultation.created_date).toLocaleString()}
+                            {formatGujaratiDateTime(consultation.created_date, lang)}
                         </span>
                     </div>
                 </div>
@@ -238,12 +249,12 @@ export const ConversationView = () => {
                                 }`}>
                                 <span className={`text-[10px] font-extrabold uppercase block mb-1 ${isCurrentUser ? 'text-emerald-100' : 'text-slate-400'
                                     }`}>
-                                    {reply.sender === 'Expert' ? t.expertLabel : t.farmerLabel}
+                                    {reply.sender === 'Expert' ? te('expertLabel') : te('farmerLabel')}
                                 </span>
                                 <p className="text-sm">{reply.message}</p>
                                 <span className={`text-[9px] block text-right mt-1.5 ${isCurrentUser ? 'text-emerald-100' : 'text-slate-400'
                                     }`}>
-                                    {new Date(reply.created_date).toLocaleString()}
+                                    {formatGujaratiDateTime(reply.created_date, lang)}
                                 </span>
                             </div>
                         </div>
@@ -257,7 +268,7 @@ export const ConversationView = () => {
                 {isClosed ? (
                     <div className="flex items-center justify-center gap-2 text-slate-400 p-2 font-medium">
                         <FiLock size={16} />
-                        <span>{t.closedMessage}</span>
+                        <span>{te('closedMessage')}</span>
                     </div>
                 ) : (
                     <form onSubmit={handleSend} className="flex gap-2">
@@ -265,7 +276,7 @@ export const ConversationView = () => {
                             type="text"
                             value={replyText}
                             onChange={(e) => setReplyText(e.target.value)}
-                            placeholder={t.typePlaceholder}
+                            placeholder={te('typePlaceholder')}
                             className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white text-slate-800 font-medium"
                             disabled={isSending}
                         />
@@ -275,11 +286,85 @@ export const ConversationView = () => {
                             className="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-1.5 transition disabled:opacity-50"
                         >
                             <FiSend size={15} />
-                            <span className="hidden sm:inline">{t.sendBtn}</span>
+                            <span className="hidden sm:inline">{te('sendBtn')}</span>
                         </button>
                     </form>
                 )}
             </div>
+
+            {/* Rating Modal */}
+            {showRatingModal && (
+                <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden relative">
+                        <button
+                            onClick={() => setShowRatingModal(false)}
+                            className="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 p-2 rounded-full transition"
+                        >
+                            <FiX size={18} />
+                        </button>
+                        <div className="p-6">
+                            <h3 className="text-xl font-extrabold text-slate-800 mb-2">
+                                {lang === 'gu' ? 'નિષ્ણાતને રેટિંગ આપો' : 'Rate this Expert'}
+                            </h3>
+                            <p className="text-sm text-slate-500 mb-6">
+                                {lang === 'gu' ? 'તમારો અનુભવ કેવો રહ્યો?' : 'How was your consultation experience?'}
+                            </p>
+                            <form onSubmit={handleRatingSubmit} className="space-y-4">
+                                <div className="flex items-center justify-center gap-2 mb-4">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <button
+                                            key={star}
+                                            type="button"
+                                            onClick={() => setRating(star)}
+                                            onMouseEnter={() => setHoverRating(star)}
+                                            onMouseLeave={() => setHoverRating(0)}
+                                            className="focus:outline-none p-1 transition-transform hover:scale-110 cursor-pointer"
+                                        >
+                                            <FiStar
+                                                size={32}
+                                                className={`transition-colors duration-200 ${star <= (hoverRating || rating)
+                                                    ? 'fill-amber-400 text-amber-400'
+                                                    : 'text-slate-300'
+                                                    }`}
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                                        {lang === 'gu' ? 'તમારો રિવ્યુ (વૈકલ્પિક)' : 'Your Review (Optional)'}
+                                    </label>
+                                    <textarea
+                                        value={reviewText}
+                                        onChange={(e) => setReviewText(e.target.value)}
+                                        rows="3"
+                                        placeholder={lang === 'gu' ? 'અહી લખો...' : 'Write your feedback here...'}
+                                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white text-slate-800 font-medium whitespace-pre-wrap resize-none"
+                                    />
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowRatingModal(false)}
+                                        className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-sm font-bold transition cursor-pointer"
+                                    >
+                                        {lang === 'gu' ? 'રદ કરો' : 'Cancel'}
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmittingRating}
+                                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition disabled:opacity-60 cursor-pointer"
+                                    >
+                                        {isSubmittingRating ? (lang === 'gu' ? 'સબમિટ થાય છે...' : 'Submitting...') : (lang === 'gu' ? 'સબમિટ કરો' : 'Submit Rating')}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
+
+export default ConversationView

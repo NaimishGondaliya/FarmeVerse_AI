@@ -19,8 +19,39 @@ import {
 import { BiRupee } from 'react-icons/bi'
 import { cropAPI, farmAPI, salesAPI } from '../../services/api'
 import { SalesModal } from '../../components/common/SalesModal'
+import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
 
 export const CropRecords = () => {
+    const { formatCurrency, language } = useLanguage()
+    const { t } = useTranslation()
+
+    const lang = (guStr, enStr) => language === 'gu' ? guStr : enStr;
+
+    const toGuDigits = (str, language) => {
+        if (language !== 'gu' || !str) return String(str);
+        const gu = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+        return String(str).replace(/[0-9]/g, d => gu[d]);
+    };
+
+    const formatDisplay = (type, val, language) => {
+        if (language !== 'gu' || !val) return val;
+        const maps = {
+            crop: {
+                'Groundnut': 'મગફળી', 'Cotton': 'કપાસ', 'Cumin': 'જીરું', 'Wheat': 'ઘઉં', 'Mustard': 'રાઈ', 'Castor Seed': 'દિવેલા'
+            },
+            season: {
+                'Kharif': 'ખરીફ', 'Rabi': 'રવિ', 'Summer': 'ઉનાળુ', 'Zaid': 'ઝાયદ'
+            },
+            status: {
+                'Sown': 'વાવણી', 'Growing': 'વૃદ્ધિ', 'Ready': 'તૈયાર', 'Harvested': 'લણણી', 'Sold': 'વેચાયેલ'
+            },
+            unit: {
+                'Acre': 'એકર', 'Hectare': 'હેક્ટર'
+            }
+        };
+        return maps[type]?.[val] || val;
+    };
     const [crops, setCrops] = useState([])
     const [farms, setFarms] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -577,15 +608,15 @@ export const CropRecords = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-card border border-dark/5 shadow-sm">
                 <div>
                     <h1 className="text-xl md:text-2xl font-bold text-dark flex items-center gap-2">
-                        <span>🌾</span> પાક રેકોર્ડ્સ (Crop Records)
+                        <span>🌾</span> {lang('પાક રેકોર્ડ્સ', 'Crop Records')}
                     </h1>
                     <p className="text-xs text-dark-light select-none">
-                        તમારા તમામ પાકની વાવણી, ખર્ચ, તબક્કા અને લણણીના રેકોર્ડનું સંચાલન કરો
+                        {lang('તમારા તમામ પાકની વાવણી, ખર્ચ, તબક્કા અને ઉપજના રેકોર્ડનું સંચાલન કરો.', 'Manage sowing, expenses, stages and yield records for all your crops.')}
                     </p>
                 </div>
                 {farms.length === 0 ? (
                     <div className="text-red-500 font-semibold text-xs md:text-sm bg-red-50 p-2.5 rounded-lg border border-red-100">
-                        પાક ઉમેરતા પહેલાં કૃપા કરીને ઓછામાં ઓછું એક ખેતર ઉમેરો.
+                        {lang('પાક ઉમેરતા પહેલાં કૃપા કરીને ઓછામાં ઓછું એક ખેતર ઉમેરો.', 'Please add at least one farm before adding a crop.')}
                     </div>
                 ) : (
                     <Button
@@ -594,7 +625,7 @@ export const CropRecords = () => {
                         className="flex items-center gap-2 text-xs md:text-sm font-semibold py-2.5 px-4 rounded-btn transition-transform active:scale-95"
                     >
                         <FiPlus size={16} />
-                        <span>નવો પાક ઉમેરો (Add Crop)</span>
+                        <span>{lang('નવો પાક ઉમેરો', 'Add Crop')}</span>
                     </Button>
                 )}
             </div>
@@ -624,8 +655,8 @@ export const CropRecords = () => {
                         <FiLayers size={20} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/75">સક્રિય પાકો (Active Crops)</span>
-                        <h4 className="text-lg font-bold text-dark">{activeCropsCount} પાક</h4>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/75">{lang('સક્રિય પાક', 'Active Crops')}</span>
+                        <h4 className="text-lg font-bold text-dark">{toGuDigits(activeCropsCount, language)} {lang('પાક', 'Crops')}</h4>
                     </div>
                 </Card>
                 <Card className="flex items-center p-4 bg-white border border-dark/5 shadow-sm rounded-card">
@@ -633,8 +664,8 @@ export const CropRecords = () => {
                         <BiRupee size={20} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/75">કુલ રોકાણ (Total Investment)</span>
-                        <h4 className="text-lg font-bold text-dark">₹{totalInvestment.toLocaleString('en-IN')}</h4>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/75">{lang('કુલ રોકાણ', 'Total Investment')}</span>
+                        <h4 className="text-lg font-bold text-dark">{toGuDigits(formatCurrency(totalInvestment), language)}</h4>
                     </div>
                 </Card>
                 <Card className="flex items-center p-4 bg-white border border-dark/5 shadow-sm rounded-card">
@@ -642,8 +673,8 @@ export const CropRecords = () => {
                         <FiTrendingUp size={20} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/75">કુલ ઉત્પાદન (Actual Yield)</span>
-                        <h4 className="text-lg font-bold text-dark">{totalYield > 0 ? `${totalYield} મણ` : 'રેકોર્ડ નથી'}</h4>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/75">{lang('કુલ ઉપજ', 'Actual Yield')}</span>
+                        <h4 className="text-lg font-bold text-dark">{totalYield > 0 ? `${toGuDigits(totalYield, language)} ${lang('મણ', 'Man')}` : lang('રેકોર્ડ નથી', 'No Records')}</h4>
                     </div>
                 </Card>
             </div>
@@ -659,7 +690,7 @@ export const CropRecords = () => {
                             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
                             <input
                                 type="text"
-                                placeholder="પાકનું નામ અથવા જાત શોધો..."
+                                placeholder={lang('પાકનું નામ અથવા જાત શોધો...', 'Search crop name or variety...')}
                                 className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -677,7 +708,7 @@ export const CropRecords = () => {
                                 value={filterFarm}
                                 onChange={(e) => setFilterFarm(e.target.value)}
                             >
-                                <option value="">બધા ખેતર</option>
+                                <option value="">{lang('બધા ખેતરો', 'All Farms')}</option>
                                 {farms.map(f => (
                                     <option key={f.id} value={f.id}>{f.farm_name}</option>
                                 ))}
@@ -690,11 +721,11 @@ export const CropRecords = () => {
                                 value={filterStatus}
                                 onChange={(e) => setFilterStatus(e.target.value)}
                             >
-                                <option value="">બધા તબક્કા</option>
-                                <option value="Sown">વાવેતર કરેલ (Sown)</option>
-                                <option value="Growing">ઉગતો પાક (Growing)</option>
-                                <option value="Harvested">લણેલો પાક (Harvested)</option>
-                                <option value="Sold">વેચાયેલ (Sold)</option>
+                                <option value="">{lang('બધા તબક્કાઓ', 'All Stages')}</option>
+                                <option value="Sown">{formatDisplay('status', 'Sown', language)}</option>
+                                <option value="Growing">{formatDisplay('status', 'Growing', language)}</option>
+                                <option value="Harvested">{formatDisplay('status', 'Harvested', language)}</option>
+                                <option value="Sold">{formatDisplay('status', 'Sold', language)}</option>
                             </select>
                         </div>
                     </div>
@@ -704,18 +735,18 @@ export const CropRecords = () => {
                         <div className="bg-emerald-50/50 p-4 rounded-card border border-emerald-100 shadow-sm animate-fadeIn">
                             <div className="flex justify-between items-center mb-2">
                                 <h4 className="text-sm font-bold text-dark flex items-center gap-1.5">
-                                    <span>📊</span> Live Farm Summary ({activeSummaryFarm.farm_name})
+                                    <span>📊</span> {lang(`લાઇવ ખેતર સારાંશ (${activeSummaryFarm.farm_name})`, `Live Farm Summary (${activeSummaryFarm.farm_name})`)}
                                 </h4>
-                                <span className="text-xs font-bold text-primary">{utilization}% Utilized</span>
+                                <span className="text-xs font-bold text-primary">{toGuDigits(utilization, language)}% {lang('ઉપયોગ થયેલ', 'Utilized')}</span>
                             </div>
                             <div className="grid grid-cols-3 gap-4 mb-3 text-sm">
                                 <div>
-                                    <span className="block text-[10px] uppercase font-bold text-dark-light">Farm Area</span>
-                                    <strong className="text-dark">{activeSummaryFarm.total_area} {activeSummaryFarm.area_unit}</strong>
+                                    <span className="block text-[10px] uppercase font-bold text-dark-light">{lang('ખેતરનું કુલ માપ', 'Farm Area')}</span>
+                                    <strong className="text-dark">{toGuDigits(activeSummaryFarm.total_area, language)} {lang(activeSummaryFarm.area_unit === 'Acre' ? 'એકર' : activeSummaryFarm.area_unit, activeSummaryFarm.area_unit)}</strong>
                                 </div>
                                 <div>
-                                    <span className="block text-[10px] uppercase font-bold text-red-500/80">Used Area</span>
-                                    <strong className="text-red-600 border-b border-red-200">{activeSummaryFarm.used_area} {activeSummaryFarm.area_unit}</strong>
+                                    <span className="block text-[10px] uppercase font-bold text-red-500/80">{lang('ઉપયોગમાં લેવાયેલ', 'Used Area')}</span>
+                                    <strong className="text-red-600 border-b border-red-200">{toGuDigits(activeSummaryFarm.used_area, language)} {lang(activeSummaryFarm.area_unit === 'Acre' ? 'એકર' : activeSummaryFarm.area_unit, activeSummaryFarm.area_unit)}</strong>
                                 </div>
                                 <div>
                                     <span className="block text-[10px] uppercase font-bold text-emerald-600/80">Available Area</span>
@@ -737,11 +768,11 @@ export const CropRecords = () => {
                     ) : filteredCrops.length === 0 ? (
                         <EmptyState
                             icon={FiLayers}
-                            title="કોઈ પાક રેકોર્ડ મળ્યો નથી"
+                            title={lang('કોઈ પાક રેકોર્ડ મળ્યો નથી', 'No Crop Records Found')}
                             description={searchQuery || filterFarm || filterStatus
-                                ? 'પસંદ કરેલ ફિલ્ટર્સ અથવા સર્ચ માટે કોઈ ડેટા નથી.'
-                                : 'તમે હજુ સુધી કોઈપણ પાકની વિગતો દાખલ કરી નથી. પાક ઉમેરવા ઉપર પ્લસ પર ક્લિક કરો.'}
-                            actionText={!searchQuery && !filterFarm && !filterStatus && farms.length > 0 ? "નવો પાક ઉમેરો" : undefined}
+                                ? lang('પસંદ કરેલ ફિલ્ટર્સ અથવા સર્ચ માટે કોઈ ડેટા નથી.', 'No data found for the selected filters or search.')
+                                : lang('તમે હજુ સુધી કોઈપણ પાકની વિગતો દાખલ કરી નથી. પાક ઉમેરવા ઉપર પ્લસ પર ક્લિક કરો.', 'You have not entered any crop details yet. Click plus above to add a crop.')}
+                            actionText={!searchQuery && !filterFarm && !filterStatus && farms.length > 0 ? lang("નવો પાક ઉમેરો", "Add Crop") : undefined}
                             onActionClick={openAddModal}
                         />
                     ) : (
@@ -750,13 +781,13 @@ export const CropRecords = () => {
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="bg-secondary-dark/65 border-b border-dark/5 text-dark-light/95 text-[10px] font-bold uppercase tracking-wider">
-                                            <th className="p-4">પાક / જાત</th>
-                                            <th className="p-4">ખેતર</th>
-                                            <th className="p-4">ઋતુ</th>
-                                            <th className="p-4">જમીન (એકર)</th>
-                                            <th className="p-4">તબક્કો (Status)</th>
-                                            <th className="p-4 text-right">કુલ ખર્ચ</th>
-                                            <th className="p-4 text-center">ક્રિયાઓ</th>
+                                            <th className="p-4">{lang('પાક / જાત', 'Crop / Variety')}</th>
+                                            <th className="p-4">{lang('ખેતર', 'Farm')}</th>
+                                            <th className="p-4">{lang('ઋતુ', 'Season')}</th>
+                                            <th className="p-4">{lang('જમીન (એકર)', 'Land (Acre)')}</th>
+                                            <th className="p-4">{lang('તબક્કો', 'Status')}</th>
+                                            <th className="p-4 text-right">{lang('કુલ ખર્ચ', 'Total Expense')}</th>
+                                            <th className="p-4 text-center">{lang('ક્રિયાઓ', 'Actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-dark/5 text-xs text-dark select-none">
@@ -767,17 +798,17 @@ export const CropRecords = () => {
                                                 onClick={() => setDetailCrop(crop)}
                                             >
                                                 <td className="p-4">
-                                                    <div className="font-bold">{crop.crop_name}</div>
+                                                    <div className="font-bold">{formatDisplay('crop', crop.crop_name, language)}</div>
                                                     <div className="text-[10px] text-dark-light font-medium">{crop.crop_variety}</div>
                                                 </td>
                                                 <td className="p-4 font-semibold text-dark-light/95">
-                                                    {crop.farm_name || `ખેતર ID: ${crop.farm}`}
+                                                    {crop.farm_name || lang(`ખેતર ID: ${crop.farm}`, `Farm ID: ${crop.farm}`)}
                                                 </td>
                                                 <td className="p-4 font-semibold">
-                                                    {crop.season}
+                                                    {formatDisplay('season', crop.season, language)}
                                                 </td>
                                                 <td className="p-4 font-bold text-dark-light/90">
-                                                    {crop.area_used} {crop.area_unit}
+                                                    {toGuDigits(crop.area_used, language)} {lang(crop.area_unit === 'Acre' ? 'એકર' : crop.area_unit, crop.area_unit)}
                                                 </td>
                                                 <td className="p-4">
                                                     <span className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold border ${crop.crop_status === 'Sown' ? 'bg-blue-50 text-blue-750 border-blue-100' :
@@ -785,14 +816,11 @@ export const CropRecords = () => {
                                                             crop.crop_status === 'Harvested' ? 'bg-emerald-55 text-emerald-800 border-emerald-100' :
                                                                 'bg-gray-50 text-gray-750 border-gray-100'
                                                         }`}>
-                                                        {crop.crop_status === 'Sown' ? 'વાવેતર (Sown)' :
-                                                            crop.crop_status === 'Growing' ? 'ઉગતો (Growing)' :
-                                                                crop.crop_status === 'Harvested' ? 'લણેલો (Harvest)' :
-                                                                    'વેચાયેલ (Sold)'}
+                                                        {formatDisplay('status', crop.crop_status, language)}
                                                     </span>
                                                 </td>
                                                 <td className="p-4 text-right font-extrabold text-dark-light/95">
-                                                    ₹{(parseFloat(crop.total_cost) || 0).toLocaleString('en-IN')}
+                                                    {formatCurrency(parseFloat(crop.total_cost) || 0)}
                                                 </td>
                                                 <td className="p-4" onClick={(e) => e.stopPropagation()}>
                                                     <div className="flex justify-center gap-1.5">
@@ -826,8 +854,8 @@ export const CropRecords = () => {
                     <div className="bg-white rounded-card border border-primary/20 shadow-md p-6 space-y-4 animate-fadeIn lg:sticky lg:top-4 max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-start border-b border-dark/5 pb-3">
                             <div>
-                                <h2 className="text-base font-bold text-dark tracking-tight">{detailCrop.crop_name} ({detailCrop.crop_variety})</h2>
-                                <p className="text-[10px] text-dark-light font-bold select-none uppercase">{detailCrop.farm_name} • {detailCrop.season}</p>
+                                <h2 className="text-base font-bold text-dark tracking-tight">{formatDisplay('crop', detailCrop.crop_name, language)} ({detailCrop.crop_variety})</h2>
+                                <p className="text-[10px] text-dark-light font-bold select-none uppercase">{detailCrop.farm_name} • {formatDisplay('season', detailCrop.season, language)}</p>
                             </div>
                             <button
                                 onClick={() => setDetailCrop(null)}
@@ -855,38 +883,38 @@ export const CropRecords = () => {
                             {/* Key Stats */}
                             <div className="grid grid-cols-2 gap-2.5 p-3 bg-secondary-dark/60 rounded-btn border border-dark/5">
                                 <div>
-                                    <span className="block text-[9px] font-bold text-dark-light uppercase">વાવણી વિસ્તાર</span>
-                                    <span className="font-extrabold text-dark">{detailCrop.area_used} {detailCrop.area_unit}</span>
+                                    <span className="block text-[9px] font-bold text-dark-light uppercase">{lang('વાવણી વિસ્તાર', 'Sowing Area')}</span>
+                                    <span className="font-extrabold text-dark">{toGuDigits(detailCrop.area_used, language)} {lang(detailCrop.area_unit === 'Acre' ? 'એકર' : detailCrop.area_unit, detailCrop.area_unit)}</span>
                                 </div>
                                 <div>
-                                    <span className="block text-[9px] font-bold text-dark-light uppercase">પાક આરોગ્ય (Health)</span>
+                                    <span className="block text-[9px] font-bold text-dark-light uppercase">{lang('પાક આરોગ્ય', 'Crop Health')}</span>
                                     <span className={`inline-block px-1.5 py-0.2 rounded font-bold text-[9px] ${detailCrop.disease_status === 'Healthy' ? 'bg-emerald-50 text-emerald-800' :
                                         detailCrop.disease_status === 'Monitored' ? 'bg-amber-50 text-amber-800' :
                                             'bg-red-50 text-red-800'
                                         }`}>
-                                        {detailCrop.disease_status === 'Healthy' ? 'સ્વસ્થ' :
-                                            detailCrop.disease_status === 'Monitored' ? 'સાવચેત' :
-                                                'રોગગ્રસ્ત'}
+                                        {detailCrop.disease_status === 'Healthy' ? lang('સ્વસ્થ', 'Healthy') :
+                                            detailCrop.disease_status === 'Monitored' ? lang('સાવચેત', 'Monitored') :
+                                                lang('રોગગ્રસ્ત', 'Infected')}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Dates Timeline */}
                             <Card className="p-3 bg-secondary-dark/60 rounded-btn border border-dark/5 space-y-1.5">
-                                <span className="text-[9px] font-bold text-dark-light uppercase tracking-wider block">સમયરેખા (Timeline)</span>
+                                <span className="text-[9px] font-bold text-dark-light uppercase tracking-wider block">{lang('સમયરેખા', 'Timeline')}</span>
                                 <div className="space-y-1.5">
                                     <div className="flex justify-between">
-                                        <span className="text-dark-light flex items-center gap-1"><FiCalendar size={11} /> વાવણી:</span>
-                                        <strong className="text-dark">{detailCrop.sowing_date}</strong>
+                                        <span className="text-dark-light flex items-center gap-1"><FiCalendar size={11} /> {lang('વાવણી:', 'Sowing Date:')}</span>
+                                        <strong className="text-dark">{toGuDigits(detailCrop.sowing_date, language)}</strong>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-dark-light flex items-center gap-1"><FiCalendar size={11} /> અંદાજિત લણણી:</span>
-                                        <strong className="text-dark">{detailCrop.expected_harvest_date}</strong>
+                                        <span className="text-dark-light flex items-center gap-1"><FiCalendar size={11} /> {lang('અંદાજિત લણણી:', 'Expected Harvest:')}</span>
+                                        <strong className="text-dark">{toGuDigits(detailCrop.expected_harvest_date, language)}</strong>
                                     </div>
                                     {detailCrop.harvest_date && (
                                         <div className="flex justify-between border-t border-dark/5 pt-1.5">
-                                            <span className="text-emerald-700 flex items-center gap-1"><FiCheck size={12} /> વાસ્તવિક લણણી:</span>
-                                            <strong className="text-emerald-800">{detailCrop.harvest_date}</strong>
+                                            <span className="text-emerald-700 flex items-center gap-1"><FiCheck size={12} /> {lang('વાસ્તવિક લણણી:', 'Actual Harvest:')}</span>
+                                            <strong className="text-emerald-800">{toGuDigits(detailCrop.harvest_date, language)}</strong>
                                         </div>
                                     )}
                                 </div>
@@ -895,16 +923,16 @@ export const CropRecords = () => {
                             {/* Costs Breakdown */}
                             <Card className="p-3 bg-secondary-dark/60 rounded-btn border border-dark/5 space-y-2">
                                 <div className="flex justify-between items-center border-b border-dark/5 pb-1">
-                                    <span className="text-[9px] font-bold text-dark-light uppercase tracking-wider">ખર્ચ બ્રેકડાઉન</span>
-                                    <strong className="text-dark font-extrabold text-[13px]">₹{(parseFloat(detailCrop.total_cost) || 0).toLocaleString('en-IN')}</strong>
+                                    <span className="text-[9px] font-bold text-dark-light uppercase tracking-wider">{lang('ખર્ચ બ્રેકડાઉન', 'Cost Breakdown')}</span>
+                                    <strong className="text-dark font-extrabold text-[13px]">{toGuDigits(formatCurrency(parseFloat(detailCrop.total_cost) || 0), language)}</strong>
                                 </div>
                                 <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] text-dark-light/95">
-                                    <div className="flex justify-between"><span>બીજ:</span><strong className="text-dark">₹{detailCrop.seed_cost || 0}</strong></div>
-                                    <div className="flex justify-between"><span>ખાતર:</span><strong className="text-dark">₹{detailCrop.fertilizer_cost || 0}</strong></div>
-                                    <div className="flex justify-between"><span>જંતુનાશક:</span><strong className="text-dark">₹{detailCrop.pesticide_cost || 0}</strong></div>
-                                    <div className="flex justify-between"><span>મજૂરી:</span><strong className="text-dark">₹{detailCrop.labour_cost || 0}</strong></div>
+                                    <div className="flex justify-between"><span>{lang('બીજ:', 'Seed:')}</span><strong className="text-dark">₹{toGuDigits(detailCrop.seed_cost || 0, language)}</strong></div>
+                                    <div className="flex justify-between"><span>{lang('ખાતર:', 'Fertilizer:')}</span><strong className="text-dark">₹{toGuDigits(detailCrop.fertilizer_cost || 0, language)}</strong></div>
+                                    <div className="flex justify-between"><span>{lang('જંતુનાશક:', 'Pesticide:')}</span><strong className="text-dark">₹{toGuDigits(detailCrop.pesticide_cost || 0, language)}</strong></div>
+                                    <div className="flex justify-between"><span>{lang('મજૂરી:', 'Labour:')}</span><strong className="text-dark">₹{toGuDigits(detailCrop.labour_cost || 0, language)}</strong></div>
                                     <div className="flex justify-between col-span-2 border-t border-dark/5 pt-1.5 mt-1">
-                                        <span>અન્ય ખર્ચ:</span><strong className="text-dark">₹{detailCrop.other_cost || 0}</strong>
+                                        <span>{lang('અન્ય ખર્ચ:', 'Other:')}</span><strong className="text-dark">₹{toGuDigits(detailCrop.other_cost || 0, language)}</strong>
                                     </div>
                                 </div>
                             </Card>
@@ -912,28 +940,28 @@ export const CropRecords = () => {
                             {/* Yield & Sell Data if Harvested/Sold */}
                             {(detailCrop.expected_yield || detailCrop.actual_yield) && (
                                 <Card className="p-3 bg-secondary-dark/60 rounded-btn border border-dark/5 space-y-1.5">
-                                    <span className="text-[9px] font-bold text-dark-light uppercase tracking-wider block">ઉત્પાદન વિગતો (Yield Metrics)</span>
+                                    <span className="text-[9px] font-bold text-dark-light uppercase tracking-wider block">{lang('ઉત્પાદન વિગતો', 'Yield Metrics')}</span>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
-                                            <span className="text-[10px] text-dark-light">અંદાજિત ઉત્પાદન:</span>
-                                            <div className="font-bold text-dark">{detailCrop.expected_yield} મણ</div>
+                                            <span className="text-[10px] text-dark-light">{lang('અંદાજિત ઉત્પાદન:', 'Expected Yield:')}</span>
+                                            <div className="font-bold text-dark">{toGuDigits(detailCrop.expected_yield, language)} {lang('મણ', 'Man')}</div>
                                         </div>
                                         {detailCrop.actual_yield && (
                                             <div>
-                                                <span className="text-[10px] text-emerald-700">વાસ્તવિક ઉત્પાદન:</span>
-                                                <div className="font-extrabold text-emerald-800">{detailCrop.actual_yield} મણ</div>
+                                                <span className="text-[10px] text-emerald-700">{lang('વાસ્તવિક ઉત્પાદન:', 'Actual Yield:')}</span>
+                                                <div className="font-extrabold text-emerald-800">{toGuDigits(detailCrop.actual_yield, language)} {lang('મણ', 'Man')}</div>
                                             </div>
                                         )}
                                     </div>
                                     {detailCrop.selling_price && (
                                         <div className="border-t border-dark/5 pt-1.5 mt-1.5 grid grid-cols-2 gap-2">
                                             <div>
-                                                <span className="text-[10px] text-dark-light">વેચાણ કિંમત:</span>
-                                                <div className="font-bold text-dark">₹{detailCrop.selling_price} / મણ</div>
+                                                <span className="text-[10px] text-dark-light">{lang('વેચાણ કિંમત:', 'Selling Price:')}</span>
+                                                <div className="font-bold text-dark">₹{toGuDigits(detailCrop.selling_price, language)} / {lang('મણ', 'Man')}</div>
                                             </div>
                                             <div>
-                                                <span className="text-[10px] text-dark-light">વેચેલ જથ્થો:</span>
-                                                <div className="font-bold text-dark">{detailCrop.sold_quantity} મણ</div>
+                                                <span className="text-[10px] text-dark-light">{lang('વેચેલ જથ્થો:', 'Sold Qty:')}</span>
+                                                <div className="font-bold text-dark">{toGuDigits(detailCrop.sold_quantity, language)} {lang('મણ', 'Man')}</div>
                                             </div>
                                         </div>
                                     )}
@@ -943,7 +971,7 @@ export const CropRecords = () => {
                             {/* Notes */}
                             {detailCrop.notes && (
                                 <div className="p-3 bg-secondary-dark/40 rounded border border-dark/5">
-                                    <span className="block text-[9px] font-bold text-dark-light uppercase">ખાસ નોંધ (Notes)</span>
+                                    <span className="block text-[9px] font-bold text-dark-light uppercase">{lang('ખાસ નોંધ', 'Notes')}</span>
                                     <p className="text-dark-light text-[11px] italic mt-0.5">{detailCrop.notes}</p>
                                 </div>
                             )}
@@ -957,14 +985,14 @@ export const CropRecords = () => {
                                 className="flex items-center gap-1.5 text-xs py-2 px-3 self-end"
                             >
                                 <FiEdit size={13} />
-                                <span>સુધારો કરો (Edit)</span>
+                                <span>{lang('સુધારો કરો', 'Edit')}</span>
                             </Button>
                             <Button
                                 onClick={() => openDeleteModal(detailCrop)}
                                 className="flex items-center gap-1.5 text-xs py-2 px-3 bg-red-50 text-red-650 border border-red-150 hover:bg-red-100 rounded-btn"
                             >
                                 <FiTrash2 size={13} />
-                                <span>કાઢી નાખો (Delete)</span>
+                                <span>{lang('કાઢી નાખો', 'Delete')}</span>
                             </Button>
                         </div>
                     </div>
@@ -983,8 +1011,8 @@ export const CropRecords = () => {
                             <h3 className="font-bold text-base md:text-lg flex items-center gap-2">
                                 <span>🌾</span>
                                 {selectedCrop
-                                    ? 'પાકની વિગતો સુધારો (Edit Crop Record)'
-                                    : 'નવો પાક રેકોર્ડ ઉમેરો (AddNew Crop Record)'}
+                                    ? lang('પાકની વિગતો સુધારો', 'Edit Crop Record')
+                                    : lang('નવો પાક રેકોર્ડ ઉમેરો', 'Add New Crop Record')}
                             </h3>
                             <button
                                 type="button"
@@ -1002,7 +1030,7 @@ export const CropRecords = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        ખેતર (Select Farm) <span className="text-red-500 font-bold">*</span>
+                                        {lang('ખેતર પસંદ કરો', 'Select Farm')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <select
                                         name="farm"
@@ -1011,7 +1039,7 @@ export const CropRecords = () => {
                                         value={formData.farm}
                                         onChange={handleInputChange}
                                     >
-                                        <option value="">ખેતર પસંદ કરો</option>
+                                        <option value="">{lang('ખેતર પસંદ કરો', 'Select Farm')}</option>
                                         {farms.map(f => (
                                             <option key={f.id} value={f.id}>{f.farm_name}</option>
                                         ))}
@@ -1023,7 +1051,7 @@ export const CropRecords = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        ઋતુ (Season)
+                                        {lang('ઋતુ', 'Season')}
                                     </label>
                                     <select
                                         name="season"
@@ -1031,9 +1059,10 @@ export const CropRecords = () => {
                                         value={formData.season}
                                         onChange={handleInputChange}
                                     >
-                                        <option value="Kharif">ખરીફ (Kharif)</option>
-                                        <option value="Rabi">રવિ (Rabi)</option>
-                                        <option value="Summer">ઉનાળુ (Summer)</option>
+                                        <option value="Kharif">{lang('ખરીફ', 'Kharif')}</option>
+                                        <option value="Rabi">{lang('રવિ', 'Rabi')}</option>
+                                        <option value="Summer">{lang('ઉનાળુ', 'Summer')}</option>
+                                        <option value="Zaid">{lang('ઝાયદ', 'Zaid')}</option>
                                     </select>
                                 </div>
                             </div>
@@ -1041,12 +1070,12 @@ export const CropRecords = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        પાકનું નામ (Crop Name) <span className="text-red-500 font-bold">*</span>
+                                        {lang('પાકનું નામ', 'Crop Name')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <input
                                         type="text"
                                         name="crop_name"
-                                        placeholder="દા.ત. ઘઉં, કપાસ, મગફળી"
+                                        placeholder={lang('દા.ત. ઘઉં, કપાસ, મગફળી', 'e.g. Wheat, Cotton, Groundnut')}
                                         className={`w-full bg-white border outline-none px-3.5 py-2.5 text-xs rounded-btn focus:border-primary ${formErrors.crop_name ? 'border-red-500' : 'border-dark/15'
                                             }`}
                                         value={formData.crop_name}
@@ -1059,12 +1088,12 @@ export const CropRecords = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        પાકની જાત (Variety) <span className="text-red-500 font-bold">*</span>
+                                        {lang('પાકની જાત', 'Variety')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <input
                                         type="text"
                                         name="crop_variety"
-                                        placeholder="દા.ત. લોક-વન (Lok-1), GW-496"
+                                        placeholder={lang('દા.ત. લોક-વન, GW-496', 'e.g. Lok-1, GW-496')}
                                         className={`w-full bg-white border outline-none px-3.5 py-2.5 text-xs rounded-btn focus:border-primary ${formErrors.crop_variety ? 'border-red-500' : 'border-dark/15'
                                             }`}
                                         value={formData.crop_variety}
@@ -1080,7 +1109,7 @@ export const CropRecords = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-dark/5 pt-3.5">
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        વાવણી તારીખ <span className="text-red-500 font-bold">*</span>
+                                        {lang('વાવણી તારીખ', 'Sowing Date')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <input
                                         type="date"
@@ -1097,7 +1126,7 @@ export const CropRecords = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        અંદાજિત લણણી તારીખ <span className="text-red-500 font-bold">*</span>
+                                        {lang('અંદાજિત લણણી તારીખ', 'Expected Harvest Date')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <input
                                         type="date"
@@ -1114,7 +1143,7 @@ export const CropRecords = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-xs text-dark-light mb-1.5">
-                                        વાસ્તવિક લણણી તારીખ (જો થઈ હોય)
+                                        {lang('વાસ્તવિક લણણી તારીખ (જો થઈ હોય)', 'Actual Harvest Date (If Done)')}
                                     </label>
                                     <input
                                         type="date"
@@ -1134,13 +1163,13 @@ export const CropRecords = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 border-t border-dark/5 pt-3.5">
                                 <div className="flex flex-col col-span-1">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        વાવેતર વિસ્તાર <span className="text-red-500 font-bold">*</span>
+                                        {lang('વાવેતર વિસ્તાર', 'Sowing Area')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <input
                                         type="number"
                                         step="0.01"
                                         name="area_used"
-                                        placeholder="દા.ત. 3.2"
+                                        placeholder={lang('દા.ત. 3.2', 'e.g. 3.2')}
                                         className={`w-full bg-white border outline-none px-3 py-2 text-xs rounded-btn focus:border-primary ${formErrors.area_used ? 'border-red-500' : 'border-dark/15'
                                             }`}
                                         value={formData.area_used}
@@ -1152,21 +1181,21 @@ export const CropRecords = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-xs font-bold text-dark/75 mb-1.5">એકમ</label>
+                                    <label className="text-xs font-bold text-dark/75 mb-1.5">{lang('એકમ', 'Unit')}</label>
                                     <select
                                         name="area_unit"
                                         className="w-full bg-white border border-dark/15 outline-none px-3 py-2 text-xs rounded-btn focus:border-primary"
                                         value={formData.area_unit}
                                         onChange={handleInputChange}
                                     >
-                                        <option value="Acre">એકર (Acre)</option>
-                                        <option value="Hectare">હેક્ટર (Hectare)</option>
+                                        <option value="Acre">{lang('એકર', 'Acre')}</option>
+                                        <option value="Hectare">{lang('હેક્ટર', 'Hectare')}</option>
                                     </select>
                                 </div>
 
                                 <div className="flex flex-col">
                                     <label className="text-xs font-bold text-dark/75 mb-1.5">
-                                        અંદાજિત ઉત્પાદન (મણ) <span className="text-red-500 font-bold">*</span>
+                                        {lang('અંદાજિત ઉત્પાદન (મણ)', 'Expected Yield (Man)')} <span className="text-red-500 font-bold">*</span>
                                     </label>
                                     <input
                                         type="number"
@@ -1185,13 +1214,13 @@ export const CropRecords = () => {
 
                                 <div className="flex flex-col">
                                     <label className="text-xs text-dark-light mb-1.5">
-                                        વાસ્તવિક ઉત્પાદન (મણ)
+                                        {lang('વાસ્તવિક ઉત્પાદન (મણ)', 'Actual Yield (Man)')}
                                     </label>
                                     <input
                                         type="number"
                                         step="0.01"
                                         name="actual_yield"
-                                        placeholder="લણણી બાદ"
+                                        placeholder={lang('લણણી બાદ', 'After Harvest')}
                                         className={`w-full bg-white border outline-none px-3 py-2 text-xs rounded-btn focus:border-primary ${formErrors.actual_yield ? 'border-red-500' : 'border-dark/15'
                                             }`}
                                         value={formData.actual_yield}
@@ -1206,14 +1235,14 @@ export const CropRecords = () => {
                             {/* Costs Breakdown */}
                             <div className="border-t border-dark/5 pt-3.5 space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <h4 className="text-xs font-bold text-dark uppercase tracking-wider">રોકાણ ખર્ચ (Investments Breakdown)</h4>
+                                    <h4 className="text-xs font-bold text-dark uppercase tracking-wider">{lang('રોકાણ ખર્ચ', 'Investments Breakdown')}</h4>
                                     <div className="text-xs font-extrabold text-primary bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
-                                        કુલ ખર્ચ: ₹{formData.total_cost.toLocaleString('en-IN')}
+                                        {lang('કુલ ખર્ચ:', 'Total Cost:')} {toGuDigits(formatCurrency(formData.total_cost), language)}
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                                     <div className="flex flex-col">
-                                        <label className="text-[10px] font-bold text-dark/75 mb-1">બીજ ખર્ચ (₹)</label>
+                                        <label className="text-[10px] font-bold text-dark/75 mb-1">{lang('બીજ ખર્ચ (₹)', 'Seed Cost (₹)')}</label>
                                         <input
                                             type="number"
                                             name="seed_cost"
@@ -1225,7 +1254,7 @@ export const CropRecords = () => {
                                     </div>
 
                                     <div className="flex flex-col">
-                                        <label className="text-[10px] font-bold text-dark/75 mb-1">ખાતર ખર્ચ (₹)</label>
+                                        <label className="text-[10px] font-bold text-dark/75 mb-1">{lang('ખાતર ખર્ચ (₹)', 'Fertilizer Cost (₹)')}</label>
                                         <input
                                             type="number"
                                             name="fertilizer_cost"
@@ -1237,7 +1266,7 @@ export const CropRecords = () => {
                                     </div>
 
                                     <div className="flex flex-col">
-                                        <label className="text-[10px] font-bold text-dark/75 mb-1">જંતુનાશક (₹)</label>
+                                        <label className="text-[10px] font-bold text-dark/75 mb-1">{lang('જંતુનાશક (₹)', 'Pesticide (₹)')}</label>
                                         <input
                                             type="number"
                                             name="pesticide_cost"
@@ -1249,7 +1278,7 @@ export const CropRecords = () => {
                                     </div>
 
                                     <div className="flex flex-col">
-                                        <label className="text-[10px] font-bold text-dark/75 mb-1">મજૂરી ખર્ચ (₹)</label>
+                                        <label className="text-[10px] font-bold text-dark/75 mb-1">{lang('મજૂરી ખર્ચ (₹)', 'Labour Cost (₹)')}</label>
                                         <input
                                             type="number"
                                             name="labour_cost"
@@ -1261,7 +1290,7 @@ export const CropRecords = () => {
                                     </div>
 
                                     <div className="flex flex-col">
-                                        <label className="text-[10px] font-bold text-dark/75 mb-1">અન્ય ખર્ચ (₹)</label>
+                                        <label className="text-[10px] font-bold text-dark/75 mb-1">{lang('અન્ય ખર્ચ (₹)', 'Other Cost (₹)')}</label>
                                         <input
                                             type="number"
                                             name="other_cost"
@@ -1277,12 +1306,12 @@ export const CropRecords = () => {
                             {/* Selling details */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-dark/5 pt-3.5">
                                 <div className="flex flex-col">
-                                    <label className="text-xs text-dark-light mb-1.5">વેચાણ કિંમત (₹ પ્રતિ મણ)</label>
+                                    <label className="text-xs text-dark-light mb-1.5">{lang('વેચાણ કિંમત (₹ પ્રતિ મણ)', 'Selling Price (₹ per Man)')}</label>
                                     <input
                                         type="number"
                                         step="0.01"
                                         name="selling_price"
-                                        placeholder="દા.ત. 1200"
+                                        placeholder={lang('દા.ત. 1200', 'e.g. 1200')}
                                         className={`w-full bg-white border outline-none px-3.5 py-2 text-xs rounded-btn focus:border-primary ${formErrors.selling_price ? 'border-red-500' : 'border-dark/15'
                                             }`}
                                         value={formData.selling_price}
@@ -1294,12 +1323,12 @@ export const CropRecords = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-xs text-dark-light mb-1.5">વેચેલો જથ્થો (મણ)</label>
+                                    <label className="text-xs text-dark-light mb-1.5">{lang('વેચેલો જથ્થો (મણ)', 'Sold Quantity (Man)')}</label>
                                     <input
                                         type="number"
                                         step="0.01"
                                         name="sold_quantity"
-                                        placeholder="દા.ત. 120"
+                                        placeholder={lang('દા.ત. 120', 'e.g. 120')}
                                         className={`w-full bg-white border outline-none px-3.5 py-2 text-xs rounded-btn focus:border-primary ${formErrors.sold_quantity ? 'border-red-500' : 'border-dark/15'
                                             }`}
                                         value={formData.sold_quantity}
@@ -1314,42 +1343,42 @@ export const CropRecords = () => {
                             {/* Statuses, Notes & Image upload */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-dark/5 pt-3.5">
                                 <div className="flex flex-col">
-                                    <label className="text-xs font-bold text-dark/75 mb-1.5">પાકનો તબક્કો (Status)</label>
+                                    <label className="text-xs font-bold text-dark/75 mb-1.5">{lang('પાકનો તબક્કો', 'Crop Status')}</label>
                                     <select
                                         name="crop_status"
                                         className="w-full bg-white border border-dark/15 outline-none px-3.5 py-2.5 text-xs rounded-btn focus:border-primary"
                                         value={formData.crop_status}
                                         onChange={handleInputChange}
                                     >
-                                        <option value="Sown">વાવેતર કરેલ (Sown)</option>
-                                        <option value="Growing">ઉગતો પાક (Growing)</option>
-                                        <option value="Harvested">લણેલો પાક (Harvested)</option>
-                                        <option value="Sold">વેચાયેલ (Sold)</option>
+                                        <option value="Sown">{lang('વાવેતર કરેલ', 'Sown')}</option>
+                                        <option value="Growing">{lang('ઉગતો પાક', 'Growing')}</option>
+                                        <option value="Harvested">{lang('લણેલો પાક', 'Harvested')}</option>
+                                        <option value="Sold">{lang('વેચાયેલ', 'Sold')}</option>
                                     </select>
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-xs font-bold text-dark/75 mb-1.5">સ્વાસ્થ્ય તબક્કો (Health)</label>
+                                    <label className="text-xs font-bold text-dark/75 mb-1.5">{lang('સ્વાસ્થ્ય તબક્કો', 'Health Status')}</label>
                                     <select
                                         name="disease_status"
                                         className="w-full bg-white border border-dark/15 outline-none px-3.5 py-2.5 text-xs rounded-btn focus:border-primary"
                                         value={formData.disease_status}
                                         onChange={handleInputChange}
                                     >
-                                        <option value="Healthy">લાલ નહિ - તંદુરસ્ત (Healthy)</option>
-                                        <option value="Healthy (Low Risk)">ઓછું જોખમ (Healthy Low Risk)</option>
-                                        <option value="Monitored">રેખરેખ હેઠળ (Monitored)</option>
-                                        <option value="Diseased">બીમાર / ચેપી (Diseased)</option>
+                                        <option value="Healthy">{lang('તંદુરસ્ત', 'Healthy')}</option>
+                                        <option value="Healthy (Low Risk)">{lang('ઓછું જોખમ', 'Low Risk')}</option>
+                                        <option value="Monitored">{lang('રેખરેખ હેઠળ', 'Monitored')}</option>
+                                        <option value="Diseased">{lang('બીમાર / ચેપી', 'Diseased')}</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div className="flex flex-col border-t border-dark/5 pt-3.5">
-                                <label className="text-xs text-dark-light mb-1.5">નોંધ / માહિતી (Notes)</label>
+                                <label className="text-xs text-dark-light mb-1.5">{lang('નોંધ / માહિતી', 'Notes')}</label>
                                 <textarea
                                     name="notes"
                                     rows="2"
-                                    placeholder="પાક વિશે કોઈ ખાસ નોંધ ઉમેરો..."
+                                    placeholder={lang('પાક વિશે કોઈ ખાસ નોંધ ઉમેરો...', 'Add special notes about the crop...')}
                                     className="w-full bg-white border border-dark/15 outline-none px-3.5 py-2 text-xs rounded-btn focus:border-primary resize-none"
                                     value={formData.notes}
                                     onChange={handleInputChange}
@@ -1358,11 +1387,11 @@ export const CropRecords = () => {
 
                             {/* Optional image selector */}
                             <div className="flex flex-col border-t border-dark/5 pt-3.5">
-                                <label className="text-xs text-dark-light mb-1.5">પાકનો ફોટો (Optional Crop Image)</label>
+                                <label className="text-xs text-dark-light mb-1.5">{lang('પાકનો ફોટો', 'Optional Crop Image')}</label>
                                 <div className="flex items-center gap-4">
                                     <label className="cursor-pointer bg-secondary-dark border border-dark/15 hover:bg-dark/5 transition-all text-xs font-bold py-2.5 px-4 rounded-btn flex items-center gap-2">
                                         <FiImage size={15} />
-                                        <span>ફોટો પસંદ કરો</span>
+                                        <span>{lang('ફોટો પસંદ કરો', 'Select Photo')}</span>
                                         <input
                                             type="file"
                                             accept="image/*"
@@ -1398,7 +1427,7 @@ export const CropRecords = () => {
                                 className="text-xs md:text-sm font-bold min-w-[80px]"
                                 disabled={isLoading}
                             >
-                                રદ કરો (Cancel)
+                                {lang('રદ કરો', 'Cancel')}
                             </Button>
                             <Button
                                 type="submit"
@@ -1406,7 +1435,7 @@ export const CropRecords = () => {
                                 className="text-xs md:text-sm font-bold min-w-[80px] bg-primary text-white hover:bg-primary-dark"
                                 isLoading={isLoading}
                             >
-                                સાચવો (Save)
+                                {lang('સાચવો', 'Save')}
                             </Button>
                         </div>
                     </form>
@@ -1418,10 +1447,13 @@ export const CropRecords = () => {
                 <div className="fixed inset-0 bg-dark/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-card shadow-2xl border border-dark/5 max-w-sm w-full p-6 space-y-4 animate-scaleUp text-xs font-sans">
                         <h3 className="font-bold text-base text-dark flex items-center gap-2">
-                            <span className="text-red-500">⚠️</span> કાઢી નાખવાની ખાતરી કરો
+                            <span className="text-red-500">⚠️</span> {lang('કાઢી નાખવાની ખાતરી કરો', 'Confirm Deletion')}
                         </h3>
                         <p className="text-dark bg-red-50/20 p-3 rounded border border-red-100/50 leading-relaxed font-sans select-none">
-                            શું તમે ખરેખર પાકનો રેકોર્ડ <strong>"{selectedCrop.crop_name}"</strong> ની વિગતો કાઢી નાખવા માંગો છો? આ નિર્ણય પાછો ખેંચી શકાશે નહીં.
+                            {lang(
+                                `શું તમે ખરેખર પાકનો રેકોર્ડ "${selectedCrop.crop_name}" ની વિગતો કાઢી નાખવા માંગો છો? આ નિર્ણય પાછો ખેંચી શકાશે નહીં.`,
+                                `Are you sure you want to delete the crop record for "${selectedCrop.crop_name}"? This action cannot be undone.`
+                            )}
                         </p>
                         <div className="flex justify-end gap-3">
                             <button
@@ -1429,14 +1461,14 @@ export const CropRecords = () => {
                                 className="px-4 py-2 border rounded font-bold hover:bg-gray-50"
                                 disabled={isLoading}
                             >
-                                રદ કરો (Cancel)
+                                {lang('રદ કરો', 'Cancel')}
                             </button>
                             <Button
                                 onClick={handleDeleteConfirm}
                                 className="px-4 py-2 bg-red-650 hover:bg-red-750 text-white rounded font-bold"
                                 isLoading={isLoading}
                             >
-                                હા, કાઢી નાખો
+                                {lang('હા, કાઢી નાખો', 'Yes, Delete')}
                             </Button>
                         </div>
                     </div>
@@ -1448,7 +1480,10 @@ export const CropRecords = () => {
                 isOpen={showSalesModal}
                 onClose={() => setShowSalesModal(false)}
                 onSuccess={async (data, isEdit) => {
-                    setSuccessMsg(isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+                    setSuccessMsg(lang(
+                        isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.',
+                        isEdit ? 'Sales record updated successfully.' : 'New sale added successfully.'
+                    ))
                     // We must refetch the crops so that the Table updates the Status to "Sold"
                     await fetchCrops()
                 }}

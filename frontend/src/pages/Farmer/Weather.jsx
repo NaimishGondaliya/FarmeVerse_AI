@@ -23,23 +23,31 @@ import { weatherAPI, farmAPI } from '../../services/api'
 
 // English/Gujarati weather descriptions translation dictionary
 const weatherTranslations = {
-    'clear sky': 'સ્વચ્છ આકાશ (Clear Sky)',
-    'few clouds': 'થોડા વાદળો (Few Clouds)',
-    'scattered clouds': 'છૂટાછવાયા વાદળો (Scattered Clouds)',
-    'broken clouds': 'ખંડિત વાદળો (Broken Clouds)',
-    'shower rain': 'વરસાદી ઝાપટાં (Shower Rain)',
-    'rain': 'વરસાદ (Rain)',
-    'light rain': 'હળવો વરસાદ (Light Rain)',
-    'moderate rain': 'મધ્યમ વરસાદ (Moderate Rain)',
-    'heavy intensity rain': 'ભારે વરસાદ (Heavy Rain)',
-    'thunderstorm': 'ગાજવીજ સાથે વાવાઝોડું (Thunderstorm)',
-    'snow': 'બરફ (Snow)',
-    'mist': 'ઝાંખું ધુમ્મસ (Mist)',
-    'smoke': 'ધુમાડો (Smoke)',
-    'haze': 'ધુમ્મસ (Haze)',
-    'dust': 'ધૂળની ડમરી (Dust)',
-    'fog': 'ગાઢ ધુમ્મસ (Fog)',
-    'overcast clouds': 'વાદળછાયું (Overcast Clouds)'
+    'clear': 'સ્વચ્છ',
+    'clear sky': 'સ્વચ્છ આકાશ',
+    'sunny': 'તડકો',
+    'cloudy': 'વાદળછાયું',
+    'clouds': 'વાદળછાયું',
+    'few clouds': 'વાદળછાયું',
+    'scattered clouds': 'વિખરાયેલા વાદળો',
+    'broken clouds': 'ખંડિત વાદળો',
+    'partly cloudy': 'આંશિક વાદળછાયું',
+    'overcast': 'ઘેરાયેલું આકાશ',
+    'overcast clouds': 'ઘેરાયેલું આકાશ',
+    'shower rain': 'વરસાદી ઝાપટાં',
+    'rain': 'વરસાદ',
+    'light rain': 'હળવો વરસાદ',
+    'moderate rain': 'મધ્યમ વરસાદ',
+    'heavy rain': 'ભારે વરસાદ',
+    'heavy intensity rain': 'ભારે વરસાદ',
+    'drizzle': 'ઝરમર વરસાદ',
+    'thunderstorm': 'વાવાઝોડા સાથે વરસાદ',
+    'snow': 'બરફ',
+    'mist': 'ઝાકળ',
+    'smoke': 'ધુમાડો',
+    'haze': 'ધુમ્મસ',
+    'dust': 'ધૂળની ડમરી',
+    'fog': 'ધુમ્મસ'
 }
 
 const translateDescription = (description, lang) => {
@@ -48,6 +56,26 @@ const translateDescription = (description, lang) => {
     const descLower = description.toLowerCase()
     return weatherTranslations[descLower] || description
 }
+
+const toGujaratiDigits = (str, lang) => {
+    if (lang !== 'GUJ') return str;
+    const gujDigits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+    return String(str).replace(/\d/g, d => gujDigits[d]);
+};
+
+const formatForecastDate = (dateStr, lang) => {
+    if (lang !== 'GUJ') return dateStr;
+    const months = {
+        'Jan': 'જાન્યુઆરી', 'Feb': 'ફેબ્રુઆરી', 'Mar': 'માર્ચ', 'Apr': 'એપ્રિલ',
+        'May': 'મે', 'Jun': 'જૂન', 'Jul': 'જુલાઈ', 'Aug': 'ઑગસ્ટ',
+        'Sep': 'સપ્ટેમ્બર', 'Oct': 'ઑક્ટોબર', 'Nov': 'નવેમ્બર', 'Dec': 'ડિસેમ્બર'
+    };
+    const parts = dateStr.split(' ');
+    if (parts.length >= 2) {
+        return `${toGujaratiDigits(parts[0], lang)} ${months[parts[1]] || parts[1]}`;
+    }
+    return dateStr;
+};
 
 // Translations vocabulary for Bilingual support
 const dictionary = {
@@ -141,7 +169,21 @@ const dictionary = {
         planOverallScore: "એકંદર ફાર્મિંગ સ્કોર",
         planAISummary: "AI ફાર્મ સારાંશ",
         planSelectText: "વિગતવાર પ્લાનર જોવા માટે કોઈ એક દિવસ ઉપર ક્લિક કરો.",
-        day: "દિવસ"
+        day: "દિવસ",
+        airMoisture: "હવામાં ભેજ",
+        kmh: "કિમી/કલાક",
+        precipExpected: "વરસાદની શક્યતા",
+        kmVisibility: "કિમી દૃશ્યતા",
+        rainProb: "વરસાદની સંભાવના",
+        uvVis: "યુવી / દૃશ્યતા",
+        recommendationLbl: "ભલામણ",
+        timingLbl: "સમય",
+        waterReasonLbl: "પાણીની જરૂરિયાતનું કારણ",
+        additionalAnalytics: "વધારાની હવામાન એનાલિટિક્સ",
+        noForecast: "આગાહીનો ડેટા ઉપલબ્ધ નથી",
+        noWeather: "કોઈ હવામાન ડેટા ઉપલબ્ધ નથીં.",
+        noWeatherDesc: "શહેરોની યાદીમાંથી કોઈ એક શહેર પસંદ કરો અથવા કસ્ટમ સર્ચ દ્વારા હવામાન મેળવો.",
+        liveWeatherStatus: "જીવંત હવામાન વિગતો"
     },
     ENG: {
         title: "🌤 Weather Bulletin",
@@ -233,7 +275,21 @@ const dictionary = {
         planOverallScore: "Overall Farming Score",
         planAISummary: "AI Farm Summary",
         planSelectText: "Click on a day above to view the detailed farm planner.",
-        day: "Day"
+        day: "Day",
+        airMoisture: "Air Moisture",
+        kmh: "km/h",
+        precipExpected: "Precipitation Expected",
+        kmVisibility: "km Visibility",
+        rainProb: "RAIN PROB",
+        uvVis: "UV / VIS",
+        recommendationLbl: "Recommendation",
+        timingLbl: "Timing",
+        waterReasonLbl: "Water Requirement Reason",
+        additionalAnalytics: "Additional Weather Analytics",
+        noForecast: "No forecast data available",
+        noWeather: "No weather information loaded.",
+        noWeatherDesc: "Select a city from the list or type in a city name above to view weather data.",
+        liveWeatherStatus: "Live Weather Status"
     }
 }
 
@@ -461,7 +517,7 @@ export const Weather = () => {
         if (speed === undefined || speed === null) return '-'
         const kmh = speed * 3.6
         return lang === 'GUJ'
-            ? `${speed.toFixed(1)} મી/સે (${kmh.toFixed(1)} કિમી/કલાક)`
+            ? `${toGujaratiDigits(speed.toFixed(1), lang)} મી/સે (${toGujaratiDigits(kmh.toFixed(1), lang)} કિમી/કલાક)`
             : `${speed.toFixed(1)} m/s (${kmh.toFixed(1)} km/h)`
     }
 
@@ -477,7 +533,7 @@ export const Weather = () => {
         if (meters === undefined || meters === null) return '-'
         const km = meters / 1000
         return lang === 'GUJ'
-            ? `${km.toFixed(1)} કિલોમીટર (${meters} મીટર)`
+            ? `${toGujaratiDigits(km.toFixed(1), lang)} કિલોમીટર (${toGujaratiDigits(meters, lang)} મીટર)`
             : `${km.toFixed(1)} km (${meters} m)`
     }
 
@@ -584,14 +640,14 @@ export const Weather = () => {
             {/* Error Widget cards rendering */}
             {errorType && (
                 <div className={`p-6 rounded-card border shadow-sm flex flex-col md:flex-row items-center gap-4 animate-fadeIn ${errorType === 'invalid_city' ? 'bg-amber-50 border-amber-250 text-amber-900' :
-                        errorType === 'api_offline' ? 'bg-orange-50 border-orange-250 text-orange-900' :
-                            errorType === 'no_coords' ? 'bg-rose-50 border-rose-250 text-rose-900' :
-                                'bg-red-50 border-red-250 text-red-900'
+                    errorType === 'api_offline' ? 'bg-orange-50 border-orange-250 text-orange-900' :
+                        errorType === 'no_coords' ? 'bg-rose-50 border-rose-250 text-rose-900' :
+                            'bg-red-50 border-red-250 text-red-900'
                     }`}>
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${errorType === 'invalid_city' ? 'bg-amber-100 text-amber-600' :
-                            errorType === 'api_offline' ? 'bg-orange-100 text-orange-600' :
-                                errorType === 'no_coords' ? 'bg-rose-100 text-rose-600' :
-                                    'bg-red-100 text-red-600'
+                        errorType === 'api_offline' ? 'bg-orange-100 text-orange-600' :
+                            errorType === 'no_coords' ? 'bg-rose-100 text-rose-600' :
+                                'bg-red-100 text-red-600'
                         }`}>
                         <FiAlertCircle size={24} />
                     </div>
@@ -769,7 +825,9 @@ export const Weather = () => {
                         <div>
                             <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2">
                                 <FiMapPin className="text-emerald-600" />
-                                {weather.city}, {weather.country}
+                                {lang === 'GUJ'
+                                    ? `${weather.city === 'Rajkot' ? 'રાજકોટ' : weather.city === 'Gondal' ? 'ગોંડલ' : weather.city}, ${weather.country === 'IN' ? 'ગુજરાત' : weather.country}`
+                                    : `${weather.city === 'રાજકોટ' ? 'Rajkot' : weather.city === 'ગોંડલ' ? 'Gondal' : weather.city}, ${weather.country === 'IN' ? 'Gujarat' : weather.country}`}
                             </h2>
                             <p className="text-sm font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
                                 <FiClock size={14} /> {t.lastUpdated}: {formatUnixTime(weather.timestamp) || '-'}
@@ -777,7 +835,7 @@ export const Weather = () => {
                         </div>
                         <div className="bg-emerald-50 px-4 py-2 rounded-xl text-emerald-700 font-bold text-sm border border-emerald-100 flex items-center gap-2">
                             <FiSun className="animate-spin-slow" />
-                            {lang === 'GUJ' ? 'જીવંત હવામાન વિગતો' : 'Live Weather Status'}
+                            {t.liveWeatherStatus}
                         </div>
                     </div>
 
@@ -790,8 +848,8 @@ export const Weather = () => {
                                 </div>
                                 <span className="text-xs font-black text-slate-400 uppercase tracking-wider">{t.feelsLike}</span>
                             </div>
-                            <h3 className="text-3xl font-black text-slate-800">{weather.temperature !== null ? `${Math.round(weather.temperature)}°` : '-'}</h3>
-                            <p className="text-xs font-bold text-slate-500 mt-1 capitalize">{weather.weather_main}</p>
+                            <h3 className="text-3xl font-black text-slate-800">{weather.temperature !== null ? `${toGujaratiDigits(Math.round(weather.temperature), lang)}°` : '-'}</h3>
+                            <p className="text-xs font-bold text-slate-500 mt-1 capitalize">{translateDescription(weather.weather_main, lang)}</p>
                         </div>
 
                         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
@@ -801,8 +859,8 @@ export const Weather = () => {
                                 </div>
                                 <span className="text-xs font-black text-slate-400 uppercase tracking-wider">{t.humidity}</span>
                             </div>
-                            <h3 className="text-3xl font-black text-slate-800">{weather.humidity !== null ? `${weather.humidity}%` : '-'}</h3>
-                            <p className="text-xs font-bold text-slate-500 mt-1">Air Moisture</p>
+                            <h3 className="text-3xl font-black text-slate-800">{weather.humidity !== null ? `${toGujaratiDigits(weather.humidity, lang)}%` : '-'}</h3>
+                            <p className="text-xs font-bold text-slate-500 mt-1">{t.airMoisture}</p>
                         </div>
 
                         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
@@ -812,8 +870,8 @@ export const Weather = () => {
                                 </div>
                                 <span className="text-xs font-black text-slate-400 uppercase tracking-wider">{t.windSpeed}</span>
                             </div>
-                            <h3 className="text-3xl font-black text-slate-800">{formatWindSpeed(weather.wind_speed).split(' ')[0]}</h3>
-                            <p className="text-xs font-bold text-slate-500 mt-1">km/h</p>
+                            <h3 className="text-3xl font-black text-slate-800">{toGujaratiDigits(formatWindSpeed(weather.wind_speed).split(' ')[0], lang)}</h3>
+                            <p className="text-xs font-bold text-slate-500 mt-1">{t.kmh}</p>
                         </div>
 
                         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
@@ -821,10 +879,10 @@ export const Weather = () => {
                                 <div className="w-10 h-10 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <FiCloud size={20} />
                                 </div>
-                                <span className="text-xs font-black text-slate-400 uppercase tracking-wider">Rain Prob</span>
+                                <span className="text-xs font-black text-slate-400 uppercase tracking-wider">{t.rainProb}</span>
                             </div>
-                            <h3 className="text-3xl font-black text-slate-800">{weather.pop !== undefined ? `${Math.round(weather.pop * 100)}%` : (weather.clouds !== null ? `${weather.clouds}%` : '-')}</h3>
-                            <p className="text-xs font-bold text-slate-500 mt-1">Precipitation Expected</p>
+                            <h3 className="text-3xl font-black text-slate-800">{weather.pop !== undefined ? `${toGujaratiDigits(Math.round(weather.pop * 100), lang)}%` : (weather.clouds !== null ? `${toGujaratiDigits(weather.clouds, lang)}%` : '-')}</h3>
+                            <p className="text-xs font-bold text-slate-500 mt-1">{t.precipExpected}</p>
                         </div>
 
                         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
@@ -832,10 +890,10 @@ export const Weather = () => {
                                 <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <FiEye size={20} />
                                 </div>
-                                <span className="text-xs font-black text-slate-400 uppercase tracking-wider">UV / VIS</span>
+                                <span className="text-xs font-black text-slate-400 uppercase tracking-wider">{t.uvVis}</span>
                             </div>
-                            <h3 className="text-3xl font-black text-slate-800">{formatVisibility(weather.visibility).split(' ')[0]}</h3>
-                            <p className="text-xs font-bold text-slate-500 mt-1">km Visibility</p>
+                            <h3 className="text-3xl font-black text-slate-800">{toGujaratiDigits(formatVisibility(weather.visibility).split(' ')[0], lang)}</h3>
+                            <p className="text-xs font-bold text-slate-500 mt-1">{t.kmVisibility}</p>
                         </div>
                     </div>
 
@@ -870,18 +928,18 @@ export const Weather = () => {
                             <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 h-full flex flex-col justify-between">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex-1">
-                                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-400 mb-1 block">Recommendation</span>
+                                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-400 mb-1 block">{t.recommendationLbl}</span>
                                         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-blue-200 text-blue-700 text-sm font-bold rounded-lg shadow-xs">
                                             {irrigationInsight?.status}
                                         </div>
                                     </div>
                                     <div className="text-right flex-1">
-                                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-400 mb-1 block">Timing</span>
+                                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-400 mb-1 block">{t.timingLbl}</span>
                                         <div className="text-sm font-black text-slate-800">{irrigationInsight?.time !== '-' ? irrigationInsight?.time : 'N/A'}</div>
                                     </div>
                                 </div>
                                 <div className="bg-white rounded-lg p-3 border border-blue-100">
-                                    <div className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Water Requirement Reason</div>
+                                    <div className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">{t.waterReasonLbl}</div>
                                     <div className="text-xs font-bold text-slate-700">{irrigationInsight?.reason} {irrigationInsight?.advice}</div>
                                 </div>
                             </div>
@@ -914,15 +972,15 @@ export const Weather = () => {
                                     <span className={`text-[10px] font-black uppercase mb-1 tracking-widest ${selectedPlannerDayIndex === day.index ? 'text-emerald-100' : 'text-slate-400'}`}>
                                         {lang === 'GUJ' ? day.dayNameGuj : day.dayNameEng}
                                     </span>
-                                    <span className="text-xl font-black tracking-tighter mb-3">{day.dateStr}</span>
+                                    <span className="text-xl font-black tracking-tighter mb-3">{formatForecastDate(day.dateStr, lang)}</span>
                                     <div className="flex w-full justify-between px-1">
                                         <div className="flex flex-col items-center gap-0.5">
                                             <FiSun size={14} className={selectedPlannerDayIndex === day.index ? 'text-amber-200' : 'text-amber-500'} />
-                                            <span className="text-xs font-bold">{day.temp}°</span>
+                                            <span className="text-xs font-bold">{toGujaratiDigits(day.temp, lang)}°</span>
                                         </div>
                                         <div className="flex flex-col items-center gap-0.5">
                                             <FiDroplet size={14} className={selectedPlannerDayIndex === day.index ? 'text-blue-200' : 'text-blue-500'} />
-                                            <span className="text-xs font-bold">{day.rainProb}%</span>
+                                            <span className="text-xs font-bold">{toGujaratiDigits(day.rainProb, lang)}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -993,13 +1051,13 @@ export const Weather = () => {
                                                         <circle cx="50" cy="50" r={radius} className="transition-all duration-1000 ease-out" stroke={strokeColor} strokeWidth="8" strokeLinecap="round" fill="none" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} />
                                                     </svg>
                                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                                        <span className="text-2xl font-black text-slate-800 leading-none">{d.score}</span>
+                                                        <span className="text-2xl font-black text-slate-800 leading-none">{toGujaratiDigits(d.score, lang)}</span>
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">{t.planOverallScore}</h4>
                                                     <span className="text-sm font-bold text-slate-700">{lang === 'GUJ' ? badgeLabelGuj : d.badge}</span>
-                                                    <p className="text-[10px] font-bold text-slate-400 mt-1">{lang === 'GUJ' ? d.dayNameGuj : d.dayNameEng}, {d.dateStr}</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 mt-1">{lang === 'GUJ' ? d.dayNameGuj : d.dayNameEng}, {formatForecastDate(d.dateStr, lang)}</p>
                                                 </div>
                                             </div>
 
@@ -1052,7 +1110,7 @@ export const Weather = () => {
                             );
                         })() : (
                             <div className="text-center p-8 text-slate-500 font-bold bg-slate-50 rounded-2xl border border-slate-200">
-                                {lang === 'GUJ' ? 'આગાહીનો ડેટા ઉપલબ્ધ નથી' : 'No forecast data available'}
+                                {t.noForecast}
                             </div>
                         )}
                     </div>
@@ -1061,7 +1119,7 @@ export const Weather = () => {
                     <div className="space-y-4">
                         <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
                             <FiActivity className="text-emerald-500" />
-                            Additional Weather Analytics
+                            {t.additionalAnalytics}
                         </h3>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -1071,7 +1129,7 @@ export const Weather = () => {
                                     <FiCompass size={16} />
                                 </div>
                                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1">{t.pressure}</span>
-                                <h4 className="text-sm font-black text-slate-700">{weather.pressure !== null ? `${weather.pressure} hPa` : '-'}</h4>
+                                <h4 className="text-sm font-black text-slate-700">{weather.pressure !== null ? `${toGujaratiDigits(weather.pressure, lang)} hPa` : '-'}</h4>
                             </div>
 
                             {/* Wind Direction */}
@@ -1081,7 +1139,7 @@ export const Weather = () => {
                                 </div>
                                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1">{t.windDirection}</span>
                                 <h4 className="text-sm font-black text-slate-700 leading-none">{getWindDirectionName(weather.wind_direction)}</h4>
-                                <span className="text-[10px] font-bold text-slate-400">({weather.wind_direction}°)</span>
+                                <span className="text-[10px] font-bold text-slate-400">({toGujaratiDigits(weather.wind_direction, lang)}°)</span>
                             </div>
 
                             {/* Clouds Cover */}
@@ -1090,7 +1148,7 @@ export const Weather = () => {
                                     <FiCloud size={16} />
                                 </div>
                                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1">{t.cloudCover}</span>
-                                <h4 className="text-sm font-black text-slate-700">{weather.clouds !== null ? `${weather.clouds}%` : '-'}</h4>
+                                <h4 className="text-sm font-black text-slate-700">{weather.clouds !== null ? `${toGujaratiDigits(weather.clouds, lang)}%` : '-'}</h4>
                             </div>
 
                             {/* Sunrise */}
@@ -1099,7 +1157,7 @@ export const Weather = () => {
                                     <FiSun size={16} />
                                 </div>
                                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1">{t.sunrise}</span>
-                                <h4 className="text-sm font-black text-slate-700">{formatUnixTime(weather.sunrise)}</h4>
+                                <h4 className="text-sm font-black text-slate-700">{toGujaratiDigits(formatUnixTime(weather.sunrise), lang)}</h4>
                             </div>
 
                             {/* Sunset */}
@@ -1108,7 +1166,7 @@ export const Weather = () => {
                                     <FiSun size={16} />
                                 </div>
                                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1">{t.sunset}</span>
-                                <h4 className="text-sm font-black text-slate-700">{formatUnixTime(weather.sunset)}</h4>
+                                <h4 className="text-sm font-black text-slate-700">{toGujaratiDigits(formatUnixTime(weather.sunset), lang)}</h4>
                             </div>
 
                             {/* Coords Location */}
@@ -1117,8 +1175,8 @@ export const Weather = () => {
                                     <FiMapPin size={16} />
                                 </div>
                                 <span className="text-[10px] font-black uppercase text-slate-400 mb-1">{t.coords}</span>
-                                <h4 className="text-[10px] font-bold text-slate-700">Lat: {weather.latitude !== null ? weather.latitude.toFixed(3) : '-'}</h4>
-                                <h4 className="text-[10px] font-bold text-slate-700">Lon: {weather.longitude !== null ? weather.longitude.toFixed(3) : '-'}</h4>
+                                <h4 className="text-[10px] font-bold text-slate-700">Lat: {weather.latitude !== null ? toGujaratiDigits(weather.latitude.toFixed(3), lang) : '-'}</h4>
+                                <h4 className="text-[10px] font-bold text-slate-700">Lon: {weather.longitude !== null ? toGujaratiDigits(weather.longitude.toFixed(3), lang) : '-'}</h4>
                             </div>
                         </div>
                     </div>
@@ -1129,12 +1187,10 @@ export const Weather = () => {
                         <FiSun size={40} />
                     </div>
                     <h4 className="text-lg font-black text-slate-700">
-                        {lang === 'GUJ' ? 'કોઈ હવામાન ડેટા ઉપલબ્ધ નથીં.' : 'No weather information loaded.'}
+                        {t.noWeather}
                     </h4>
                     <p className="text-sm font-bold text-slate-400 mt-2 max-w-sm">
-                        {lang === 'GUJ'
-                            ? 'શહેરોની યાદીમાંથી કોઈ એક શહેર પસંદ કરો અથવા કસ્ટમ સર્ચ દ્વારા હવામાન મેળવો.'
-                            : 'Select a city from the list or type in a city name above to view weather data.'}
+                        {t.noWeatherDesc}
                     </p>
                 </div>
             )}
@@ -1142,5 +1198,4 @@ export const Weather = () => {
         </div>
     )
 }
-
 export default Weather;

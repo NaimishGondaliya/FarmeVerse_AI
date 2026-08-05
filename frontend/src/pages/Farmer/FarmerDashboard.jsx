@@ -19,6 +19,33 @@ import {
 } from 'react-icons/fi'
 import { BiRupee } from 'react-icons/bi'
 import { farmAPI, cropAPI, weatherAPI, marketPricesAPI } from '../../services/api'
+import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
+
+const formatDisplay = (type, val, language) => {
+    if (language !== 'gu') return val;
+    const maps = {
+        crop: {
+            'Groundnut': 'મગફળી', 'Cotton': 'કપાસ', 'Wheat': 'ઘઉં', 'Cumin': 'જીરું', 'Mustard': 'રાઈ', 'Castor Seed': 'એરંડા'
+        },
+        market: {
+            'Rajkot APMC': 'રાજકોટ APMC', 'Gondal APMC': 'ગોંડલ APMC', 'Junagadh APMC': 'જૂનાગઢ APMC'
+        },
+        day: {
+            'Sun': 'રવિવાર', 'Mon': 'સોમવાર', 'Tue': 'મંગળવાર', 'Wed': 'બુધવાર', 'Thu': 'ગુરુવાર', 'Fri': 'શુક્રવાર', 'Sat': 'શનિવાર', 'Today': 'આજે'
+        },
+        weather: {
+            'Clear': 'સ્વચ્છ', 'Rainy': 'વરસાદી', 'Clouds': 'વાદળછાયું', 'Rain': 'વરસાદ'
+        }
+    };
+    return maps[type]?.[val] || val;
+};
+
+const toGuDigits = (str, language) => {
+    if (language !== 'gu' || !str) return str;
+    const gu = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+    return String(str).replace(/[0-9]/g, d => gu[d]);
+};
 
 // Premium Animated Counter Component
 const AnimatedCounter = ({ value, duration = 800, prefix = '', suffix = '' }) => {
@@ -48,12 +75,16 @@ const AnimatedCounter = ({ value, duration = 800, prefix = '', suffix = '' }) =>
         return () => clearInterval(timer)
     }, [value, duration])
 
-    return <span>{prefix}{count.toLocaleString('en-IN')}{suffix}</span>
+    const { formatNumber, language } = useLanguage()
+    return <span>{prefix}{toGuDigits(formatNumber(count), language)}{suffix}</span>
 }
 
 export const FarmerDashboard = () => {
     const navigate = useNavigate()
-    const [farmerName, setFarmerName] = useState('ગુજરાત ખેડૂત મિત્ર') // Default Gujarati welcome name
+    const { formatNumber, formatCurrency, formatDate, language } = useLanguage()
+    const { t } = useTranslation()
+
+    const [farmerName, setFarmerName] = useState('Farmer') // Default Gujarati welcome name
     const [showModal, setShowModal] = useState(false)
     const [modalType, setModalType] = useState('')
     const [farmsCount, setFarmsCount] = useState(0)
@@ -225,13 +256,13 @@ export const FarmerDashboard = () => {
 
             case 'Profit Calculator':
                 return {
-                    title: 'નફાની ગણતરી કરો (Profit Calculator)',
-                    body: 'Phase 2 રોકાણ વ્યવસ્થાપક સાધન. જેના દ્વારા ખેડૂત તેના રોકાણ અને આવકની સરખામણી કરી નફો ગણી શકશે.'
+                    title: t('dashboard.profitCalcTitle'),
+                    body: t('dashboard.profitCalcDesc')
                 }
             default:
                 return {
-                    title: 'ફીચર ટૂંક સમયમાં શરૂ થશે',
-                    body: 'ભવિષ્યના અપડેટમાં આ આખી સુવિધા ઉપલબ્ધ બનશે.'
+                    title: t('dashboard.comingSoonTitle'),
+                    body: t('dashboard.comingSoonDesc')
                 }
         }
     }
@@ -272,21 +303,21 @@ export const FarmerDashboard = () => {
                 <div className="max-w-2xl space-y-4 relative z-10">
                     <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-accent border border-white/10">
                         <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-                        ખેડૂત લાઈવ સત્ર • Active Session
+                        {t('dashboard.activeSession')}
                     </div>
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                        આવકાર, {farmerName}!
+                        {t('dashboard.welcome', { name: farmerName })}
                     </h1>
                     <p className="text-sm md:text-base text-emerald-100/90 leading-relaxed font-medium">
-                        આ રહ્યું તમારું ફાર્મવર્સ એઆઈ (FarmVerse AI) ડેશબોર્ડ. ગુજરાતના ખેડૂતો માટે બનાવવામાં આવેલ અદ્યતન સ્માર્ટ કૃષિ નિર્ણય સહાયક સાધનો.
+                        {t('dashboard.subtitle')}
                     </p>
                     <div className="pt-2 flex flex-wrap gap-4 items-center">
                         <span className="inline-flex items-center gap-2 bg-emerald-800/40 px-3 py-1 rounded-full text-xs font-bold text-emerald-200 border border-emerald-700/30">
-                            📍 ગુજરાત કૃષિ ક્ષેત્ર
+                            {t('dashboard.agriZone')}
                         </span>
                         <div className="flex items-center gap-1.5 text-xs text-accent font-bold">
                             <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-                            સરકારી ટેકાના ભાવ ચાલુ છે
+                            {t('dashboard.mspActive')}
                         </div>
                     </div>
                 </div>
@@ -302,9 +333,9 @@ export const FarmerDashboard = () => {
                 >
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">મારા ખેતરો</p>
+                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">{t('dashboard.myFarms')}</p>
                             <h3 className="text-2xl font-black text-dark tracking-tight">
-                                <AnimatedCounter value={farmsCount} suffix=" ખેતરો" />
+                                <AnimatedCounter value={farmsCount} suffix={' ' + t('dashboard.farms')} />
                             </h3>
                         </div>
                         <div className="p-3 bg-green-50 text-green-600 rounded-xl shadow-xs flex items-center justify-center flex-shrink-0">
@@ -315,7 +346,7 @@ export const FarmerDashboard = () => {
                         <span className="truncate">
                             {farmsList.length > 0
                                 ? farmsList.slice(0, 1).map(f => f.farm_name).join('') + '...'
-                                : 'કોઈ ખેતર નથી'}
+                                : t('dashboard.noFarms')}
                         </span>
                         <FiArrowRight size={14} className="text-green-600 flex-shrink-0" />
                     </div>
@@ -329,9 +360,9 @@ export const FarmerDashboard = () => {
                 >
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">વાવેતર પાક</p>
+                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">{t('dashboard.currentCrops')}</p>
                             <h3 className="text-2xl font-black text-dark tracking-tight">
-                                <AnimatedCounter value={cropsCount} suffix=" પાક" />
+                                <AnimatedCounter value={cropsCount} suffix={' ' + t('dashboard.crops')} />
                             </h3>
                         </div>
                         <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl shadow-xs flex items-center justify-center flex-shrink-0">
@@ -342,7 +373,7 @@ export const FarmerDashboard = () => {
                         <span className="truncate">
                             {cropsList.length > 0
                                 ? cropsList.slice(0, 1).map(c => c.crop_name).join('') + '...'
-                                : 'કોઈ પાક નથી'}
+                                : t('dashboard.noCrops')}
                         </span>
                         <FiArrowRight size={14} className="flex-shrink-0" />
                     </div>
@@ -355,7 +386,7 @@ export const FarmerDashboard = () => {
                 >
                     <div className="flex items-start justify-between">
                         <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">કુલ નફો</p>
+                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">{t('dashboard.totalProfit')}</p>
                             <h3 className="text-2xl font-black text-primary tracking-tight">
                                 <AnimatedCounter value={totalProfit} prefix="₹" />
                             </h3>
@@ -365,7 +396,7 @@ export const FarmerDashboard = () => {
                         </div>
                     </div>
                     <div className="border-t border-dark/5 pt-2.5 mt-2 flex items-center justify-between text-xs text-dark-light/95 font-medium">
-                        <span className="truncate">રોકાણ: ₹{totalInvestment.toLocaleString('en-IN')}</span>
+                        <span className="truncate">{t('dashboard.investment')}: {toGuDigits(formatCurrency(totalInvestment), language)}</span>
                         <FiTrendingUp size={14} className="text-primary flex-shrink-0" />
                     </div>
                 </Card>
@@ -384,9 +415,9 @@ export const FarmerDashboard = () => {
                 >
                     <div className="flex items-start justify-between h-auto">
                         <div className="space-y-0.5 pr-2">
-                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">આજનું હવામાન</p>
+                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider">{t('dashboard.todaysWeather')}</p>
                             <h3 className="text-2xl font-black text-dark tracking-tight">
-                                {weatherLoading ? '...' : (weatherData?.temperature !== undefined && weatherData?.temperature !== null ? `${Math.round(weatherData.temperature)}°C` : '-')}
+                                {weatherLoading ? '...' : (weatherData?.temperature !== undefined && weatherData?.temperature !== null ? `${toGuDigits(Math.round(weatherData.temperature), language)}°C` : '-')}
                             </h3>
                         </div>
                         <div className="p-2 bg-amber-50 text-accent rounded-lg shadow-xs flex items-center justify-center flex-shrink-0">
@@ -398,7 +429,7 @@ export const FarmerDashboard = () => {
                     ) : weatherData ? (
                         <div className="border-t border-dark/5 pt-2 mt-auto flex flex-col text-xs text-accent-dark font-bold justify-end h-full">
                             <div className="flex items-center justify-between">
-                                <span className="truncate">{weatherData.weather_main} • {weatherData.locationName}</span>
+                                <span className="truncate">{formatDisplay('weather', weatherData.weather_main, language)} • {weatherData.locationName}</span>
                             </div>
                             <span className="text-[9px] font-medium text-dark-light mt-0.5">Last Updated: {weatherData.timestamp ? new Date(weatherData.timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}</span>
                         </div>
@@ -420,12 +451,12 @@ export const FarmerDashboard = () => {
                 >
                     <div className="flex items-start justify-between h-auto">
                         <div className="space-y-0.5 pr-2 overflow-hidden w-full">
-                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider block">શ્રેષ્ઠ બજાર</p>
+                            <p className="text-[10px] font-bold text-dark-light uppercase tracking-wider block">{t('dashboard.bestMarket')}</p>
                             {marketLoading ? (
                                 <h3 className="text-sm font-extrabold text-dark tracking-tight truncate">...</h3>
                             ) : bestMarket ? (
-                                <h3 className="text-[14px] font-extrabold text-dark tracking-tight truncate w-full" title={bestMarket.market_name}>
-                                    {bestMarket.market_name}
+                                <h3 className="text-[14px] font-extrabold text-dark tracking-tight truncate w-full" title={formatDisplay('market', bestMarket.market_name, language)}>
+                                    {formatDisplay('market', bestMarket.market_name, language)}
                                 </h3>
                             ) : (
                                 <h3 className="text-[13px] font-extrabold text-dark tracking-tight">No Market Data</h3>
@@ -443,17 +474,17 @@ export const FarmerDashboard = () => {
                     ) : bestMarket ? (
                         <div className="border-t border-dark/5 pt-1.5 flex flex-col gap-0.5 mt-auto">
                             <div className="flex justify-between items-center text-[12px] font-bold">
-                                <span className="text-orange-700 font-extrabold truncate w-[70px]">{bestMarket.crop_name}</span>
-                                <span className="text-dark">₹{Math.round(bestMarket.modal_price).toLocaleString('en-IN')}<span className="text-dark/50 text-[10px] font-semibold">/Qt</span></span>
+                                <span className="text-orange-700 font-extrabold truncate w-[70px]">{formatDisplay('crop', bestMarket.crop_name, language)}</span>
+                                <span className="text-dark">{toGuDigits(formatCurrency(Math.round(bestMarket.modal_price)), language)}<span className="text-dark/50 text-[10px] font-semibold">/Qt</span></span>
                             </div>
                             <div className="flex justify-between items-center text-[10px] mt-0.5">
                                 <span className="text-emerald-600 font-extrabold bg-emerald-50 px-1 py-0.5 rounded border border-emerald-100 flexitems-center">
-                                    +{bestMarket.diff > 0 ? `₹${Math.round(bestMarket.diff)}` : '₹0'} Extra
+                                    +{bestMarket.diff > 0 ? toGuDigits(formatCurrency(Math.round(bestMarket.diff)), language) : toGuDigits(formatCurrency(0), language)} {language === 'gu' ? 'વધારાનો' : 'Extra'}
                                 </span>
                                 <span className="text-dark-light font-medium text-[9px] truncate ml-1">vs 2nd best</span>
                             </div>
                             <p className="text-[9px] font-semibold text-dark-light truncate mt-0.5 bg-secondary-dark/30 rounded py-0.5 px-1 inline-block w-fit max-w-full">
-                                Sell {bestMarket.crop_name} here today.
+                                {language === 'gu' ? `આજે અહીં ${formatDisplay('crop', bestMarket.crop_name, language)} વેચો` : `Sell ${bestMarket.crop_name} here today.`}
                             </p>
                         </div>
                     ) : (
@@ -470,15 +501,15 @@ export const FarmerDashboard = () => {
                 {/* 1. Today's Farm Tasks */}
                 <Card className="col-span-1 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition flex flex-col">
                     <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
-                        <FiTarget className="text-primary" /> આજના કૃષિ કાર્યો (Today's Tasks)
+                        <FiTarget className="text-primary" /> {t('dashboard.todaysTasks')}
                     </h2>
                     <div className="flex-1 space-y-3">
                         {[
-                            { name: 'Irrigation (પિયત)', status: weatherData?.temperature > 30 ? 'Do it Today' : 'Skip', icon: <FiCloudRain />, color: 'text-blue-500', bg: 'bg-blue-50' },
-                            { name: 'Spraying (દવા છંટકાવ)', status: (weatherData?.wind_speed || 0) < 15 ? 'Safe' : 'Avoid', icon: <FiTarget />, color: 'text-accent', bg: 'bg-amber-50' },
-                            { name: 'Fertilizer (ખાતર)', status: 'Good Day', icon: <FiActivity />, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-                            { name: 'Harvest (લણણી)', status: 'Delay', icon: <FiLayers />, color: 'text-orange-500', bg: 'bg-orange-50' },
-                            { name: 'Disease Insp. (નિરીક્ષણ)', status: 'Recommended', icon: <FiCheckCircle />, color: 'text-green-600', bg: 'bg-green-50' },
+                            { name: t('tasks.irrigation'), status: weatherData?.temperature > 30 ? t('taskStatus.doItToday') : t('taskStatus.skip'), icon: <FiCloudRain />, color: 'text-blue-500', bg: 'bg-blue-50' },
+                            { name: t('tasks.spraying'), status: (weatherData?.wind_speed || 0) < 15 ? t('taskStatus.safe') : t('taskStatus.avoid'), icon: <FiTarget />, color: 'text-accent', bg: 'bg-amber-50' },
+                            { name: t('tasks.fertilizer'), status: t('taskStatus.goodDay'), icon: <FiActivity />, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                            { name: t('tasks.harvest'), status: t('taskStatus.delay'), icon: <FiLayers />, color: 'text-orange-500', bg: 'bg-orange-50' },
+                            { name: t('tasks.diseaseInsp'), status: t('taskStatus.recommended'), icon: <FiCheckCircle />, color: 'text-green-600', bg: 'bg-green-50' },
                         ].map((task, idx) => (
                             <div key={idx} className="flex items-center justify-between p-2.5 rounded-card bg-[#f8f9fa] border border-dark/5">
                                 <div className="flex items-center gap-3">
@@ -487,7 +518,7 @@ export const FarmerDashboard = () => {
                                     </div>
                                     <span className="text-xs font-bold text-dark">{task.name}</span>
                                 </div>
-                                <span className={`text-[10px] uppercase font-extrabold px-2 py-1 rounded shadow-xs ${task.status === 'Skip' || task.status === 'Avoid' || task.status === 'Delay' ? 'bg-red-50 text-red-600' : 'bg-primary-light text-primary'}`}>
+                                <span className={`text-[10px] uppercase font-extrabold px-2 py-1 rounded shadow-xs ${task.status === t('taskStatus.skip') || task.status === t('taskStatus.avoid') || task.status === t('taskStatus.delay') ? 'bg-red-50 text-red-600' : 'bg-primary-light text-primary'}`}>
                                     {task.status}
                                 </span>
                             </div>
@@ -498,7 +529,7 @@ export const FarmerDashboard = () => {
                 {/* 2. 7-Day Weather Preview */}
                 <Card className="col-span-1 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition flex flex-col">
                     <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
-                        <FiSun className="text-accent" /> ૭ દિવસનું હવામાન (7-Day Forecast)
+                        <FiSun className="text-accent" /> {t('dashboard.forecast')}
                     </h2>
                     <div className="flex-1 overflow-auto pr-2 space-y-2">
                         {weatherData ? [...Array(7)].map((_, i) => {
@@ -512,12 +543,12 @@ export const FarmerDashboard = () => {
                             const isRainy = (i % 3 === 0 && Math.sin(i) > 0.5)
                             return (
                                 <div key={i} className="flex justify-between items-center bg-[#f8f9fa] p-3 rounded-card border border-dark/5">
-                                    <span className="text-xs font-extrabold text-dark w-12">{i === 0 ? 'Today' : days[date.getDay()]}</span>
+                                    <span className="text-xs font-extrabold text-dark w-12">{formatDisplay('day', i === 0 ? 'Today' : days[date.getDay()], language)}</span>
                                     <div className="flex gap-1 items-center">
                                         {isRainy ? <FiCloudRain className="text-blue-500" /> : <FiSun className="text-accent" />}
-                                        <span className="text-[10px] text-dark-light font-medium ml-1">{isRainy ? 'Rainy' : 'Clear'}</span>
+                                        <span className="text-[10px] text-dark-light font-medium ml-1">{formatDisplay('weather', isRainy ? 'Rainy' : 'Clear', language)}</span>
                                     </div>
-                                    <span className="text-sm font-black text-dark">{Math.round(temp)}°C</span>
+                                    <span className="text-sm font-black text-dark">{toGuDigits(Math.round(temp), language)}°C</span>
                                 </div>
                             )
                         }) : (
@@ -529,27 +560,27 @@ export const FarmerDashboard = () => {
                 {/* 3. Profit Summary */}
                 <Card className="col-span-1 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition flex flex-col">
                     <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
-                        <FiTrendingUp className="text-emerald-500" /> નફાનો અંદાજ (Profit Summary)
+                        <FiTrendingUp className="text-emerald-500" /> {t('dashboard.profitSummary')}
                     </h2>
                     <div className="flex-1 flex flex-col justify-center space-y-6">
                         <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between shadow-xs">
                             <div>
-                                <p className="text-[10px] font-bold text-emerald-800 uppercase">Total Income</p>
-                                <h3 className="text-xl font-black text-emerald-600 mt-1">₹{(totalProfit + totalInvestment).toLocaleString('en-IN')}</h3>
+                                <p className="text-[10px] font-bold text-emerald-800 uppercase">{t('dashboard.totalIncome')}</p>
+                                <h3 className="text-xl font-black text-emerald-600 mt-1">{toGuDigits(formatCurrency(totalProfit + totalInvestment), language)}</h3>
                             </div>
                             <FiTrendingUp size={28} className="text-emerald-400 opacity-50" />
                         </div>
                         <div className="p-4 bg-red-50 rounded-xl border border-red-100 flex items-center justify-between shadow-xs">
                             <div>
-                                <p className="text-[10px] font-bold text-red-800 uppercase">Total Expenses</p>
-                                <h3 className="text-xl font-black text-red-600 mt-1">₹{totalInvestment.toLocaleString('en-IN')}</h3>
+                                <p className="text-[10px] font-bold text-red-800 uppercase">{t('dashboard.totalExpenses')}</p>
+                                <h3 className="text-xl font-black text-red-600 mt-1">{toGuDigits(formatCurrency(totalInvestment), language)}</h3>
                             </div>
                             <FiActivity size={28} className="text-red-400 opacity-50" />
                         </div>
                         <div className="p-4 bg-primary-light/30 rounded-xl border border-primary/20 flex items-center justify-between shadow-xs">
                             <div>
-                                <p className="text-[10px] font-bold text-primary-dark uppercase">Net Profit</p>
-                                <h3 className="text-xl font-black text-primary mt-1">₹{totalProfit.toLocaleString('en-IN')}</h3>
+                                <p className="text-[10px] font-bold text-primary-dark uppercase">{t('dashboard.netProfit')}</p>
+                                <h3 className="text-xl font-black text-primary mt-1">{toGuDigits(formatCurrency(totalProfit), language)}</h3>
                             </div>
                             <FiCheckCircle size={28} className="text-primary opacity-50" />
                         </div>
@@ -559,16 +590,16 @@ export const FarmerDashboard = () => {
                 {/* 4. My Farms Overview */}
                 <Card className="col-span-1 lg:col-span-3 bg-white p-5 border border-dark/5 shadow-sm hover:shadow-md transition">
                     <h2 className="text-sm font-bold text-dark flex items-center gap-2 mb-4">
-                        <FiMapPin className="text-primary" /> મારા ખેતરો (My Farms Overview)
+                        <FiMapPin className="text-primary" /> {t('dashboard.myFarmsOverview')}
                     </h2>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse min-w-[600px]">
                             <thead>
                                 <tr className="bg-secondary-dark/65 border-b border-dark/5 text-dark-light/95 text-[10px] font-bold uppercase">
-                                    <th className="p-3">Farm Name</th>
-                                    <th className="p-3">Village</th>
-                                    <th className="p-3">Area</th>
-                                    <th className="p-3">Status</th>
+                                    <th className="p-3">{t('dashboard.farmName')}</th>
+                                    <th className="p-3">{t('dashboard.village')}</th>
+                                    <th className="p-3">{t('dashboard.area')}</th>
+                                    <th className="p-3">{t('dashboard.status')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-dark/5 text-xs text-dark">
@@ -577,15 +608,15 @@ export const FarmerDashboard = () => {
                                         <td className="p-3 font-extrabold">{farm.farm_name}</td>
                                         <td className="p-3">{farm.village || '-'}</td>
                                         <td className="p-3 font-mono">
-                                            {farm.total_area ? farm.total_area : 'N/A'} {farm.area_unit || ''}
+                                            {toGuDigits(farm.total_area ? farm.total_area : 'N/A', language)} {language === 'gu' ? (farm.area_unit === 'Acre' ? 'એકર' : farm.area_unit) : (farm.area_unit || '')}
                                         </td>
                                         <td className="p-3">
-                                            <span className="bg-green-100 text-green-700 text-[9px] font-extrabold px-2 py-0.5 rounded shadow-xs uppercase">Active</span>
+                                            <span className="bg-green-100 text-green-700 text-[9px] font-extrabold px-2 py-0.5 rounded shadow-xs uppercase">{t('common.active') || 'Active'}</span>
                                         </td>
                                     </tr>
                                 )) : (
                                     <tr>
-                                        <td colSpan="4" className="text-center py-6 text-dark-light font-bold text-xs">No farms registered.</td>
+                                        <td colSpan="4" className="text-center py-6 text-dark-light font-bold text-xs">{t('dashboard.noFarmsRegistered')}</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -602,10 +633,10 @@ export const FarmerDashboard = () => {
                         <table className="w-full text-left border-collapse min-w-[500px]">
                             <thead>
                                 <tr className="bg-emerald-50 border-b border-dark/5 text-emerald-800 text-[10px] font-bold uppercase">
-                                    <th className="p-3">Crop Name</th>
-                                    <th className="p-3">Current Status</th>
-                                    <th className="p-3">Days Since Sowing</th>
-                                    <th className="p-3">Expected Harvest Date</th>
+                                    <th className="p-3">{t('dashboard.cropName')}</th>
+                                    <th className="p-3">{t('dashboard.currentStatus')}</th>
+                                    <th className="p-3">{t('dashboard.daysSinceSowing')}</th>
+                                    <th className="p-3">{t('dashboard.expectedHarvest')}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-dark/5 text-xs text-dark">
@@ -616,15 +647,15 @@ export const FarmerDashboard = () => {
                                     expectedHarvest.setDate(expectedHarvest.getDate() + 120); // rough est
                                     return (
                                         <tr key={idx} className="hover:bg-emerald-50/30 transition-colors">
-                                            <td className="p-3 font-extrabold">{crop.crop_name}</td>
-                                            <td className="p-3 font-semibold text-emerald-700">{crop.status || 'Growing'}</td>
-                                            <td className="p-3 font-mono">{diff > 0 ? diff : 0} days</td>
-                                            <td className="p-3 font-mono">{expectedHarvest.toLocaleDateString('en-GB')}</td>
+                                            <td className="p-3 font-extrabold">{formatDisplay('crop', crop.crop_name, language)}</td>
+                                            <td className="p-3 font-semibold text-emerald-700">{t(`cropStatus.${crop.status || 'Growing'}`)}</td>
+                                            <td className="p-3 font-mono">{toGuDigits(diff > 0 ? diff : 0, language)} {language === 'gu' ? 'દિવસ' : 'days'}</td>
+                                            <td className="p-3 font-mono">{toGuDigits(formatDate(expectedHarvest), language)}</td>
                                         </tr>
                                     )
                                 }) : (
                                     <tr>
-                                        <td colSpan="4" className="text-center py-6 text-dark-light font-bold text-xs">No crops registered.</td>
+                                        <td colSpan="4" className="text-center py-6 text-dark-light font-bold text-xs">{t('dashboard.noCropsRegistered')}</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -636,7 +667,7 @@ export const FarmerDashboard = () => {
                 <Card className="col-span-1 lg:col-span-1 bg-gradient-to-br from-orange-50 to-amber-100 p-5 border border-orange-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
                     <div>
                         <h2 className="text-sm font-bold text-orange-800 flex items-center gap-2 mb-4">
-                            <FiTrendingUp className="text-orange-600" /> આજના બજારની તક (Market Opportunity)
+                            <FiTrendingUp className="text-orange-600" /> {t('dashboard.marketOpportunity')}
                         </h2>
                         {bestMarket ? (
                             <div className="space-y-4">
@@ -651,11 +682,11 @@ export const FarmerDashboard = () => {
                                 <div className="flex gap-3">
                                     <div className="flex-1 bg-white p-3 rounded-xl shadow-xs border border-orange-100">
                                         <p className="text-[9px] text-orange-600 font-bold uppercase">Modal Price</p>
-                                        <h3 className="text-sm font-black text-dark mt-0.5 font-mono">₹{Math.round(bestMarket.modal_price).toLocaleString('en-IN')}</h3>
+                                        <h3 className="text-sm font-black text-dark mt-0.5 font-mono">{formatCurrency(Math.round(bestMarket.modal_price))}</h3>
                                     </div>
                                     <div className="flex-1 bg-emerald-50 p-3 rounded-xl shadow-xs border border-emerald-100">
                                         <p className="text-[9px] text-emerald-700 font-bold uppercase">Extra Profit</p>
-                                        <h3 className="text-sm font-black text-emerald-600 mt-0.5 font-mono">+{bestMarket.diff > 0 ? `₹${Math.round(bestMarket.diff)}` : '₹0'}</h3>
+                                        <h3 className="text-sm font-black text-emerald-600 mt-0.5 font-mono">+{bestMarket.diff > 0 ? formatCurrency(Math.round(bestMarket.diff)) : formatCurrency(0)}</h3>
                                     </div>
                                 </div>
                             </div>

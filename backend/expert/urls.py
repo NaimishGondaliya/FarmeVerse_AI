@@ -7,7 +7,9 @@ from .views import (
     ExpertDetailView,
     ExpertRegisterView,
     ExpertLoginView,
-    ExpertDashboardView
+    ExpertDashboardView,
+    ExpertNotificationListView,
+    ExpertNotificationDetailView,
 )
 
 app_name = 'expert'
@@ -21,6 +23,8 @@ urlpatterns = [
     path('search/', ExpertSearchView.as_view(), name='search'),
     path('districts/', ExpertDistrictsView.as_view(), name='districts'),
     path('<int:pk>/', ExpertDetailView.as_view(), name='detail'),
+    path('notifications/', ExpertNotificationListView.as_view(), name='notifications'),
+    path('notifications/<int:pk>/', ExpertNotificationDetailView.as_view(), name='notification-detail'),
 ]
 
 

@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework import exceptions
+from django.db.models import Avg, Count
 from expert.models import AgricultureExpert
-from .models import Consultation, ConsultationReply
+from .models import Consultation, ConsultationReply, ExpertReview
 from .serializers import ConsultationSerializer, ConsultationReplySerializer
 
 class PingConsultationView(APIView):
@@ -181,3 +182,56 @@ class ConsultationCloseView(ConsultationBaseView):
         consultation.save()
 
         return Response({"success": True, "status": "Closed", "message": "Consultation successfully closed."}, status=status.HTTP_200_OK)
+
+
+class SubmitRatingView(ConsultationBaseView):
+    def post(self, request, pk):
+        role, user = self.get_role_and_user(request)
+        if role != 'Farmer':
+            return Response({"error": "Only farmers can rate consultations."}, status=status.HTTP_403_FORBIDDEN)
+
+        consultation = get_object_or_404(Consultation, pk=pk)
+        
+        # Check permissions
+        if consultation.farmer != user:
+            return Response({"error": "You can only rate your own consultations."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Confirm status is Closed
+        if consultation.status != 'Closed':
+            return Response({"error": "Consultation must be closed before submitting a rating."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if already rated
+        if hasattr(consultation, 'review'):
+            return Response({"error": "This consultation has already been rated."}, status=status.HTTP_400_BAD_REQUEST)
+
+        rating_val = request.data.get('rating')
+        review_text = request.data.get('review', '').strip()
+
+        try:
+            rating_val = int(rating_val)
+            if rating_val < 1 or rating_val > 5:
+                raise ValueError
+        except (TypeError, ValueError):
+            return Response({"rating": ["Rating must be an integer between 1 and 5."]}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the review
+        review = ExpertReview.objects.create(
+            consultation=consultation,
+            expert=consultation.expert,
+            farmer=user,
+            rating=rating_val,
+            review=review_text
+        )
+
+        # Recalculate average rating for expert
+        expert = consultation.expert
+        reviews_agg = ExpertReview.objects.filter(expert=expert).aggregate(
+            avg_rating=Avg('rating'),
+            cnt=Count('id')
+        )
+        if reviews_agg['avg_rating'] is not None:
+            expert.rating = round(reviews_agg['avg_rating'], 1)
+        expert.review_count = reviews_agg['cnt'] or 0
+        expert.save(update_fields=['rating', 'review_count'])
+
+        return Response({"success": True, "message": "Rating submitted successfully."}, status=status.HTTP_201_CREATED)

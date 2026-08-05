@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
 import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import {
@@ -22,8 +23,8 @@ const dictionary = {
         title: "📈 લાઈવ બજાર ભાવો (Live Market Prices)",
         subtitle: "ગુજરાત માર્કેટ યાર્ડ (APMC) સરકારી એગમાર્કનેટ (AGMARKNET) લાઈવ ભાવો",
         searchPlaceholder: "પાકનું નામ શોધો... (દા.ત. કપાસ, જીરૂ)",
-        allDistricts: "બધા જિલ્લા (All Districts)",
-        districtSelector: "જિલ્લો પસંદ કરો (Select District)",
+        allDistricts: "બધા જિલ્લાઓ",
+        districtSelector: "જિલ્લો પસંદ કરો",
         refreshBtn: "ભાવ અપડેટ કરો (Refresh)",
         refreshing: "અપડેટ થઈ રહ્યું છે...",
         lastUpdated: "છેલ્લે અપડેટ કરેલ",
@@ -47,7 +48,16 @@ const dictionary = {
         noData: "કોઈ બજાર ભાવો મળ્યા નથી. કૃપા કરીને રીફ્રેશ બટન દબાવો.",
         sourceLive: "સરકારી લાઈવ ફીડ",
         sourceOffline: "લોકલ ડેટાબેઝ કેશ",
-        loading: "બજારના લાઈવ ભાવો મેળવી રહ્યા છીએ..."
+        loading: "બજારના લાઈવ ભાવો મેળવી રહ્યા છીએ...",
+        feedIntegration: "ફીડ એકીકરણ સ્થિતિ",
+        sqliteCache: "SQLite ડેટાબેઝ કેશ બરાબર છે",
+        highAvailability: "ઉચ્ચ ઉપલબ્ધતા સક્રિય. ઝડપી પ્રશ્નો સક્ષમ.",
+        dataSource: "ડેટા સ્ત્રોત",
+        apmcMultiCompare: "બહુવિધ માર્કેટ યાર્ડની સરખામણી",
+        min: "ન્યૂનતમ",
+        max: "મહત્તમ",
+        qt: "ક્વિન્ટલ",
+        man: "મણ"
     },
     ENG: {
         title: "📈 Live Market Prices",
@@ -78,7 +88,16 @@ const dictionary = {
         noData: "No market prices found. Please click Refresh.",
         sourceLive: "Government Live Feed",
         sourceOffline: "Local SQLite Cache",
-        loading: "Fetching live market prices..."
+        loading: "Fetching live market prices...",
+        feedIntegration: "FEED INTEGRATION STATUS",
+        sqliteCache: "SQLite Database Cache OK",
+        highAvailability: "High availability active. Fast queries enabled.",
+        dataSource: "Data Source",
+        apmcMultiCompare: "APMC MULTI-COMPARE",
+        min: "Min",
+        max: "Max",
+        qt: "Qt.",
+        man: "Man"
     }
 }
 
@@ -86,11 +105,80 @@ const dictionary = {
 const cropNameMapping = {
     "cotton": ["cotton", "કપાસ", "kapas"],
     "groundnut": ["groundnut", "મગફળી", "magfali", "sing"],
-    "cumin": ["cumin", "જીરૂ", "jeera", "jiru"],
+    "cumin": ["cumin", "જીરૂ", "jeera", "jiru", "જીરું"],
     "wheat": ["wheat", "ઘઉં", "ghau", "ghaun"],
-    "mustard": ["mustard", "રાઈ", "rai"],
+    "mustard": ["mustard", "રાઈ", "rai", "રાયડો"],
     "castor seed": ["castor seed", "દિવેલા", "divela", "eranda"]
 }
+
+const CROP_MAP = {
+    'જુવાર': { en: 'Jowar', gu: 'જુવાર' },
+    'jowar': { en: 'Jowar', gu: 'જુવાર' },
+    'વાલ': { en: 'Val', gu: 'વાલ' },
+    'val': { en: 'Val', gu: 'વાલ' },
+    'રાયડો': { en: 'Mustard', gu: 'રાયડો' },
+    'mustard': { en: 'Mustard', gu: 'રાયડો' },
+    'અડદ': { en: 'Black Gram', gu: 'અડદ' },
+    'black gram': { en: 'Black Gram', gu: 'અડદ' },
+    'urad': { en: 'Black Gram', gu: 'અડદ' },
+    'કળંજી': { en: 'Kalonji', gu: 'કળંજી' },
+    'kalonji': { en: 'Kalonji', gu: 'કળંજી' },
+    'સોયાબીન': { en: 'Soybean', gu: 'સોયાબીન' },
+    'soybean': { en: 'Soybean', gu: 'સોયાબીન' },
+    'બાજરી': { en: 'Bajra', gu: 'બાજરી' },
+    'bajra': { en: 'Bajra', gu: 'બાજરી' },
+    'pearl millet': { en: 'Bajra', gu: 'બાજરી' },
+    'તલ કાળા': { en: 'Black Sesame', gu: 'તલ કાળા' },
+    'black sesame': { en: 'Black Sesame', gu: 'તલ કાળા' },
+    'કપાસ': { en: 'Cotton', gu: 'કપાસ' },
+    'cotton': { en: 'Cotton', gu: 'કપાસ' },
+    'મગફળી': { en: 'Groundnut', gu: 'મગફળી' },
+    'groundnut': { en: 'Groundnut', gu: 'મગફળી' },
+    'જીરું': { en: 'Cumin', gu: 'જીરું' },
+    'જીરૂ': { en: 'Cumin', gu: 'જીરૂ' },
+    'cumin': { en: 'Cumin', gu: 'જીરું' },
+    'ઘઉં': { en: 'Wheat', gu: 'ઘઉં' },
+    'wheat': { en: 'Wheat', gu: 'ઘઉં' },
+    'દિવેલા': { en: 'Castor Seed', gu: 'દિવેલા' },
+    'castor seed': { en: 'Castor Seed', gu: 'દિવેલા' }
+};
+
+const getLocalizedCropName = (cropName, lang) => {
+    if (!cropName) return '';
+    const key = cropName.trim().toLowerCase();
+    return CROP_MAP[key]?.[lang] || cropName;
+};
+
+const getLocalizedMarketName = (marketName, lang) => {
+    if (!marketName) return '';
+    if (lang === 'gu') {
+        let gujName = marketName.toLowerCase()
+            .replace('apmc', 'માર્કેટ યાર્ડ')
+            .replace('market yard', 'માર્કેટ યાર્ડ');
+
+        if (marketName.toLowerCase().includes('junagadh')) return 'જૂનાગઢ માર્કેટ યાર્ડ';
+        if (marketName.toLowerCase().includes('rajkot')) return 'રાજકોટ માર્કેટ યાર્ડ';
+        if (marketName.toLowerCase().includes('gondal')) return 'ગોંડલ માર્કેટ યાર્ડ';
+        return gujName;
+    } else {
+        let engName = marketName;
+        if (engName.includes('માર્કેટ યાર્ડ')) engName = engName.replace('માર્કેટ યાર્ડ', 'APMC');
+        if (engName.includes('જૂનાગઢ')) engName = engName.replace('જૂનાગઢ', 'Junagadh');
+        if (engName.includes('રાજકોટ')) engName = engName.replace('રાજકોટ', 'Rajkot');
+        if (engName.includes('ગોંડલ')) engName = engName.replace('ગોંડલ', 'Gondal');
+
+        if (engName.toLowerCase() === 'junagadh' || engName.toLowerCase() === 'junagadh apmc' || engName.toLowerCase() === 'junagadh market yard') return 'Junagadh APMC';
+        if (engName.toLowerCase() === 'rajkot' || engName.toLowerCase() === 'rajkot apmc' || engName.toLowerCase() === 'rajkot market yard') return 'Rajkot APMC';
+        if (engName.toLowerCase() === 'gondal' || engName.toLowerCase() === 'gondal apmc' || engName.toLowerCase() === 'gondal market yard') return 'Gondal APMC';
+        return engName;
+    }
+};
+
+const toGujaratiDigits = (str, lang) => {
+    if (lang !== 'gu') return str;
+    const gujDigits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+    return String(str).replace(/\d/g, d => gujDigits[d]);
+};
 
 // Map market names to their respective districts
 const marketDistrictMap = {
@@ -148,8 +236,10 @@ export const MarketPrices = () => {
             setAnalyticsData(null)
         }
     }, [analyticsFilter])
-    const { language } = useLanguage()
-    const lang = language === 'en' ? 'ENG' : 'GUJ'
+    const { language, formatCurrency, formatNumber, formatDate } = useLanguage()
+    const lang = language === 'gu' ? 'GUJ' : 'ENG'
+    const t = dictionary[lang]
+
     const [priceUnit, setPriceUnit] = useState('quintal') // 'quintal' or 'man'
 
     const convertPrice = (val) => {
@@ -158,12 +248,12 @@ export const MarketPrices = () => {
     }
 
     const displayUnit = priceUnit === 'man'
-        ? (lang === 'GUJ' ? ' / મણ (૨૦ કિલો)' : ' / Man (20 kg)')
-        : (lang === 'GUJ' ? ' / ક્વિન્ટલ (૧૦૦ કિલો)' : ' / Quintal (100 kg)')
+        ? (lang === 'GUJ' ? ' / મણ' : ' / Man')
+        : (lang === 'GUJ' ? ' / ક્વિન્ટલ' : ' / Quintal')
 
     const displayPerUnit = priceUnit === 'man'
-        ? (lang === 'GUJ' ? 'મણ દીઠ' : 'per Man')
-        : (lang === 'GUJ' ? 'ક્વિન્ટલ દીઠ' : 'per Quintal')
+        ? (lang === 'GUJ' ? 'પ્રતિ મણ' : 'Per Man')
+        : (lang === 'GUJ' ? 'પ્રતિ ક્વિન્ટલ' : 'Per Quintal')
 
     useEffect(() => {
         loadMarketPrices()
@@ -221,7 +311,7 @@ export const MarketPrices = () => {
         }
     }
 
-    const t = dictionary[lang]
+
 
     // Search and filter pricing data
     const filteredPrices = prices.filter(p => {
@@ -252,10 +342,7 @@ export const MarketPrices = () => {
         const maxVal = Math.max(...cropRecords.map(r => parseFloat(r.max_price)))
         const avgModal = modals.reduce((a, b) => a + b, 0) / modals.length
 
-        // Return matching Gujarati name if lang is GUJ
-        const displayCropName = lang === 'GUJ'
-            ? (cropNameMapping[cropName.toLowerCase()]?.[1] || cropName)
-            : cropName
+        const displayCropName = getLocalizedCropName(cropName, language);
 
         return {
             name: displayCropName,
@@ -290,17 +377,9 @@ export const MarketPrices = () => {
         const diffConverted = bestPriceConverted - worstPriceConverted
 
         // Translate crop and market details
-        const displayCropName = lang === 'GUJ'
-            ? (cropNameMapping[cropName.toLowerCase()]?.[1] || cropName)
-            : cropName
-
-        const displayBestMarket = lang === 'GUJ'
-            ? bestRecord.market_name.replace("APMC", "માર્કેટ યાર્ડ")
-            : bestRecord.market_name
-
-        const displayWorstMarket = lang === 'GUJ'
-            ? worstRecord.market_name.replace("APMC", "માર્કેટ યાર્ડ")
-            : worstRecord.market_name
+        const displayCropName = getLocalizedCropName(cropName, language);
+        const displayBestMarket = getLocalizedMarketName(bestRecord.market_name, language);
+        const displayWorstMarket = getLocalizedMarketName(worstRecord.market_name, language);
 
         return {
             crop: displayCropName,
@@ -314,20 +393,7 @@ export const MarketPrices = () => {
 
     const recommendation = getBestMarketRecommendation(selectedRecommendationCrop)
 
-    // Format Date helper
-    const formatDate = (dateStr) => {
-        if (!dateStr) return '-'
-        try {
-            const d = new Date(dateStr)
-            return d.toLocaleDateString(lang === 'GUJ' ? 'gu-IN' : 'en-IN', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            })
-        } catch {
-            return dateStr
-        }
-    }
+
 
     return (
         <div className="space-y-6 animate-fadeIn pb-12">
@@ -411,7 +477,7 @@ export const MarketPrices = () => {
                                     {t.bestMarketTitle}
                                 </h3>
                                 <span className="bg-emerald-700 text-[10px] uppercase font-extrabold px-2.5 py-1 rounded-full border border-emerald-600">
-                                    APMC Multi-Compare
+                                    {t.apmcMultiCompare}
                                 </span>
                             </div>
 
@@ -427,7 +493,7 @@ export const MarketPrices = () => {
                                                 : 'hover:bg-emerald-700 text-emerald-100 bg-emerald-800/50'
                                                 }`}
                                         >
-                                            {lang === 'GUJ' ? (cropNameMapping[crop.toLowerCase()]?.[1] || crop) : crop}
+                                            {getLocalizedCropName(crop, language)}
                                         </button>
                                     ))}
                                 </div>
@@ -448,7 +514,7 @@ export const MarketPrices = () => {
                                     <div className="space-y-1 pt-2 sm:pt-0 sm:pl-4">
                                         <span className="text-[10px] text-emerald-250 uppercase font-bold tracking-wider block">{t.expectedPrice}</span>
                                         <h4 className="text-lg font-extrabold text-accent">
-                                            ₹{recommendation.expectedPrice.toLocaleString('en-IN')}<span className="text-xs text-white/80 select-none font-medium ml-1">{displayUnit}</span>
+                                            {toGujaratiDigits(formatCurrency(recommendation.expectedPrice), language)}<span className="text-xs text-white/80 select-none font-medium ml-1">{displayUnit}</span>
                                         </h4>
                                     </div>
 
@@ -457,12 +523,12 @@ export const MarketPrices = () => {
                                         <span className="text-[10px] text-emerald-250 uppercase font-bold tracking-wider block">{t.extraIncome}</span>
                                         <h4 className="text-lg font-extrabold text-yellow-300 flex items-center gap-1">
                                             <FiTrendingUp size={16} />
-                                            +{recommendation.extraIncome > 0 ? `₹${recommendation.extraIncome.toLocaleString('en-IN')}` : `₹0`}
+                                            +{toGujaratiDigits(recommendation.extraIncome > 0 ? formatCurrency(recommendation.extraIncome) : formatCurrency(0), language)}
                                             <span className="text-[10px] font-bold text-yellow-105 ml-1">/ {displayPerUnit}</span>
                                         </h4>
                                         <span className="text-[9px] text-emerald-200 select-none block">
                                             {recommendation.extraIncome > 0
-                                                ? `(${recommendation.percentage}% ${t.comparedTo} ${recommendation.worstMarket})`
+                                                ? `(${toGujaratiDigits(recommendation.percentage, language)}% ${t.comparedTo} ${recommendation.worstMarket})`
                                                 : `(Prices are uniform across all markets)`
                                             }
                                         </span>
@@ -480,13 +546,13 @@ export const MarketPrices = () => {
                     <Card className="bg-white p-6 rounded-card border border-dark/5 shadow-sm flex flex-col justify-between">
                         <div className="space-y-3">
                             <h4 className="text-xs uppercase font-extrabold text-dark-light/80 block select-none">
-                                Feed Integration Status
+                                {t.feedIntegration}
                             </h4>
                             <div className="flex gap-2 items-center p-3 rounded-btn border border-emerald-100 bg-emerald-50 text-emerald-800 text-xs font-bold leading-normal">
                                 <FiCheckCircle size={18} className="text-emerald-600 flex-shrink-0" />
                                 <div>
-                                    <p className="font-extrabold">SQLite Database Cache OK</p>
-                                    <p className="font-medium text-[10px] text-emerald-700/90 mt-0.5">High availability active. Fast queries enabled.</p>
+                                    <p className="font-extrabold">{t.sqliteCache}</p>
+                                    <p className="font-medium text-[10px] text-emerald-700/90 mt-0.5">{t.highAvailability}</p>
                                 </div>
                             </div>
                         </div>
@@ -495,11 +561,11 @@ export const MarketPrices = () => {
                             <div className="flex justify-between font-bold text-dark-light">
                                 <span>{t.lastUpdated}:</span>
                                 <span className="text-dark bg-secondary-dark px-2.5 py-0.5 rounded font-mono text-[10px]">
-                                    {prices.length > 0 ? formatDate(prices[0].price_date) : '-'}
+                                    {prices.length > 0 ? toGujaratiDigits(formatDate(prices[0].price_date), language) : '-'}
                                 </span>
                             </div>
                             <div className="flex justify-between font-bold text-dark-light">
-                                <span>Data Source:</span>
+                                <span>{t.dataSource}:</span>
                                 <span className="text-emerald-750 font-extrabold font-sans text-right">
                                     {prices.length > 0
                                         ? (prices[0].source === "AGMARKNET"
@@ -531,14 +597,14 @@ export const MarketPrices = () => {
                                         {badge.name}
                                     </span>
                                     <h4 className="text-sm font-extrabold text-primary mt-1">
-                                        ₹{badge.avg.toLocaleString('en-IN')}
+                                        {toGujaratiDigits(formatCurrency(badge.avg), language)}
                                         <span className="text-[10px] text-dark-light select-none font-medium ml-1">
-                                            /{priceUnit === 'man' ? (lang === 'GUJ' ? 'મણ' : 'Man') : (lang === 'GUJ' ? 'ક્વિન્ટલ' : 'Qt')}
+                                            /{priceUnit === 'man' ? t.man : t.qt}
                                         </span>
                                     </h4>
                                     <div className="flex justify-between text-[8.5px] font-bold text-dark-light/75 mt-1 border-t border-dark/5 pt-1 font-mono">
-                                        <span>Min: {badge.min}</span>
-                                        <span>Max: {badge.max}</span>
+                                        <span>{t.min}: {toGujaratiDigits(badge.min, language)}</span>
+                                        <span>{t.max}: {toGujaratiDigits(badge.max, language)}</span>
                                     </div>
                                 </Card>
                             )
@@ -588,7 +654,7 @@ export const MarketPrices = () => {
                     {/* Date Picker */}
                     <div className="relative flex items-center h-11 bg-secondary-dark/20 rounded-btn border border-dark/10 px-3 shadow-xs">
                         <span className="text-xs font-bold text-dark-light mr-2 whitespace-nowrap hidden xl:inline">
-                            {lang === 'GUJ' ? 'તારીખ:' : 'Date:'}
+                            {t.date}:
                         </span>
                         <input
                             type="date"
@@ -608,7 +674,7 @@ export const MarketPrices = () => {
                                 ? 'bg-primary text-white shadow-xs'
                                 : 'text-dark-light hover:text-dark'}`}
                         >
-                            પ્રતિ ક્વિન્ટલ (Per Quintal)
+                            {lang === 'GUJ' ? 'પ્રતિ ક્વિન્ટલ' : 'Per Quintal'}
                         </button>
                         <button
                             type="button"
@@ -617,7 +683,7 @@ export const MarketPrices = () => {
                                 ? 'bg-primary text-white shadow-xs'
                                 : 'text-dark-light hover:text-dark'}`}
                         >
-                            પ્રતિ મણ (Per Man)
+                            {lang === 'GUJ' ? 'પ્રતિ મણ' : 'Per Man'}
                         </button>
                     </div>
                 </div>
@@ -668,13 +734,9 @@ export const MarketPrices = () => {
                                 </thead>
                                 <tbody className="divide-y divide-dark/5 text-xs text-dark select-none">
                                     {filteredPrices.map((price, idx) => {
-                                        const displayCrop = lang === 'GUJ'
-                                            ? (cropNameMapping[price.crop_name.toLowerCase()]?.[1] || price.crop_name)
-                                            : price.crop_name;
+                                        const displayCrop = getLocalizedCropName(price.crop_name, language);
 
-                                        const displayMarket = lang === 'GUJ'
-                                            ? price.market_name.replace("APMC", "માર્કેટ યાર્ડ")
-                                            : price.market_name;
+                                        const displayMarket = getLocalizedMarketName(price.market_name, language);
 
                                         return (
                                             <tr
@@ -697,27 +759,27 @@ export const MarketPrices = () => {
 
                                                 {/* Min Price */}
                                                 <td className="p-4 text-right font-bold text-dark-light/95 font-mono font-semibold">
-                                                    ₹{convertPrice(price.min_price).toLocaleString('en-IN')}
+                                                    {toGujaratiDigits(formatCurrency(convertPrice(price.min_price)), language)}
                                                 </td>
 
                                                 {/* Max Price */}
                                                 <td className="p-4 text-right font-bold text-dark-light/95 font-mono font-semibold">
-                                                    ₹{convertPrice(price.max_price).toLocaleString('en-IN')}
+                                                    {toGujaratiDigits(formatCurrency(convertPrice(price.max_price)), language)}
                                                 </td>
 
                                                 {/* Modal Price */}
                                                 <td className="p-4 text-right font-extrabold text-primary bg-emerald-50/20 font-mono text-[13px]">
-                                                    ₹{convertPrice(price.modal_price).toLocaleString('en-IN')}
+                                                    {toGujaratiDigits(formatCurrency(convertPrice(price.modal_price)), language)}
                                                 </td>
 
                                                 {/* Arrival Quantity */}
                                                 <td className="p-4 text-right font-bold text-dark font-mono">
-                                                    {price.arrival_quantity ? parseInt(price.arrival_quantity).toLocaleString('en-IN') : '0'} Qt.
+                                                    {price.arrival_quantity ? toGujaratiDigits(formatNumber(parseInt(price.arrival_quantity)), language) : toGujaratiDigits('0', language)} {t.qt}
                                                 </td>
 
                                                 {/* Date */}
                                                 <td className="p-4 text-center text-dark-light font-mono font-medium text-[10px]">
-                                                    {formatDate(price.price_date)}
+                                                    {toGujaratiDigits(formatDate(price.price_date), language)}
                                                 </td>
                                             </tr>
                                         )

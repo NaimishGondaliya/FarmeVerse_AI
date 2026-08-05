@@ -20,8 +20,66 @@ import {
 } from 'react-icons/fi'
 import { BiRupee } from 'react-icons/bi'
 import { cropAPI, expenseAPI, salesAPI } from '../../services/api'
+import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
 
 export const ProfitCalculator = () => {
+    const { formatNumber, formatCurrency, formatDate, language } = useLanguage()
+    const { t } = useTranslation()
+
+    const lang = (gu, en) => language === 'gu' ? gu : en;
+    const toGuDigits = (str, langKey) => {
+        if (langKey !== 'gu' || str === undefined || str === null) return String(str || '');
+        const gu = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+        return String(str).replace(/[0-9]/g, d => gu[d]);
+    };
+
+    const localizeCropName = (cropName) => {
+        if (!cropName) return '';
+        const cleanName = String(cropName).trim();
+        if (language !== 'gu') return cleanName;
+        const cropDict = {
+            'groundnut': 'મગફળી',
+            'cotton': 'કપાસ',
+            'cumin': 'જીરું',
+            'wheat': 'ઘઉં',
+            'mustard': 'રાઈ',
+            'castor seed': 'દિવેલા'
+        };
+        return cropDict[cleanName.toLowerCase()] || cleanName;
+    };
+
+    const localizeExpenseType = (type) => {
+        if (!type) return '';
+        const cleanType = String(type).trim();
+        const typeKey = cleanType.toLowerCase();
+
+        if (language !== 'gu') {
+            const engDict = {
+                'seed': 'Seed',
+                'fertilizer': 'Fertilizer',
+                'pesticide': 'Pesticide',
+                'labour': 'Labour',
+                'irrigation': 'Irrigation',
+                'machinery': 'Machinery',
+                'transportation': 'Transportation',
+                'other': 'Other'
+            };
+            return engDict[typeKey] || cleanType;
+        }
+
+        const guDict = {
+            'seed': 'બીજ',
+            'fertilizer': 'ખાતર',
+            'pesticide': 'જંતુનાશક',
+            'labour': 'મજૂરી',
+            'irrigation': 'પિયત',
+            'machinery': 'યંત્રો',
+            'transportation': 'પરિવહન',
+            'other': 'અન્ય'
+        };
+        return guDict[typeKey] || cleanType;
+    };
     const [crops, setCrops] = useState([])
     const [expenses, setExpenses] = useState([])
     const [sales, setSales] = useState([])
@@ -53,7 +111,7 @@ export const ProfitCalculator = () => {
     // Form states
     const [expenseForm, setExpenseForm] = useState({
         crop: '',
-        expense_type: 'Seed',
+        expense_type: t('expenseType.Seed'),
         amount: '',
         expense_date: new Date().toISOString().substring(0, 10),
         description: ''
@@ -86,7 +144,7 @@ export const ProfitCalculator = () => {
             if (salesRes.success) setSales(salesRes.data || [])
         } catch (err) {
             console.error('Error loading calculator data:', err)
-            setErrorMsg('માહિતી લોડ કરવામાં સમસ્યા આવી. કૃપા કરીને રીફ્રેશ કરો.')
+            setErrorMsg(t('profitCalc.errorLoad'))
         } finally {
             setIsLoading(false)
         }
@@ -135,26 +193,26 @@ export const ProfitCalculator = () => {
     // Expense & Sales CRUD handlers
     const validateExpense = () => {
         const errors = {}
-        if (!expenseForm.crop) errors.crop = 'પાક પસંદ કરવો જરૂરી છે.'
+        if (!expenseForm.crop) errors.crop = t('profitCalc.valCropReq')
         if (!expenseForm.amount || parseFloat(expenseForm.amount) <= 0) {
-            errors.amount = 'ખર્ચની રકમ 0 થી વધુ હોવી જોઈએ.'
+            errors.amount = t('profitCalc.valAmtZero')
         }
-        if (!expenseForm.expense_date) errors.expense_date = 'ખર્ચ તારીખ જરૂરી છે.'
+        if (!expenseForm.expense_date) errors.expense_date = t('profitCalc.valExpDateReq')
         setFormErrors(errors)
         return Object.keys(errors).length === 0
     }
 
     const validateSales = () => {
         const errors = {}
-        if (!salesForm.crop) errors.crop = 'પાક પસંદ કરવો જરૂરી છે.'
-        if (!salesForm.market_yard.trim()) errors.market_yard = 'માર્કેટ યાર્ડનું નામ જરૂરી છે.'
+        if (!salesForm.crop) errors.crop = t('profitCalc.valCropReq')
+        if (!salesForm.market_yard.trim()) errors.market_yard = t('profitCalc.valYardReq')
         if (!salesForm.sold_quantity || parseFloat(salesForm.sold_quantity) <= 0) {
-            errors.sold_quantity = 'વેચેલો જથ્થો 0 થી વધુ હોવો જોઈશે.'
+            errors.sold_quantity = t('profitCalc.valQtyZero')
         }
         if (!salesForm.price_per_kg || parseFloat(salesForm.price_per_kg) <= 0) {
-            errors.price_per_kg = 'કિંમત (પ્રતિ કિલો) 0 થી વધુ હોવી જોઈશે.'
+            errors.price_per_kg = t('profitCalc.valPriceZero')
         }
-        if (!salesForm.sale_date) errors.sale_date = 'વેચાણ તારીખ અપાયેલી હોવી જરૂરી છે.'
+        if (!salesForm.sale_date) errors.sale_date = t('profitCalc.valSaleDateReq')
         setFormErrors(errors)
         return Object.keys(errors).length === 0
     }
@@ -173,15 +231,15 @@ export const ProfitCalculator = () => {
             }
 
             if (res.success) {
-                setSuccessMsg(editExpense ? 'ખર્ચ સફળતાપૂર્વક અપડેટ થયો.' : 'નવો ખર્ચ સફળતાપૂર્વક ઉમેરાયો.')
+                setSuccessMsg(editExpense ? t('profitCalc.msgExpUpdateSuccess') : t('profitCalc.msgExpAddSuccess'))
                 setShowExpenseModal(false)
                 loadData()
             } else {
-                setErrorMsg(res.message || 'માહિતી સંગ્રહ નિષ્ફળ.')
+                setErrorMsg(res.message || t('profitCalc.msgSaveFailed'))
             }
         } catch (err) {
             console.error('Error saving expense:', err)
-            setErrorMsg('તપાસ કરો કે વિગતો સાચી છે અને ફરીથી પ્રયાસ કરો.')
+            setErrorMsg(t('profitCalc.msgCheckDetails'))
         } finally {
             setIsLoading(false)
         }
@@ -201,15 +259,15 @@ export const ProfitCalculator = () => {
             }
 
             if (res.success) {
-                setSuccessMsg(editSales ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+                setSuccessMsg(editSales ? t('profitCalc.msgSaleUpdateSuccess') : t('profitCalc.msgSaleAddSuccess'))
                 setShowSalesModal(false)
                 loadData()
             } else {
-                setErrorMsg(res.message || 'માહિતી સંગ્રહ નિષ્ફળ.')
+                setErrorMsg(res.message || t('profitCalc.msgSaveFailed'))
             }
         } catch (err) {
             console.error('Error saving sales:', err)
-            setErrorMsg('સિસ્ટમ એરર! કૃપા રકમ વિગતો ચકાસો.')
+            setErrorMsg(t('profitCalc.msgSystemError'))
         } finally {
             setIsLoading(false)
         }
@@ -219,7 +277,7 @@ export const ProfitCalculator = () => {
         setEditExpense(null)
         setExpenseForm({
             crop: crops.length > 0 ? crops[0].id : '',
-            expense_type: 'Seed',
+            expense_type: t('expenseType.Seed'),
             amount: '',
             expense_date: new Date().toISOString().substring(0, 10),
             description: ''
@@ -285,14 +343,14 @@ export const ProfitCalculator = () => {
             }
 
             if (res.success) {
-                setSuccessMsg('રેકોર્ડ સફળતાપૂર્વક કાઢી નાખવામાં આવ્યો.')
+                setSuccessMsg(t('profitCalc.msgDelSuccess'))
                 loadData()
             } else {
-                setErrorMsg(res.message || 'કાઢી નાખવામાં નિષ્ફળતા.')
+                setErrorMsg(res.message || t('profitCalc.msgDelFailed'))
             }
         } catch (err) {
             console.error('Error during deletion:', err)
-            setErrorMsg('કાઢી નાખવામાં મુશ્કેલી પડી.')
+            setErrorMsg(t('profitCalc.msgDelError'))
         } finally {
             setIsLoading(false)
             setShowDeleteModal(false)
@@ -314,7 +372,8 @@ export const ProfitCalculator = () => {
 
     // Dynamic HSL variables/calculations for SVG rendering
     const pieSummaryData = Object.entries(expenseTypeSummary).map(([key, val]) => ({
-        label: key,
+        label: key, // original key name
+        displayLabel: localizeExpenseType(key), // dynamically localized text
         value: val,
         color: expenseColors[key] || '#6B7280'
     })).filter(item => item.value > 0)
@@ -348,10 +407,10 @@ export const ProfitCalculator = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-card border border-dark/5 shadow-sm">
                 <div>
                     <h1 className="text-xl md:text-2xl font-bold text-dark flex items-center gap-2">
-                        <span>📊</span> નફાની ગણતરી (Farm Profit Calculator)
+                        {t('profitCalc.titleMain')}
                     </h1>
                     <p className="text-xs text-dark-light">
-                        તમારા પાક પાછળ થતાં કુલ ખર્ચ, વેચાણ અને ચોખ્ખો નફાનું વિશ્લેષણ મેળવો
+                        {t('profitCalc.subtitleMain')}
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -360,14 +419,14 @@ export const ProfitCalculator = () => {
                         className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-btn transition-all active:scale-95"
                     >
                         <FiPlus size={14} />
-                        <span>ખર્ચ ઉમેરો (Add Expense)</span>
+                        <span>{t('profitCalc.btnAddExpHeader')}</span>
                     </Button>
                     <Button
                         onClick={openAddSales}
                         className="bg-primary hover:bg-primary-dark text-white flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-btn transition-all active:scale-95"
                     >
                         <FiPlus size={14} />
-                        <span>વેચાણ ઉમેરો (Add Sale)</span>
+                        <span>{t('profitCalc.btnAddSaleHeader')}</span>
                     </Button>
                 </div>
             </div>
@@ -394,16 +453,16 @@ export const ProfitCalculator = () => {
             <div className="bg-white p-4 rounded-card border border-dark/5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div className="flex items-center gap-2">
                     <FiFilter className="text-primary" size={16} />
-                    <span className="text-xs font-bold text-dark/75">પાક પસંદગી (Select Crop):</span>
+                    <span className="text-xs font-bold text-dark/75">{t('profitCalc.cropSelection')}</span>
                 </div>
                 <select
                     className="w-full sm:w-64 bg-secondary-dark border border-dark/10 outline-none px-3.5 py-2 text-xs rounded-btn focus:border-primary font-bold"
                     value={selectedCropFilter}
                     onChange={(e) => setSelectedCropFilter(e.target.value)}
                 >
-                    <option value="all">બધા સક્રિય પાક (All Crops)</option>
+                    <option value="all">{t('profitCalc.allActiveCrops')}</option>
                     {crops.map(c => (
-                        <option key={c.id} value={c.id}>{c.crop_name} ({c.crop_variety}) - {c.farm_name}</option>
+                        <option key={c.id} value={c.id}>{localizeCropName(c.crop_name)} ({c.crop_variety}) - {c.farm_name}</option>
                     ))}
                 </select>
             </div>
@@ -415,8 +474,8 @@ export const ProfitCalculator = () => {
                         <FiTrendingUp size={22} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/85">કુલ આવક (Revenue)</span>
-                        <h4 className="text-lg font-bold text-dark select-none mt-0.5">₹{totalRevenue.toLocaleString('en-IN')}</h4>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/85">{t('profitCalc.metricRevenue')}</span>
+                        <h4 className="text-lg font-bold text-dark select-none mt-0.5">{toGuDigits(formatCurrency(totalRevenue), language)}</h4>
                     </div>
                 </Card>
 
@@ -425,8 +484,8 @@ export const ProfitCalculator = () => {
                         <BiRupee size={22} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/85">કુલ સરવાળો ખર્ચ (Expense)</span>
-                        <h4 className="text-lg font-bold text-dark select-none mt-0.5">₹{totalExpense.toLocaleString('en-IN')}</h4>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/85">{t('profitCalc.metricExpense')}</span>
+                        <h4 className="text-lg font-bold text-dark select-none mt-0.5">{toGuDigits(formatCurrency(totalExpense), language)}</h4>
                     </div>
                 </Card>
 
@@ -435,9 +494,9 @@ export const ProfitCalculator = () => {
                         <BiRupee size={22} className={netProfit < 0 ? 'rotate-180' : ''} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/85">ચોખ્ખો નફો (Net Profit)</span>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/85">{t('profitCalc.metricNetProfit')}</span>
                         <h4 className={`text-lg font-extrabold select-none mt-0.5 ${netProfit >= 0 ? 'text-emerald-700' : 'text-red-600'}`}>
-                            {netProfit < 0 ? '-' : ''}₹{Math.abs(netProfit).toLocaleString('en-IN')}
+                            {netProfit < 0 ? '-' : ''}{toGuDigits(formatCurrency(Math.abs(netProfit)), language)}
                         </h4>
                     </div>
                 </Card>
@@ -447,8 +506,8 @@ export const ProfitCalculator = () => {
                         <FiPercent size={22} />
                     </div>
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-dark-light/85">નફાનો સીમાડો (Profit Margin)</span>
-                        <h4 className="text-lg font-bold text-dark select-none mt-0.5">{profitMargin.toFixed(1)}%</h4>
+                        <span className="text-[10px] uppercase font-bold text-dark-light/85">{t('profitCalc.metricMargin')}</span>
+                        <h4 className="text-lg font-bold text-dark select-none mt-0.5">{toGuDigits(profitMargin.toFixed(1), language)}%</h4>
                     </div>
                 </Card>
             </div>
@@ -458,12 +517,12 @@ export const ProfitCalculator = () => {
                 {/* SVG Visual graph */}
                 <Card className="lg:col-span-1 bg-white p-5 rounded-card border border-dark/5 shadow-sm flex flex-col justify-start">
                     <h3 className="font-bold text-sm text-dark border-b border-dark/5 pb-2.5 mb-4 select-none flex items-center gap-2">
-                        <span>🍩</span> પાક ખર્ચ શ્રેણી (Expense Split)
+                        {t('profitCalc.expenseSplit')}
                     </h3>
                     {totalExpense === 0 ? (
                         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-dark-light/60">
                             <FiInfo size={28} className="mb-2" />
-                            <p className="text-xs font-semibold">પસંદ કરેલ પાક પર કોઈ રજિસ્ટર્ડ ખર્ચ નથી.</p>
+                            <p className="text-xs font-semibold">{t('profitCalc.noExpenseReg')}</p>
                         </div>
                     ) : (
                         <div className="space-y-6">
@@ -483,8 +542,8 @@ export const ProfitCalculator = () => {
                                     <circle cx="0" cy="0" r="0.65" fill="#fff" />
                                 </svg>
                                 <div className="absolute inset-0 flex flex-col items-center justify-center select-none">
-                                    <span className="text-[9px] font-bold text-dark-light uppercase">ખર્ચ સરવાળો</span>
-                                    <span className="text-sm font-extrabold text-dark-light/95">₹{totalExpense.toLocaleString('en-IN')}</span>
+                                    <span className="text-[9px] font-bold text-dark-light uppercase">{t('profitCalc.expenseSum')}</span>
+                                    <span className="text-sm font-extrabold text-dark-light/95">{toGuDigits(formatCurrency(totalExpense), language)}</span>
                                 </div>
                             </div>
                             {/* Legend labels */}
@@ -492,7 +551,7 @@ export const ProfitCalculator = () => {
                                 {pieSummaryData.map((slice, idx) => (
                                     <div key={idx} className="flex items-center gap-1.5 truncate">
                                         <span className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: slice.color }}></span>
-                                        <span className="truncate">{slice.label}: ₹{slice.value.toLocaleString()}</span>
+                                        <span className="truncate">{slice.displayLabel}: {toGuDigits(formatCurrency(slice.value), language)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -508,13 +567,13 @@ export const ProfitCalculator = () => {
                             onClick={() => setActiveTab('expenses')}
                             className={`flex-1 text-center py-2 rounded-btn transition-all ${activeTab === 'expenses' ? 'bg-primary text-white shadow-sm' : 'text-dark-light hover:bg-secondary-dark'}`}
                         >
-                            ખર્ચ લિસ્ટ (Expenses)
+                            {t('profitCalc.tabExpenseList')}
                         </button>
                         <button
                             onClick={() => setActiveTab('sales')}
                             className={`flex-1 text-center py-2 rounded-btn transition-all ${activeTab === 'sales' ? 'bg-primary text-white shadow-sm' : 'text-dark-light hover:bg-secondary-dark'}`}
                         >
-                            વેચાણ લિસ્ટ (Sales)
+                            {t('profitCalc.tabSalesList')}
                         </button>
                     </div>
 
@@ -527,7 +586,7 @@ export const ProfitCalculator = () => {
                                     <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
                                     <input
                                         type="text"
-                                        placeholder="ખર્ચ વિગત શોધો..."
+                                        placeholder={t('profitCalc.searchExpPlaceholder')}
                                         className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                         value={expenseSearch}
                                         onChange={(e) => setExpenseSearch(e.target.value)}
@@ -544,15 +603,15 @@ export const ProfitCalculator = () => {
                                     value={expenseTypeFilter}
                                     onChange={(e) => setExpenseTypeFilter(e.target.value)}
                                 >
-                                    <option value="all">બધા પ્રકાર (All Categories)</option>
-                                    <option value="Seed">બીજ (Seed)</option>
-                                    <option value="Fertilizer">ખાતર (Fertilizer)</option>
-                                    <option value="Pesticide">જંતુનાશક (Pesticide)</option>
-                                    <option value="Labour">મજૂરી (Labour)</option>
-                                    <option value="Irrigation">પિયત (Irrigation)</option>
-                                    <option value="Machinery">મશીનરી (Machinery)</option>
-                                    <option value="Transportation">ટ્રાન્સપોર્ટ (Transportation)</option>
-                                    <option value="Other">અન્ય (Other)</option>
+                                    <option value="all">{t('profitCalc.allCategories')}</option>
+                                    <option value="Seed">{localizeExpenseType('Seed')}</option>
+                                    <option value="Fertilizer">{localizeExpenseType('Fertilizer')}</option>
+                                    <option value="Pesticide">{localizeExpenseType('Pesticide')}</option>
+                                    <option value="Labour">{localizeExpenseType('Labour')}</option>
+                                    <option value="Irrigation">{localizeExpenseType('Irrigation')}</option>
+                                    <option value="Machinery">{localizeExpenseType('Machinery')}</option>
+                                    <option value="Transportation">{localizeExpenseType('Transportation')}</option>
+                                    <option value="Other">{localizeExpenseType('Other')}</option>
                                 </select>
                             </div>
 
@@ -562,9 +621,9 @@ export const ProfitCalculator = () => {
                             ) : filteredExpenses.length === 0 ? (
                                 <EmptyState
                                     icon={FiInfo}
-                                    title="કોઈ ખર્ચ રેકોર્ડ મળ્યો નથી"
-                                    description={expenseSearch || expenseTypeFilter !== 'all' ? "પસંદ કરેલ ફિલ્ટર્સ અથવા સર્ચ માટે કોઈ ડેટા નથી." : "તમારા પાક માટેના ખર્ચની વિગતો અહીં ઉમેરો."}
-                                    actionText={!(expenseSearch || expenseTypeFilter !== 'all') ? "ખર્ચ ઉમેરો (Add Expense)" : undefined}
+                                    title={t('profitCalc.noExp')}
+                                    description={expenseSearch || expenseTypeFilter !== 'all' ? t('profitCalc.noExpMatch') : t('profitCalc.noExpAdd')}
+                                    actionText={!(expenseSearch || expenseTypeFilter !== 'all') ? t('profitCalc.btnAddExpHeader') : undefined}
                                     onActionClick={openAddExpense}
                                 />
                             ) : (
@@ -572,10 +631,10 @@ export const ProfitCalculator = () => {
                                     <table className="w-full text-left border-collapse">
                                         <thead>
                                             <tr className="bg-secondary-dark/65 border-b border-dark/5 text-dark-light/95 text-[10px] font-bold uppercase tracking-wider">
-                                                <th className="p-3">પાક</th>
-                                                <th className="p-3">ખર્ચ પ્રકાર</th>
-                                                <th className="p-3">તારીખ</th>
-                                                <th className="p-3">રકમ</th>
+                                                <th className="p-3">{t('profitCalc.thCrop')}</th>
+                                                <th className="p-3">{t('profitCalc.thExpType')}</th>
+                                                <th className="p-3">{t('profitCalc.thDate')}</th>
+                                                <th className="p-3">{t('profitCalc.thAmount')}</th>
                                                 <th className="p-3 text-center">ક્રિયાઓ</th>
                                             </tr>
                                         </thead>
@@ -583,32 +642,32 @@ export const ProfitCalculator = () => {
                                             {filteredExpenses.map(exp => (
                                                 <tr key={exp.id} className="hover:bg-secondary-dark/30 transition-colors">
                                                     <td className="p-3 font-semibold text-dark/90">
-                                                        {exp.crop_name || `પાક ID: ${exp.crop}`}
+                                                        {exp.crop_name ? localizeCropName(exp.crop_name) : `પાક ID: ${exp.crop}`}
                                                     </td>
                                                     <td className="p-3">
                                                         <span
                                                             className="inline-block px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-xs"
                                                             style={{ backgroundColor: expenseColors[exp.expense_type] || '#6B7280' }}
                                                         >
-                                                            {exp.expense_type}
+                                                            {localizeExpenseType(exp.expense_type)}
                                                         </span>
-                                                        {exp.description && <div className="text-[10px] text-dark-light font-medium truncate max-w-[150px] mt-0.5">{exp.description}</div>}
+                                                        {exp.description && <div className="text-[10px] text-dark-light font-medium truncate max-w-[150px] mt-0.5">{exp.description === "Auto-synced from crop records" ? lang("પાક રેકોર્ડમાંથી આપમેળે સમન્વયિત", exp.description) : exp.description}</div>}
                                                     </td>
-                                                    <td className="p-3 text-dark-light font-semibold">{exp.expense_date}</td>
-                                                    <td className="p-3 font-extrabold text-dark-light/95">₹{(parseFloat(exp.amount) || 0).toLocaleString('en-IN')}</td>
+                                                    <td className="p-3 text-dark-light font-semibold">{toGuDigits(formatDate(exp.expense_date), language)}</td>
+                                                    <td className="p-3 font-extrabold text-dark-light/95">{toGuDigits(formatCurrency(parseFloat(exp.amount) || 0), language)}</td>
                                                     <td className="p-3 text-center">
                                                         <div className="flex justify-center gap-1.5">
                                                             <button
                                                                 onClick={() => openEditExpense(exp)}
                                                                 className="p-1 px-1.5 text-primary hover:bg-secondary-dark rounded"
-                                                                title="સુધારો કરો"
+                                                                title={t('common.edit')}
                                                             >
                                                                 <FiEdit2 size={12} />
                                                             </button>
                                                             <button
                                                                 onClick={() => triggerDelete('expense', exp.id)}
                                                                 className="p-1 px-1.5 text-red-500 hover:bg-red-50 rounded"
-                                                                title="કાઢી નાખો"
+                                                                title={t('common.delete')}
                                                             >
                                                                 <FiTrash2 size={12} />
                                                             </button>
@@ -632,7 +691,7 @@ export const ProfitCalculator = () => {
                                     <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
                                     <input
                                         type="text"
-                                        placeholder="યાર્ડ અથવા પાક શોધો..."
+                                        placeholder={t('profitCalc.searchSalePlaceholder')}
                                         className="w-full h-12 rounded-xl border border-slate-300 pl-11 pr-10 text-sm leading-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                         value={salesSearch}
                                         onChange={(e) => setSalesSearch(e.target.value)}
@@ -651,9 +710,9 @@ export const ProfitCalculator = () => {
                             ) : filteredSales.length === 0 ? (
                                 <EmptyState
                                     icon={FiInfo}
-                                    title="કોઈ વેચાણ રેકોર્ડ મળ્યો નથી"
-                                    description={salesSearch ? "પસંદ કરેલ સર્ચ માટે કોઈ ડેટા નથી." : "તમારા લણેલા પાક વેચાણની વિગતો અહીં ઉમેરો."}
-                                    actionText={!salesSearch ? "વેચાણ ઉમેરો (Add Sale)" : undefined}
+                                    title={t('profitCalc.noSales')}
+                                    description={salesSearch ? t('profitCalc.noSaleMatch') : t('profitCalc.noSaleAdd')}
+                                    actionText={!salesSearch ? t('profitCalc.btnAddSaleHeader') : undefined}
                                     onActionClick={openAddSales}
                                 />
                             ) : (
@@ -661,11 +720,11 @@ export const ProfitCalculator = () => {
                                     <table className="w-full text-left border-collapse">
                                         <thead>
                                             <tr className="bg-secondary-dark/65 border-b border-dark/5 text-dark-light/95 text-[10px] font-bold uppercase tracking-wider">
-                                                <th className="p-3">પાક</th>
-                                                <th className="p-3">માર્કેટ યાર્ડ</th>
-                                                <th className="p-3">જથ્થો (kg)</th>
-                                                <th className="p-3">ભાવ (₹/kg)</th>
-                                                <th className="p-3">કુલ આવક</th>
+                                                <th className="p-3">{t('profitCalc.thCrop')}</th>
+                                                <th className="p-3">{t('profitCalc.thMarketYard')}</th>
+                                                <th className="p-3">{t('profitCalc.thQtyKg')}</th>
+                                                <th className="p-3">{t('common.pricePerKg')}</th>
+                                                <th className="p-3">{t('profitCalc.thTotalRevenue')}</th>
                                                 <th className="p-3 text-center">ક્રિયાઓ</th>
                                             </tr>
                                         </thead>
@@ -673,26 +732,26 @@ export const ProfitCalculator = () => {
                                             {filteredSales.map(sale => (
                                                 <tr key={sale.id} className="hover:bg-secondary-dark/30 transition-colors">
                                                     <td className="p-3 font-semibold text-dark/90">
-                                                        {sale.crop_name || `પાક ID: ${sale.crop}`}
-                                                        <div className="text-[9px] text-dark-light font-semibold mt-0.5">{sale.sale_date}</div>
+                                                        {sale.crop_name ? localizeCropName(sale.crop_name) : `પાક ID: ${sale.crop}`}
+                                                        <div className="text-[9px] text-dark-light font-semibold mt-0.5">{toGuDigits(formatDate(sale.sale_date), language)}</div>
                                                     </td>
                                                     <td className="p-3 font-semibold text-dark-light/90">{sale.market_yard}</td>
-                                                    <td className="p-3 text-dark font-bold">{parseFloat(sale.sold_quantity).toLocaleString()} kg</td>
-                                                    <td className="p-3 text-dark font-bold">₹{parseFloat(sale.price_per_kg).toLocaleString()}</td>
-                                                    <td className="p-3 font-extrabold text-emerald-800">₹{(parseFloat(sale.total_revenue) || 0).toLocaleString('en-IN')}</td>
+                                                    <td className="p-3 text-dark font-bold">{toGuDigits(formatNumber(parseFloat(sale.sold_quantity)), language)} {lang('કિગ્રા', 'kg')}</td>
+                                                    <td className="p-3 text-dark font-bold">{toGuDigits(formatCurrency(parseFloat(sale.price_per_kg)), language)}</td>
+                                                    <td className="p-3 font-extrabold text-emerald-800">{toGuDigits(formatCurrency(parseFloat(sale.total_revenue) || 0), language)}</td>
                                                     <td className="p-3 text-center">
                                                         <div className="flex justify-center gap-1.5">
                                                             <button
                                                                 onClick={() => openEditSales(sale)}
                                                                 className="p-1 px-1.5 text-primary hover:bg-secondary-dark rounded"
-                                                                title="સુધારો કરો"
+                                                                title={t('common.edit')}
                                                             >
                                                                 <FiEdit2 size={12} />
                                                             </button>
                                                             <button
                                                                 onClick={() => triggerDelete('sales', sale.id)}
                                                                 className="p-1 px-1.5 text-red-500 hover:bg-red-50 rounded"
-                                                                title="કાઢી નાખો"
+                                                                title={t('common.delete')}
                                                             >
                                                                 <FiTrash2 size={12} />
                                                             </button>
@@ -718,7 +777,7 @@ export const ProfitCalculator = () => {
                     >
                         <div className="flex justify-between items-center bg-primary px-5 py-3.5 text-white">
                             <h3 className="font-bold text-sm flex items-center gap-1">
-                                {editExpense ? 'ખર્ચ સુધારો (Edit Expense)' : 'નવો ખર્ચ ઉમેરો (Add New Expense)'}
+                                {editExpense ? t('profitCalc.modalEditExp') : t('profitCalc.modalAddExp')}
                             </h3>
                             <button
                                 type="button"
@@ -731,15 +790,15 @@ export const ProfitCalculator = () => {
 
                         <div className="p-5 space-y-3.5">
                             <div className="flex flex-col">
-                                <label className="text-[10px] font-bold text-dark/75 mb-1">આસક્ત પાક (Target Crop) *</label>
+                                <label className="text-[10px] font-bold text-dark/75 mb-1">{t('profitCalc.lblTargetCrop')}</label>
                                 <select
                                     className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.crop ? 'border-red-500' : 'border-dark/15'}`}
                                     value={expenseForm.crop}
                                     onChange={(e) => setExpenseForm(prev => ({ ...prev, crop: e.target.value }))}
                                 >
-                                    <option value="">પાક પસંદ કરો</option>
+                                    <option value="">{t('profitCalc.phSelectCrop')}</option>
                                     {crops.map(c => (
-                                        <option key={c.id} value={c.id}>{c.crop_name} ({c.crop_variety}) - {c.farm_name}</option>
+                                        <option key={c.id} value={c.id}>{localizeCropName(c.crop_name)} ({c.crop_variety}) - {c.farm_name}</option>
                                     ))}
                                 </select>
                                 {formErrors.crop && <span className="text-[9px] text-red-650 mt-0.5">{formErrors.crop}</span>}
@@ -747,25 +806,25 @@ export const ProfitCalculator = () => {
 
                             <div className="grid grid-cols-2 gap-3.5">
                                 <div className="flex flex-col">
-                                    <label className="text-[10px] font-bold text-dark/75 mb-1">ખર્ચનો પ્રકાર (Expense Type)</label>
+                                    <label className="text-[10px] font-bold text-dark/75 mb-1">{t('profitCalc.lblExpType')}</label>
                                     <select
                                         className="w-full bg-white border border-dark/15 outline-none px-3 py-2 rounded-btn focus:border-primary"
                                         value={expenseForm.expense_type}
                                         onChange={(e) => setExpenseForm(prev => ({ ...prev, expense_type: e.target.value }))}
                                     >
-                                        <option value="Seed">બીજ (Seed)</option>
-                                        <option value="Fertilizer">ખાતર (Fertilizer)</option>
-                                        <option value="Pesticide">જંતુનાશક (Pesticide)</option>
-                                        <option value="Labour">મજૂરી (Labour)</option>
-                                        <option value="Irrigation">પિયત (Irrigation)</option>
-                                        <option value="Machinery">મશીનરી (Machinery)</option>
-                                        <option value="Transportation">ટ્રાન્સપોર્ટ (Transportation)</option>
-                                        <option value="Other">અન્ય (Other)</option>
+                                        <option value="Seed">{t('expenseType.Seed', { defaultValue: 'Seed' })}</option>
+                                        <option value="Fertilizer">{t('expenseType.Fertilizer', { defaultValue: 'Fertilizer' })}</option>
+                                        <option value="Pesticide">{t('expenseType.Pesticide', { defaultValue: 'Pesticide' })}</option>
+                                        <option value="Labour">{t('expenseType.Labour', { defaultValue: 'Labour' })}</option>
+                                        <option value="Irrigation">{t('expenseType.Other', { defaultValue: 'Other' })}</option>
+                                        <option value="Machinery">{t('expenseType.Machinery', { defaultValue: 'Machinery' })}</option>
+                                        <option value="Transportation">{t('expenseType.Other', { defaultValue: 'Other' })}</option>
+                                        <option value="Other">{t('expenseType.Other', { defaultValue: 'Other' })}</option>
                                     </select>
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="text-[10px] font-bold text-dark/75 mb-1">ખર્ચની રકમ (Amount) *</label>
+                                    <label className="text-[10px] font-bold text-dark/75 mb-1">{t('profitCalc.lblAmount')}</label>
                                     <input
                                         type="number"
                                         step="0.01"
@@ -778,7 +837,7 @@ export const ProfitCalculator = () => {
                             </div>
 
                             <div className="flex flex-col">
-                                <label className="text-[10px] font-bold text-dark/75 mb-1">ખર્ચ તારીખ (Expense Date) *</label>
+                                <label className="text-[10px] font-bold text-dark/75 mb-1">{t('profitCalc.lblExpDate')}</label>
                                 <input
                                     type="date"
                                     className={`w-full bg-white border outline-none px-3 py-2 rounded-btn focus:border-primary ${formErrors.expense_date ? 'border-red-500' : 'border-dark/15'}`}
@@ -789,7 +848,7 @@ export const ProfitCalculator = () => {
                             </div>
 
                             <div className="flex flex-col">
-                                <label className="text-[10px] font-bold text-dark/75 mb-1">સ્પષ્ટીકરણ / નોંધ (Description)</label>
+                                <label className="text-[10px] font-bold text-dark/75 mb-1">{t('profitCalc.lblDesc')}</label>
                                 <textarea
                                     rows="2"
                                     className="w-full bg-white border border-dark/15 outline-none px-3 py-2 rounded-btn focus:border-primary font-medium"
@@ -805,7 +864,7 @@ export const ProfitCalculator = () => {
                                 onClick={() => setShowExpenseModal(false)}
                                 className="px-4 py-2 hover:bg-dark/5 text-dark-light rounded"
                             >
-                                રદ કરો (Cancel)
+                                {lang('રદ કરો', 'Cancel')}
                             </button>
                             <Button
                                 type="submit"
@@ -813,7 +872,7 @@ export const ProfitCalculator = () => {
                                 disabled={isLoading}
                                 className="px-4 py-2 hover:opacity-90 transition-all font-bold rounded-btn"
                             >
-                                Save (સાચવો)
+                                {lang('સાચવો', 'Save')}
                             </Button>
                         </div>
                     </form>
@@ -825,7 +884,7 @@ export const ProfitCalculator = () => {
                 isOpen={showSalesModal}
                 onClose={() => setShowSalesModal(false)}
                 onSuccess={(data, isEdit) => {
-                    setSuccessMsg(isEdit ? 'વેચાણનો રેકોર્ડ અપડેટ થયો.' : 'નવું વેચાણ સફળતાપૂર્વક ઉમેરાયું.')
+                    setSuccessMsg(isEdit ? t('profitCalc.msgSaleUpdateSuccess') : t('profitCalc.msgSaleAddSuccess'))
                     loadData()
                 }}
                 editSales={editSales}
@@ -834,28 +893,30 @@ export const ProfitCalculator = () => {
 
             {/* DELETE CONFIRMATION DIALOG MODAL */}
             {showDeleteModal && (
-                <div className="fixed inset-0 bg-dark/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
-                    <Card className="bg-white rounded-card shadow-2xl border border-dark/5 max-w-sm w-full p-6 space-y-4 animate-scaleUp text-xs font-semibold text-dark select-none">
-                        <div className="flex items-center gap-3 text-red-600">
-                            <FiTrash2 size={24} />
-                            <h3 className="font-extrabold text-sm">કોઈ આઇટમ કાઢી નાખવાની ખાતરી છે?</h3>
+                <div className="fixed inset-0 bg-dark/60 backdrop-blur-xs z-[100] flex items-center justify-center p-4 animate-fadeIn">
+                    <Card className="bg-white rounded-card shadow-2xl border border-dark/5 max-w-sm w-full overflow-hidden flex flex-col animate-scaleUp text-xs text-dark select-none">
+                        <div className="p-6 pb-4 flex-1">
+                            <div className="flex items-center gap-3 text-red-600 mb-3">
+                                <FiTrash2 size={24} className="shrink-0" />
+                                <h3 className="font-extrabold text-sm">{lang('કોઈ આઇટમ કાઢી નાખવાની ખાતરી છે?', 'Confirm Deletion')}</h3>
+                            </div>
+                            <p className="text-dark-light font-medium leading-relaxed">{lang('આ ક્રિયા કાયમી છે અને પાછી લાવી શકાશે નહીં. શું તમે ખરેખર આગળ વધવા માંગો છો?', 'This action is permanent and cannot be undone. Are you sure you want to proceed?')}</p>
                         </div>
-                        <p className="text-dark-light font-medium">આ ક્રિયા કાયમી છે અને પાછી લાવી શકાશે નહીં. શું તમે ખરેખર આગળ વધવા માંગો છો?</p>
-                        <div className="flex justify-end gap-2 pt-2 text-[11px] font-bold">
+                        <div className="bg-secondary-dark px-6 py-4 border-t border-dark/5 flex justify-end gap-3 sm:gap-4 mt-auto w-full">
                             <button
                                 onClick={() => {
                                     setShowDeleteModal(false)
                                     setDeleteTarget(null)
                                 }}
-                                className="px-4 py-2 hover:bg-dark/5 text-dark-light rounded"
+                                className="min-w-[100px] flex-1 sm:flex-none px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-dark rounded-btn transition-colors font-bold flex justify-center items-center h-10 shadow-sm"
                             >
-                                ના (Cancel)
+                                {lang('રદ કરો', 'Cancel')}
                             </button>
                             <button
                                 onClick={confirmDeletion}
-                                className="px-4 py-2 bg-red-650 hover:bg-red-750 text-white rounded-btn transition-colors"
+                                className="min-w-[100px] flex-1 sm:flex-none px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-btn transition-colors font-bold flex justify-center items-center h-10 shadow-sm"
                             >
-                                હા, કાઢી નાખો (Delete)
+                                {lang('કાઢી નાખો', 'Delete')}
                             </button>
                         </div>
                     </Card>

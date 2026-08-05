@@ -19,6 +19,8 @@ urlpatterns = [
     path('expenses/<int:pk>/', ExpenseDetailView.as_view(), name='expense_detail'),
     path('sales/', SalesListCreateView.as_view(), name='sales'),
     path('sales/<int:pk>/', SalesDetailView.as_view(), name='sales_detail'),
+    path('notifications/', NotificationListView.as_view(), name='notifications'),
+    path('notifications/<int:pk>/', NotificationDetailView.as_view(), name='notification_detail'),
 ]
 
 

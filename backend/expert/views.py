@@ -224,3 +224,31 @@ class ExpertDetailView(APIView):
             return Response({"error": "Expert not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class ExpertNotificationListView(APIView):
+    authentication_classes = [ExpertJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            notifications = request.user.notifications.all()
+            from farmer.serializers import NotificationSerializer
+            serializer = NotificationSerializer(notifications, many=True)
+            return Response({"data": serializer.data, "message": "Notifications fetched"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ExpertNotificationDetailView(APIView):
+    authentication_classes = [ExpertJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            notification = request.user.notifications.get(pk=pk)
+            notification.is_read = True
+            notification.save()
+            return Response({"message": "Notification marked as read."}, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+
+

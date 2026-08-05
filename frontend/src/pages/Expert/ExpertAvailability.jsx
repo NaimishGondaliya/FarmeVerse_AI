@@ -1,54 +1,42 @@
 import React, { useState, useEffect } from 'react'
-import { FiClock, FiCalendar, FiCheckCircle, FiSave, FiAlertCircle } from 'react-icons/fi'
+import { FiClock, FiCalendar, FiSave, FiAlertCircle } from 'react-icons/fi'
 import { expertAPI } from '../../services/api'
 import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from '../../hooks/useTranslation'
 
-const T = {
-    ENG: {
-        title: "Availability Management",
-        subtitle: "Configure your online status, working days, and consultation hours.",
-        statusCard: "Consultation Status",
-        onlineStatus: "Online (Accepting Inquiries)",
-        offlineStatus: "Offline (Away/Busy)",
-        workingDays: "Working Days",
-        workingHours: "Working Hours",
-        startTime: "Start Time",
-        endTime: "End Time",
-        days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        saveBtn: "Save Availability settings",
-        saving: "Saving settings...",
-        loading: "Loading availability configurations...",
-        error: "Failed to load profiles.",
-        success: "Availability settings updated successfully!",
-        warningOffline: "Warning: Going offline hides your profile from farmers seeking consultations."
-    },
-    GUJ: {
-        title: "ઉપલબ્ધતા સમય વ્યવસ્થાપન",
-        subtitle: "તમારી ઓનલાઇન સ્થિતિ, કામકાજના દિવસો અને સમય સેટ કરો.",
-        statusCard: "પરામર્શ માટેની હાજરી સ્થિતિ",
-        onlineStatus: "ઓનલાઈન (વાતચીત માટે ઉપલબ્ધ)",
-        offlineStatus: "ઓફલાઇન (હાલમાં વ્યસ્ત)",
-        workingDays: "કામકાજના દિવસો",
-        workingHours: "કામકાજનો સમય",
-        startTime: "શરૂઆતનો સમય",
-        endTime: "સમાપ્તિ સમય",
-        days: ["સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર", "રવિવાર"],
-        saveBtn: "સમય સેટિંગ્સ સાચવો",
-        saving: "સાચવી રહ્યાં છીએ...",
-        loading: "ઉપલબ્ધતા માહિતી લોડ થઈ રહી છે...",
-        error: "કન્ફિગરેશન મેળવવામાં નિષ્ફળતા.",
-        success: "ઉપલબ્ધતા સમય સફળતાપૂર્વક સાચવવામાં આવ્યો છે!",
-        warningOffline: "ચેતવણી: ઓફલાઇન મોડ કરવાથી ખેડૂતો કૃષિ સલાહ મેળવવા માટે તમારો સંપર્ક સાધી શકશે નહીં."
-    }
-}
+const DAYS_EN = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+const DAYS_GU = ["સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર", "રવિવાર"]
 
 const dayKeys = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 export const ExpertAvailability = () => {
     const { language, changeLanguage } = useLanguage()
-    const lang = language === 'en' ? 'ENG' : 'GUJ'
+    const lang = language === 'en' ? 'en' : 'gu'
+    const { t: tRaw } = useTranslation()
+    const te = (key) => tRaw(`expert.${key}`)
+    const t = {
+        title: te('availTitle'),
+        subtitle: te('availSubtitle'),
+        statusCard: te('statusCard'),
+        onlineStatus: te('onlineStatus'),
+        offlineStatus: te('offlineStatus'),
+        workingDays: te('workingDays'),
+        workingHours: te('workingHours'),
+        startTime: te('startTime'),
+        endTime: te('endTime'),
+        days: lang === 'gu' ? DAYS_GU : DAYS_EN,
+        saveBtn: te('saveAvail'),
+        saving: te('savingAvail'),
+        loading: te('loadingAvail'),
+        error: te('errorAvail'),
+        success: te('successAvail'),
+        warningOffline: te('warningOffline'),
+        toggleLabel: te('toggleLabel'),
+        toggleDesc: te('toggleDesc'),
+        retry: te('retry')
+    }
     const [profile, setProfile] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
@@ -70,7 +58,7 @@ export const ExpertAvailability = () => {
         end: '17:00'
     })
 
-    const t = T[lang]
+
 
     // Load expert settings
     const loadSettings = async () => {
@@ -189,7 +177,7 @@ export const ExpertAvailability = () => {
             triggerMessage('success', t.success)
         } catch (err) {
             console.error(err)
-            triggerMessage('error', lang === 'GUJ' ? 'સાચવવાનું નિષ્ફળ ગયું.' : 'Failed to save settings.')
+            triggerMessage('error', te('errorAvail'))
         } finally {
             setIsSaving(false)
         }
@@ -214,7 +202,7 @@ export const ExpertAvailability = () => {
                     </h1>
                     <p className="text-xs text-dark-light font-medium">{t.subtitle}</p>
                 </div>
-                
+
             </div>
 
             {/* Alert banner */}
@@ -232,8 +220,8 @@ export const ExpertAvailability = () => {
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block pb-2 border-b border-slate-100 mb-2">{t.statusCard}</span>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="space-y-1">
-                            <label className="text-sm font-bold text-slate-850">Toggle Consultation Available Status</label>
-                            <p className="text-xs text-slate-400">Farmers can only search and inquire for help when you are active/online.</p>
+                            <label className="text-sm font-bold text-slate-850">{t.toggleLabel}</label>
+                            <p className="text-xs text-slate-400">{t.toggleDesc}</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <button

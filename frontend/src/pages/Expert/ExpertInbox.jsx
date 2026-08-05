@@ -1,148 +1,136 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { FiInbox, FiMessageSquare, FiChevronRight, FiClock, FiCheckSquare } from 'react-icons/fi'
+import { FiMessageSquare, FiChevronRight, FiAlertCircle } from 'react-icons/fi'
 import { consultationAPI } from '../../services/api'
 import { useLanguage } from '../../context/LanguageContext'
-import Loader from '../../components/common/Loader'
-import EmptyState from '../../components/common/EmptyState'
-
-const translations = {
-    ENG: {
-        title: "Expert Consultations Inbox",
-        subtitle: "Review agricultural issues submitted by farmers and provide advice",
-        tableFarmer: "Farmer Name",
-        tableSubject: "Topic / Subject",
-        tableDate: "Date Inquired",
-        tableStatus: "Query Status",
-        tableAction: "Action",
-        pending: "Pending Help",
-        replied: "Answered",
-        closed: "Closed",
-        openChat: "Open Conversation",
-        noQueries: "No farmer consultations found",
-        noQueriesDesc: "Incoming queries assigned to your district or specialization will appear here.",
-        loading: "Loading inbox messages...",
-        error: "Failed to reload inbox list.",
-    },
-    GUJ: {
-        title: "નિષ્ણાત પરામર્શ ઇનબોક્સ",
-        subtitle: "ખેડૂતો દ્વારા સબમિટ કરાયેલ કૃષિ સમસ્યાઓની સમીક્ષા કરો અને નિષ્ણાત સલાહ આપો",
-        tableFarmer: "ખેડૂતનું નામ",
-        tableSubject: "સમસ્યા / વિષય",
-        tableDate: "મોકલ્યા તારીખ",
-        tableStatus: "સ્થિતિ",
-        tableAction: "કાર્ય",
-        pending: "જવાબ બાકી",
-        replied: "જવાબ આપેલ",
-        closed: "બંધ કરેલ છે",
-        openChat: "વાતચીત ખોલો",
-        noQueries: "કોઈ ખેડૂત પરામર્શ પ્રશ્નો મળ્યા નથી",
-        noQueriesDesc: "તમારા જિલ્લા અથવા વિશેષતા માટે મોકલેલા પ્રશ્નો અહીં દેખાશે.",
-        loading: "ઇનબોક્સ લોડ થઈ રહ્યું છે...",
-        error: "ઇનબોક્સ લોડ કરવામાં સમસ્યા આવી રહી છે.",
-    }
-}
+import { useTranslation } from '../../hooks/useTranslation'
+import { Card } from '../../components/common/Card'
+import { formatGujaratiDateTime } from '../../utils/gujaratiFormat'
 
 export const ExpertInbox = () => {
-    const { language } = useLanguage()
-    const lang = language === 'en' ? 'ENG' : 'GUJ'
-    const [queries, setQueries] = useState([])
+    const [consultations, setConsultations] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState('')
+    const [isError, setIsError] = useState(false)
+    const { language } = useLanguage()
+    const { t } = useTranslation()
+    const lang = language === 'en' ? 'en' : 'gu'
 
-    const t = translations[lang]
+    // Shorthand for expert locale section
+    const te = (key) => t(`expert.${key}`)
 
-    const loadInbox = async () => {
+    const fetchConsultations = async () => {
+        setIsLoading(true)
+        setIsError(false)
         try {
             const data = await consultationAPI.getExpertList()
-            setQueries(data)
-            setError('')
+            setConsultations(data)
         } catch (err) {
-            console.error(err)
-            setError(t.error)
+            console.error('Inbox load error', err)
+            setIsError(true)
         } finally {
             setIsLoading(false)
         }
     }
 
     useEffect(() => {
-        loadInbox()
-    }, [lang])
+        fetchConsultations()
+    }, [])
+
+    const statusLabel = (status) => {
+        if (status === 'Pending') return te('statusPending')
+        if (status === 'Replied') return te('statusReplied')
+        return te('statusClosed')
+    }
+
+    const statusClass = (status) => {
+        if (status === 'Pending') return 'bg-amber-50 text-amber-800 border-amber-200'
+        if (status === 'Replied') return 'bg-emerald-50 text-emerald-800 border-emerald-200'
+        return 'bg-slate-100 text-slate-700 border-slate-200'
+    }
 
     if (isLoading) {
         return (
-            <div className="p-4 md:p-6 max-w-5xl mx-auto">
-                <Loader variant="skeleton" type="table" />
+            <div className="flex flex-col items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+                <p className="mt-4 text-dark-light text-sm font-semibold">{te('loading')}</p>
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className="p-8 text-center max-w-lg mx-auto mt-12">
+                <FiAlertCircle size={42} className="text-red-500 mx-auto mb-3" />
+                <h3 className="font-bold text-dark text-lg">{te('errorInbox')}</h3>
+                <button
+                    onClick={fetchConsultations}
+                    className="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg font-bold text-sm transition"
+                >
+                    {te('retry')}
+                </button>
             </div>
         )
     }
 
     return (
-        <div className="max-w-5xl mx-auto p-4 md:p-6">
-            {/* Header section */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="space-y-6 animate-fadeIn pb-12 max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="flex justify-between items-center bg-white p-4 rounded-card border shadow-xs">
                 <div>
-                    <h2 className="text-xl md:text-2xl font-extrabold text-slate-800">{t.title}</h2>
-                    <p className="text-sm text-slate-500 mt-1">{t.subtitle}</p>
+                    <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                        <FiMessageSquare className="text-emerald-600" /> {te('inboxTitle')}
+                    </h1>
+                    <p className="text-xs text-dark-light font-medium">{te('inboxSubtitle')}</p>
                 </div>
-
-
             </div>
 
-            {/* Queries Grid */}
-            {queries.length === 0 ? (
-                <EmptyState
-                    icon={FiInbox}
-                    title={t.noQueries}
-                    description={t.noQueriesDesc}
-                />
-            ) : (
-                <div className="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden">
+            {/* Table Card */}
+            <Card className="p-0 overflow-hidden shadow-sm">
+                {consultations.length === 0 ? (
+                    <div className="py-20 flex flex-col items-center justify-center text-dark-light">
+                        <FiMessageSquare size={40} className="mb-4 text-dark-light/50" />
+                        <h4 className="font-bold text-dark/80">{te('noQueries')}</h4>
+                        <p className="text-xs mt-1">{te('noQueriesDesc')}</p>
+                    </div>
+                ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-slate-55 border-b border-light select-none text-xs font-bold text-slate-500">
-                                    <th className="p-4 md:p-5">{t.tableFarmer}</th>
-                                    <th className="p-4 md:p-5">{t.tableSubject}</th>
-                                    <th className="p-4 md:p-5">{t.tableDate}</th>
-                                    <th className="p-4 md:p-5">{t.tableStatus}</th>
-                                    <th className="p-4 md:p-5 text-right">{t.tableAction}</th>
+                                <tr className="bg-[#f3f4f6] border-b border-slate-100 text-[10px] text-slate-500 tracking-widest uppercase font-extrabold">
+                                    <th className="px-5 py-4">{te('tableFarmer')}</th>
+                                    <th className="px-5 py-4">{te('tableSubject')}</th>
+                                    <th className="px-5 py-4">{te('tableDate')}</th>
+                                    <th className="px-5 py-4">{te('tableStatus')}</th>
+                                    <th className="px-5 py-4 text-right">{te('tableAction')}</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
-                                {queries.map((q) => (
-                                    <tr key={q.id} className="hover:bg-slate-50/50 transition">
-                                        <td className="p-4 md:p-5 text-sm font-bold text-slate-800">
-                                            {q.farmer_name}
+                            <tbody className="divide-y divide-slate-50">
+                                {consultations.map((c) => (
+                                    <tr
+                                        key={c.id}
+                                        className="hover:bg-primary-light/20 transition group text-sm text-dark font-medium"
+                                    >
+                                        <td className="px-5 py-4 font-bold text-slate-800 whitespace-nowrap">
+                                            {c.farmer_name}
                                         </td>
-                                        <td className="p-4 md:p-5">
-                                            <div className="font-bold text-slate-800 text-sm max-w-xs md:max-w-md truncate">
-                                                {q.subject}
-                                            </div>
-                                            <div className="text-xs text-slate-400 mt-1 max-w-xs md:max-w-md truncate">
-                                                {q.message}
-                                            </div>
+                                        <td className="px-5 py-4 max-w-xs">
+                                            <div className="font-bold truncate">{c.subject}</div>
+                                            <div className="text-[10px] text-dark-light truncate mt-0.5">{c.message}</div>
                                         </td>
-                                        <td className="p-4 md:p-5 text-xs text-slate-500 font-medium">
-                                            {new Date(q.created_date).toLocaleString()}
+                                        <td className="px-5 py-4 text-[11px] text-dark-light whitespace-nowrap">
+                                            {formatGujaratiDateTime(c.created_date, lang)}
                                         </td>
-                                        <td className="p-4 md:p-5">
-                                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${q.status === 'Pending' ? 'bg-amber-100 text-amber-800' :
-                                                q.status === 'Replied' ? 'bg-emerald-100 text-emerald-800' :
-                                                    'bg-slate-100 text-slate-800'
-                                                }`}>
-                                                {q.status === 'Pending' ? t.pending :
-                                                    q.status === 'Replied' ? t.replied :
-                                                        t.closed}
+                                        <td className="px-5 py-4">
+                                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase border ${statusClass(c.status)}`}>
+                                                {statusLabel(c.status)}
                                             </span>
                                         </td>
-                                        <td className="p-4 md:p-5 text-right">
+                                        <td className="px-5 py-4 text-right">
                                             <Link
-                                                to={`/expert/consultation/${q.id}`}
-                                                className="inline-flex items-center gap-1 text-primary hover:text-primary-dark font-extrabold text-xs transition"
+                                                to={`/expert/consultation/${c.id}`}
+                                                className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 text-[11px] font-extrabold group-hover:underline transition"
                                             >
-                                                <span>{t.openChat}</span>
-                                                <FiChevronRight size={14} />
+                                                {te('openChat')} <FiChevronRight size={13} />
                                             </Link>
                                         </td>
                                     </tr>
@@ -150,8 +138,10 @@ export const ExpertInbox = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
-            )}
+                )}
+            </Card>
         </div>
     )
 }
+
+export default ExpertInbox

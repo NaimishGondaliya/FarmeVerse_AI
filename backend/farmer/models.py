@@ -298,7 +298,8 @@ class Sales(models.Model):
 
 
 class Notification(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications', verbose_name="User")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications', null=True, blank=True, verbose_name="User")
+    expert = models.ForeignKey('expert.AgricultureExpert', on_delete=models.CASCADE, related_name='notifications', null=True, blank=True, verbose_name="Expert")
     title = models.CharField(max_length=255, verbose_name="Title")
     message = models.TextField(verbose_name="Message")
     is_read = models.BooleanField(default=False, verbose_name="Is Read")

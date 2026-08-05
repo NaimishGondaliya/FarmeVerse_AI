@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, memo } from 'react'
 import { useLanguage } from '../../context/LanguageContext'
 import {
     FiUsers, FiUserCheck, FiUserX, FiMessageSquare, FiClock,
-    FiSearch, FiPlus, FiEdit2, FiTrash2, FiEye, FiToggleLeft,
+    FiSearch, FiPlus, FiEdit2, FiTrash2, FiEye, FiEyeOff, FiToggleLeft,
     FiToggleRight, FiX, FiStar, FiMapPin, FiPhone, FiMail,
     FiAward, FiGlobe, FiCalendar, FiBookOpen, FiAlertTriangle,
     FiCheck, FiChevronDown
@@ -22,10 +22,10 @@ const AnimatedCounter = ({ value, duration = 800, prefix = '', suffix = '' }) =>
             setCount(value)
             return
         }
-        
+
         const totalMiliseconds = duration
         const incrementTime = Math.max(Math.floor(totalMiliseconds / end), 15)
-        
+
         const timer = setInterval(() => {
             start += Math.ceil(end / (totalMiliseconds / incrementTime))
             if (start >= end) {
@@ -57,13 +57,13 @@ const T = {
         specialization: 'Specialization', experience: 'Experience (years)', district: 'District',
         languages: 'Languages', bio: 'Bio', activeStatus: 'Active Status',
         save: 'Save', cancel: 'Cancel', create: 'Create Expert', update: 'Update Expert',
-        deleteTitle: 'Confirm Deactivation', deleteMsg: 'Are you sure you want to deactivate this expert? They will no longer be able to log in or receive consultations.',
-        deleteConfirm: 'Deactivate', actions: 'Actions', status: 'Status', rating: 'Rating',
+        deleteTitle: 'Confirm Deletion', deleteMsg: 'Are you sure you want to delete this expert? The account will be permanently removed.',
+        deleteConfirm: 'Delete', actions: 'Actions', status: 'Status', rating: 'Rating',
         consultations: 'Consultations', noExperts: 'No experts found', noExpertsDesc: 'Try changing your search or filter criteria.',
         recentConsultations: 'Recent Consultations', loading: 'Loading...', active: 'Active', inactive: 'Inactive',
         errorLoad: 'Failed to load experts', retry: 'Retry', successCreated: 'Expert created successfully',
         successUpdated: 'Expert updated successfully', successStatus: 'Expert status updated',
-        successDeleted: 'Expert deactivated successfully', photo: 'Photo URL', profilePhoto: 'Profile Photo URL',
+        successDeleted: 'Expert deleted successfully', photo: 'Photo URL', profilePhoto: 'Profile Photo URL',
         officeAddress: 'Office Address', availability: 'Availability', googleMap: 'Google Map Link',
         lang: 'English (ENG)'
     },
@@ -80,13 +80,13 @@ const T = {
         specialization: 'વિશેષતા', experience: 'અનુભવ (વર્ષ)', district: 'જિલ્લો',
         languages: 'ભાષાઓ', bio: 'બાયો', activeStatus: 'સક્રિય સ્થિતિ',
         save: 'સાચવો', cancel: 'રદ કરો', create: 'નિષ્ણાત બનાવો', update: 'અપડેટ કરો',
-        deleteTitle: 'નિષ્ક્રિય કરવાની પુષ્ટિ', deleteMsg: 'શું તમે ખરેખર આ નિષ્ણાતને નિષ્ક્રિય કરવા માંગો છો?',
-        deleteConfirm: 'નિષ્ક્રિય કરો', actions: 'ક્રિયાઓ', status: 'સ્થિતિ', rating: 'રેટિંગ',
+        deleteTitle: 'ડિલીટ કરવાની પુષ્ટિ', deleteMsg: 'શું તમે ખરેખર આ નિષ્ણાતને ડિલીટ કરવા માંગો છો? એકાઉન્ટ કાયમી ધોરણે દૂર કરવામાં આવશે.',
+        deleteConfirm: 'ડિલીટ કરો', actions: 'ક્રિયાઓ', status: 'સ્થિતિ', rating: 'રેટિંગ',
         consultations: 'પરામર્શ', noExperts: 'કોઈ નિષ્ણાત મળ્યા નથી', noExpertsDesc: 'શોધ અથવા ફિલ્ટર બદલો.',
         recentConsultations: 'તાજેતરના પરામર્શ', loading: 'લોડ થઈ રહ્યું છે...', active: 'સક્રિય', inactive: 'નિષ્ક્રિય',
         errorLoad: 'નિષ્ણાતો લોડ કરવામાં નિષ્ફળ', retry: 'ફરી પ્રયાસ કરો', successCreated: 'નિષ્ણાત સફળતાપૂર્વક બનાવાયા',
         successUpdated: 'નિષ્ણાત સફળતાપૂર્વક અપડેટ થયા', successStatus: 'નિષ્ણાતની સ્થિતિ અપડેટ થઈ',
-        successDeleted: 'નિષ્ણાત નિષ્ક્રિય થયા', photo: 'ફોટો URL', profilePhoto: 'પ્રોફાઇલ ફોટો URL',
+        successDeleted: 'નિષ્ણાત સફળતાપૂર્વક ડિલીટ થયા', photo: 'ફોટો URL', profilePhoto: 'પ્રોફાઇલ ફોટો URL',
         officeAddress: 'ઓફિસ સરનામું', availability: 'ઉપલબ્ધતા', googleMap: 'ગુગલ મેપ લિંક',
         lang: 'ગુજરાતી (GUJ)'
     }
@@ -126,35 +126,33 @@ const Field = memo(({ label, name, type = 'text', required, textarea, form, setF
     const inputType = isPassword ? (showPassword ? 'text' : 'password') : type
 
     return (
-        <div className="w-full flex flex-col font-sans">
+        <div className="w-full flex flex-col font-sans gap-1.5">
             {label && (
-                <label className="text-xs md:text-sm font-semibold text-slate-600 mb-1.5 flex items-center gap-1 select-none">
+                <label className="text-xs md:text-sm font-semibold text-slate-600 flex items-center gap-1 select-none">
                     {label}
                     {required && <span className="text-red-500 font-bold">*</span>}
                 </label>
             )}
 
-            <div className="relative flex items-center h-[46px]">
+            <div className="relative">
                 {textarea ? (
                     <textarea
                         value={form[name] || ''}
                         onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
                         rows={3}
-                        className={`w-full bg-white text-dark placeholder:text-dark-light/40 px-4 py-3 rounded-btn border text-sm transition-all duration-200 outline-none ${
-                            formErrors[name]
-                                ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10 bg-red-50/5 animate-shake'
-                                : 'border-dark/15 focus:border-primary focus:ring-2 focus:ring-primary/10'
-                        }`}
+                        className={`w-full bg-white text-dark placeholder:text-dark-light/40 px-4 py-3 rounded-btn border text-sm transition-all duration-200 outline-none resize-none ${formErrors[name]
+                            ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10 bg-red-50/5 animate-shake'
+                            : 'border-dark/15 focus:border-primary focus:ring-2 focus:ring-primary/10'
+                            }`}
                     />
                 ) : name === 'active_status' ? (
                     <button
                         type="button"
                         onClick={() => setForm(f => ({ ...f, active_status: !f.active_status }))}
-                        className={`flex items-center gap-2 px-4 py-2.5 rounded-btn border text-sm font-bold transition duration-200 select-none ${
-                            form.active_status 
-                                ? 'bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100' 
-                                : 'bg-red-50 border-red-300 text-red-700 hover:bg-red-100'
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-btn border text-sm font-bold transition duration-200 select-none ${form.active_status
+                            ? 'bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-emerald-100'
+                            : 'bg-red-50 border-red-300 text-red-700 hover:bg-red-100'
+                            }`}
                     >
                         {form.active_status ? <FiToggleRight size={20} /> : <FiToggleLeft size={20} />}
                         {form.active_status ? t.active : t.inactive}
@@ -165,22 +163,20 @@ const Field = memo(({ label, name, type = 'text', required, textarea, form, setF
                             type={inputType}
                             value={form[name] || ''}
                             onChange={e => setForm(f => ({ ...f, [name]: type === 'number' ? (e.target.value === '' ? '' : Number(e.target.value)) : e.target.value }))}
-                            className={`w-full h-full bg-white text-dark placeholder:text-dark-light/40 px-4 rounded-btn border text-sm transition-all duration-200 outline-none ${
-                                isPassword ? 'pr-11' : ''
-                            } ${
-                                formErrors[name]
+                            className={`w-full h-[44px] bg-white text-dark placeholder:text-dark-light/40 px-4 rounded-btn border text-sm transition-all duration-200 outline-none ${isPassword ? 'pr-11' : ''
+                                } ${formErrors[name]
                                     ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10 bg-red-50/5 animate-shake'
                                     : 'border-dark/15 focus:border-primary focus:ring-2 focus:ring-primary/10'
-                            }`}
+                                }`}
                         />
                         {isPassword && (
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(!showPassword)}
+                                onClick={() => setShowPassword(prev => !prev)}
                                 tabIndex="-1"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-light/60 hover:text-dark outline-none cursor-pointer flex items-center justify-center transition-colors z-10"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-dark-light/60 hover:text-dark outline-none cursor-pointer flex items-center justify-center transition-colors z-10"
                             >
-                                {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                {showPassword ? <FiEyeOff size={17} /> : <FiEye size={17} />}
                             </button>
                         )}
                     </>
@@ -188,7 +184,7 @@ const Field = memo(({ label, name, type = 'text', required, textarea, form, setF
             </div>
 
             {formErrors[name] && (
-                <span className="text-xs text-red-655 font-bold mt-1.5 flex items-center gap-1 animate-fadeIn">
+                <span className="text-xs text-red-600 font-bold flex items-center gap-1 animate-fadeIn">
                     <FiAlertTriangle size={13} className="text-red-500 flex-shrink-0" />
                     <span>{formErrors[name]}</span>
                 </span>
@@ -373,8 +369,14 @@ export const AdminExpertManagement = () => {
             showToast(t.successDeleted)
             setShowDeleteModal(false)
             fetchAll()
-        } catch { showToast('Deactivation failed', 'error') }
-        finally { setIsSaving(false) }
+        } catch (err) {
+            const data = err.response?.data
+            if (data && data.error) {
+                showToast(data.error, 'error')
+            } else {
+                showToast('Deletion failed', 'error')
+            }
+        } finally { setIsSaving(false) }
     }
 
     const handleToggleStatus = async (expert) => {
@@ -420,7 +422,7 @@ export const AdminExpertManagement = () => {
                         <span className="text-[200px]">🌾</span>
                     </div>
                     <div className="absolute left-[-50px] top-[-50px] w-64 h-64 bg-white/5 rounded-full blur-3xl" />
-                    
+
                     <div className="max-w-3xl space-y-3.5 relative z-10">
                         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-accent border border-white/10">
                             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
@@ -570,10 +572,14 @@ export const AdminExpertManagement = () => {
                                             </td>
                                             <td className="px-4 py-3 text-center font-bold text-slate-600 hidden sm:table-cell">{exp.consultation_count ?? exp.total_consultations ?? 0}</td>
                                             <td className="px-4 py-3 text-center hidden sm:table-cell">
-                                                <span className="inline-flex items-center gap-1 text-amber-600 font-bold">
-                                                    <FiStar className="fill-amber-500" size={12} />
-                                                    {exp.rating ? parseFloat(exp.rating).toFixed(1) : '0.0'}
-                                                </span>
+                                                {exp.rating && parseFloat(exp.rating) !== 0.0 ? (
+                                                    <span className="inline-flex items-center gap-1 text-amber-600 font-bold">
+                                                        <FiStar className="fill-amber-500" size={12} />
+                                                        {parseFloat(exp.rating).toFixed(1)}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-slate-400 font-medium text-xs">—</span>
+                                                )}
                                             </td>
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center justify-center gap-1">
@@ -583,7 +589,7 @@ export const AdminExpertManagement = () => {
                                                         className={`p-1.5 rounded-md transition ${exp.active_status ? 'hover:bg-amber-50 text-amber-600' : 'hover:bg-green-50 text-green-600'}`}>
                                                         {exp.active_status ? <FiToggleRight size={15} /> : <FiToggleLeft size={15} />}
                                                     </button>
-                                                    <button onClick={() => openDelete(exp)} title="Deactivate" className="p-1.5 rounded-md hover:bg-red-50 text-red-500 transition"><FiTrash2 size={15} /></button>
+                                                    <button onClick={() => openDelete(exp)} title="Delete" className="p-1.5 rounded-md hover:bg-red-50 text-red-500 transition"><FiTrash2 size={15} /></button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -679,7 +685,7 @@ export const AdminExpertManagement = () => {
                                 { icon: FiGlobe, label: t.languages, val: viewData.languages },
                                 { icon: FiMail, label: t.email, val: viewData.email },
                                 { icon: FiPhone, label: t.phone, val: viewData.phone },
-                                { icon: FiStar, label: t.rating, val: viewData.rating ? parseFloat(viewData.rating).toFixed(1) : '0.0' },
+                                { icon: FiStar, label: t.rating, val: (viewData.rating && parseFloat(viewData.rating) !== 0.0) ? parseFloat(viewData.rating).toFixed(1) : '—' },
                                 { icon: FiMessageSquare, label: t.consultations, val: viewData.consultation_count ?? viewData.total_consultations ?? 0 }
                             ].map((item, i) => {
                                 const Ico = item.icon

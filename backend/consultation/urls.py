@@ -5,7 +5,8 @@ from .views import (
     ExpertInboxView,
     ConsultationDetailView,
     ConsultationReplyView,
-    ConsultationCloseView
+    ConsultationCloseView,
+    SubmitRatingView
 )
 
 app_name = 'consultation'
@@ -18,4 +19,5 @@ urlpatterns = [
     path('<int:pk>/', ConsultationDetailView.as_view(), name='detail'),
     path('<int:pk>/reply/', ConsultationReplyView.as_view(), name='reply'),
     path('<int:pk>/close/', ConsultationCloseView.as_view(), name='close'),
+    path('<int:pk>/rate/', SubmitRatingView.as_view(), name='rate'),
 ]

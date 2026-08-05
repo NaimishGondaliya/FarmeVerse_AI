@@ -8,7 +8,9 @@ from .views import (
     AdminConsultationStatsView,
     AdminConsultationListView,
     AdminConsultationDetailView,
-    AdminConsultationStatusView
+    AdminConsultationStatusView,
+    AdminNotificationListView,
+    AdminNotificationDetailView
 )
 
 app_name = 'adminpanel'
@@ -27,4 +29,8 @@ urlpatterns = [
     path('consultations/', AdminConsultationListView.as_view(), name='consultation-list'),
     path('consultations/<int:pk>/', AdminConsultationDetailView.as_view(), name='consultation-detail'),
     path('consultations/<int:pk>/status/', AdminConsultationStatusView.as_view(), name='consultation-status'),
+
+    # Admin Notifications
+    path('notifications/', AdminNotificationListView.as_view(), name='notifications'),
+    path('notifications/<int:pk>/', AdminNotificationDetailView.as_view(), name='notification-detail'),
 ]
